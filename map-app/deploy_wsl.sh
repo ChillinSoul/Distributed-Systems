@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 # Variables
-IMAGE_NAME="nginx-home-image"
+IMAGE_NAME="map-app"
 
 # Detect the operating system
 OS="$(uname)"
@@ -11,16 +11,8 @@ if [[ "$OS" == *"NT"* || "$OS" == *"MINGW"* || "$OS" == *"CYGWIN"* ]]; then
   IS_WINDOWS=true
 fi
 
-echo "Starting deployment process for nginx-home on $OS..."
+echo "Starting deployment process for $IMAGE_NAME on $OS..."
 
-# Step 1: Build the Nuxt application
-echo "Building the Nuxt application..."
-if npm run build; then
-  echo "Nuxt application built successfully."
-else
-  echo "Nuxt application build failed. Exiting..."
-  exit 1
-fi
 
 # Step 2: Check if Minikube is running
 echo "Checking if Minikube is running..."
@@ -60,4 +52,4 @@ else
   exit 1
 fi
 
-echo "Deployment process for nginx-home completed successfully."
+echo "Deployment process for $IMAGE_NAME completed successfully."

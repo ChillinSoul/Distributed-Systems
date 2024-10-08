@@ -4,15 +4,18 @@ FROM node:22.9.0-slim
 # Set the working directory inside the container
 WORKDIR /src
 
-# Copy package files and install dependencies (use npm ci for cleaner install)
+# Copy package files and install dependencies (npm install in this case)
 COPY package*.json ./
-RUN npm ci --production
+RUN npm install
 
 # Copy the rest of the application code
 COPY . .
 
-# Expose the port the app runs on
+# Run the build step
+RUN npm run build
+
+# Expose the port the app will run on
 EXPOSE 3000
 
-
+# Command to run the application
 CMD ["node", "./.output/server/index.mjs", "-p", "3000"]
