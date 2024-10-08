@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: services-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /nuxt-app(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: nuxt-app-service
+                port:
+                  number: 80
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: nginx-home-service
+                port:
+                  number: 80
+          - path: /hello-k8s(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: hello-k8s-service
+                port:
+                  number: 80
+          - path: /bb-app(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: bb-app-service
+                port:
+                  number: 80
