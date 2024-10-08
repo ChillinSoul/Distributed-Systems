@@ -1,9 +1,9 @@
-cd nuxt-app
+cd data-nuxt-app
 ./deploy.sh
 cd ../nginx-home
 ./deploy.sh
-cd ../getting-started-app
+cd ../camera-app
 ./deploy.sh
-cd ../kubernetes-app
+cd ../map-app
 ./deploy.sh
 cd ..

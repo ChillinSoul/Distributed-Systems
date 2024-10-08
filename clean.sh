@@ -1,9 +1,9 @@
-cd nuxt-app
+cd data-nuxt-app
 ./clean.sh
 cd ../nginx-home
 ./clean.sh
-cd ../getting-started-app
+cd ../camera-app
 ./clean.sh
-cd ../kubernetes-app
+cd ../map-app
 ./clean.sh
 cd ..

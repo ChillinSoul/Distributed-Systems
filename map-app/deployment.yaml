@@ -2,20 +2,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-k8s-deployment
+  name: map-app-deployment
 spec:
   replicas: 1 # Number of app instances
   selector:
     matchLabels:
-      app: hello-k8s
+      app: map-app
   template:
     metadata:
       labels:
-        app: hello-k8s
+        app: map-app
     spec:
       containers:
-        - name: hello-k8s
-          image: hello-k8s # The Docker image we just built
+        - name: map-app
+          image: map-app # The Docker image we just built
           imagePullPolicy: Never
           ports:
             - containerPort: 5000

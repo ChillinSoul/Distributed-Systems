@@ -4,7 +4,7 @@
 set -e
 
 # Variables
-IMAGE_NAME="hello-k8s"
+IMAGE_NAME="map-app"
 
 # Detect the operating system
 OS="$(uname)"

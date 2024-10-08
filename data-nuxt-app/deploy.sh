@@ -4,7 +4,7 @@
 set -e
 
 # Variables
-IMAGE_NAME="nuxt-app-image"
+IMAGE_NAME="data-nuxt-app-image"
 
 # Detect the operating system
 OS="$(uname)"

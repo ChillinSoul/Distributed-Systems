@@ -6,12 +6,12 @@
             <p> Master 2 Computer Science Project</p>
             <div class="m-4 flex flex-col justify-center gap-4 min-w-xl">
                 <p>Manneken Data</p>
-                <Nuxt-link to="/nuxt-app/" class="text-white bg-blue-500 px-4 py-2 rounded-md w-full">Manneken Data </Nuxt-link>
-                <APITest endpoint="http://nuxt-app-service/api/hello/message"/>
-                <p>BB-APP</p>
-                <Nuxt-link to="/bb-app/" class="text-white bg-blue-500 px-4 py-2 rounded-md w-full">BB-APP </Nuxt-link>
-                <p>hello-k8s</p>
-                <APITest endpoint="http://hello-k8s-service/"/>
+                <Nuxt-link to="/data-nuxt-app/" class="text-white bg-blue-500 px-4 py-2 rounded-md w-full">Manneken Data </Nuxt-link>
+                <APITest endpoint="http://data-nuxt-app-service/api/hello/message"/>
+                <p>camera-app</p>
+                <Nuxt-link to="/camera-app/" class="text-white bg-blue-500 px-4 py-2 rounded-md w-full">camera-app </Nuxt-link>
+                <p>map-app</p>
+                <APITest endpoint="http://map-app-service/"/>
             </div>
         </div>
     </div>

@@ -4,7 +4,7 @@
 set -e
 
 # Variables
-IMAGE_NAME="bb-app-image"
+IMAGE_NAME="camera-app-image"
 
 # Detect the operating system
 OS="$(uname)"
@@ -14,7 +14,7 @@ if [[ "$OS" == *"NT"* || "$OS" == *"MINGW"* || "$OS" == *"CYGWIN"* ]]; then
   IS_WINDOWS=true
 fi
 
-echo "Starting deployment process for nuxt-app..."
+echo "Starting deployment process for camera-app..."
 
 echo "Checking if Minikube is running..."
 if ! minikube status > /dev/null 2>&1; then
@@ -42,4 +42,4 @@ else
   exit 1
 fi
 
-echo "Deployment process for bb-app completed successfully."
+echo "Deployment process for camera-app completed successfully."

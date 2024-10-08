@@ -10,11 +10,11 @@ spec:
   rules:
     - http:
         paths:
-          - path: /nuxt-app(/|$)(.*)
+          - path: /data-nuxt-app(/|$)(.*)
             pathType: ImplementationSpecific
             backend:
               service:
-                name: nuxt-app-service
+                name: data-nuxt-app-service
                 port:
                   number: 80
           - path: /
@@ -24,17 +24,17 @@ spec:
                 name: nginx-home-service
                 port:
                   number: 80
-          - path: /hello-k8s(/|$)(.*)
+          - path: /map-app(/|$)(.*)
             pathType: ImplementationSpecific
             backend:
               service:
-                name: hello-k8s-service
+                name: map-app-service
                 port:
                   number: 80
-          - path: /bb-app(/|$)(.*)
+          - path: /camera-app(/|$)(.*)
             pathType: ImplementationSpecific
             backend:
               service:
-                name: bb-app-service
+                name: camera-app-service
                 port:
                   number: 80

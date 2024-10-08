@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: hello-k8s-service
+  name: map-app-service
 spec:
   selector:
     app: hello-k8s
