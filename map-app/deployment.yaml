@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: map-app-deployment
 spec:
-  replicas: 1 # Number of app instances
+  replicas: 1
   selector:
     matchLabels:
       app: map-app
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: map-app
-          image: map-app # The Docker image we just built
+          image: map-app
           imagePullPolicy: Never
           ports:
             - containerPort: 5000

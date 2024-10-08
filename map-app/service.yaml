@@ -4,7 +4,7 @@ metadata:
   name: map-app-service
 spec:
   selector:
-    app: hello-k8s
+    app: map-app
   type: ClusterIP
   ports:
     - protocol: TCP
