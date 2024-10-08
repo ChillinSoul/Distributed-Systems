@@ -38,3 +38,10 @@ spec:
                 name: camera-app-service
                 port:
                   number: 80
+          - path: /bb-demo(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: bb-demo-service
+                port:
+                  number: 80

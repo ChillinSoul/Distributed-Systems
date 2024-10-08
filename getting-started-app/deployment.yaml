@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bb-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bb-demo
+  template:
+    metadata:
+      labels:
+        app: bb-demo
+    spec:
+      containers:
+      - name: bb-site
+        image: bb-demo-image
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
