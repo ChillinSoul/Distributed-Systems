@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: bb-site
-        image: trivial-service:latest
+        image: bb-demo-image
         imagePullPolicy: Never
         ports:
         - containerPort: 5000

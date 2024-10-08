@@ -6,4 +6,6 @@ cd ../camera-app
 ./clean.sh
 cd ../map-app
 ./clean.sh
+cd ../getting-started-app
+./clean.sh
 cd ..

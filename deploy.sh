@@ -6,4 +6,6 @@ cd ../camera-app
 ./deploy.sh
 cd ../map-app
 ./deploy.sh
+cd ../getting-started-app
+./deploy.sh
 cd ..

@@ -7,7 +7,5 @@ spec:
   selector:
     app: bb-demo
   ports:
-    - port: 5000
+    - port: 80
       targetPort: 5000
-      #ClusterIP: 30023  # You can specify any port from 30000-32767
-  type: ClusterIP
