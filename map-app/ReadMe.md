@@ -238,3 +238,69 @@ And reapply the deployment to update your running application.
 ## Conclusion
 
 Thank you for reading this. You have successfully deployed a "Hello World" application on Kubernetes using Minikube.
+
+# Proxy - Deployment of all the application
+
+## Ingress
+
+The Ingress resource in Kubernetes is used to manage external access to services within a cluster. An Ingress can route traffic to multiple services based on URL paths, allowing you to expose multiple applications behind a single domain (or IP address).
+
+In this case, your ingress.yaml is a configuration file that uses NGINX as the ingress controller to proxy traffic to multiple applications (like data-nuxt-app, nginx-home-service, map-app, and camera-app) based on the URL path.
+
+```yaml
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /data-nuxt-app(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: data-nuxt-app-service
+                port:
+                  number: 80
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: nginx-home-service
+                port:
+                  number: 80
+          - path: /map-app(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: map-app-service
+                port:
+                  number: 80
+          - path: /camera-app(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: camera-app-service
+                port:
+                  number: 80
+```
+
+## Resume
+
+- Start minikube
+
+```bash
+minikube start
+```
+
+- Build the Docker Image
+
+```bash
+docker build -t $IMAGE_NAME .
+```
+
+- Deploy
+  The deployment create the pods and inside the pods create the containers based on the Docker Image.
+  The service expose the pods on HTTP
+
+```bash
+kubectl apply -f ./deployment.yaml && kubectl apply -f ./service.yaml
+```

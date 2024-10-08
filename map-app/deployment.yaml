@@ -18,4 +18,4 @@ spec:
           image: map-app # The container is based on a Docker image we previously built
           imagePullPolicy: Never
           ports:
-            - containerPort: 5000
+            - containerPort: 3000
