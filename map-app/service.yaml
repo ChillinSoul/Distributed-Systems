@@ -10,4 +10,3 @@ spec:
     - protocol: TCP
       port: 80 # The port exposed by the Service (port 80 for HTTP)
       targetPort: 5000 # The port in the container where the app is running (port 5000)
-  type: ClusterIP
