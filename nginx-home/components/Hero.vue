@@ -13,6 +13,8 @@
                 <p>map-app</p>
                 <Nuxt-link to="/map-app/" class="text-white bg-blue-500 px-4 py-2 rounded-md w-full">map-app </Nuxt-link>
                 <APITest endpoint="http://map-app-service/"/>
+                <p>bb-demo</p>
+                <Nuxt-link to="/bb-demo/" class="text-white bg-blue-500 px-4 py-2 rounded-md w-full">bb-demo </Nuxt-link>
             </div>
         </div>
     </div>
