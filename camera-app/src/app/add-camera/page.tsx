@@ -94,7 +94,7 @@ export default function AddCameraPage() {
         const data = await response.json();
         setErrorMessage(data.error || 'Failed to add camera');
       }
-    } catch (error) {
+    } catch {
       setErrorMessage('An error occurred while adding the camera');
     }
   };
