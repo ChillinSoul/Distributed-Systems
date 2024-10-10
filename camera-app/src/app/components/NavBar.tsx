@@ -28,13 +28,13 @@ const Navbar = () => {
         <h1 style={{ margin: 0 }}>My Camera App</h1>
       </div>
       <div style={styles.navLinks}>
-        <Link href="/" style={styles.link}>
+        <Link href="./" style={styles.link}>
           Home
         </Link>
-        <Link href="/cameras" style={styles.link}>
+        <Link href="./cameras" style={styles.link}>
           Cameras
         </Link>
-        <Link href="/add-camera" style={styles.link}>
+        <Link href="./add-camera" style={styles.link}>
           Add Camera
         </Link>
       </div>
