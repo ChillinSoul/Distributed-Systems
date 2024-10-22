@@ -12,10 +12,10 @@ async function fetchAllData() {
   loading.value = true;
 
   // Fetch from the mock APIs to get fresh data
-  await useFetch('/api/anpr');  // Fetch ANPR data
-  await useFetch('/api/map');   // Fetch Map data
+  await useFetch('./api/anpr');  // Fetch ANPR data
+  await useFetch('./api/map');   // Fetch Map data
 
-  const { data } = await useFetch('/api/allData');  // Fetch all data from database
+  const { data } = await useFetch('./api/allData');  // Fetch all data from database
   allData.value = data.value;
   loading.value = false;
 }
