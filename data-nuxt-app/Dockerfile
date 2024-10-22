@@ -4,12 +4,15 @@ FROM node:22.9.0-slim
 # Set the working directory inside the container
 WORKDIR /src
 
-# Copy package files and install dependencies (npm install in this case)
+# Copy package files and install dependencies
 COPY package*.json ./
 RUN npm install
 
 # Copy the rest of the application code
 COPY . .
+
+# Run Prisma generate
+RUN npx prisma generate
 
 # Run the build step
 RUN npm run build

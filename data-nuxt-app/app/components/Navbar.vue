@@ -10,6 +10,12 @@
                     <li>
                         <a href="./about">About</a>
                     </li>
+                    <li>
+                        <a href="./formulas">Formulas</a>
+                    </li>
+                    <li>
+                        <a href="./traffic-data">Traffic Data</a>
+                    </li>
                 </ul>
             </div>
         </nav> 
