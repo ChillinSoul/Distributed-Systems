@@ -68,11 +68,13 @@ fi
 
 # Step 6: Apply Kubernetes configurations
 echo "Deploying to Kubernetes..."
-if kubectl apply -f ./deployment.yaml && kubectl apply -f ./service.yaml && kubectl apply -f ./ingress.yaml && npx prisma migrate deploy; then
+if kubectl apply -f ./deployment.yaml && kubectl apply -f ./service.yaml && kubectl apply -f ./ingress.yaml; then
   echo "Deployment to Kubernetes completed successfully."
 else
   echo "Kubernetes deployment failed. Exiting..."
   exit 1
 fi
+
+npx prisma migrate deploy
 
 echo "Deployment process for nuxt-app completed successfully."
