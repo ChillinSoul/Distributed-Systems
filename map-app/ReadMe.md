@@ -1,240 +1,83 @@
-# Steps to Deploy a "Hello World" App on Kubernetes
+# Map Application
 
 By Thibaut François
 
 ## Introduction
 
-This guide outlines the steps to deploy a simple "Hello World" application on a Kubernetes cluster using Minikube. This setup is beginner-friendly and serves as a practical introduction to Kubernetes.
+The **Map Application** is a part of the **Brussels Traffic Monitoring** project, focusing on analyzing traffic in Brussels for improved mobility and sustainable development. This application allows users to visualize the map, view routes, and access the quickest paths between locations.
 
-## Setting Up Kubernetes Locally
+## Features
 
-To deploy the app, you first need a local Kubernetes cluster. For this purpose, we will use **Minikube**.
+- **Interactive Map**: Users can view a detailed map of Brussels at [http://localhost/map-app](http://localhost/map-app).
+- **Route Visualization**: The application computes and displays routes.
+- **Shortest Path Calculation**: Find the most efficient path between points.
+- **API Access**: Access map data via the API at [http://localhost/map-app/api](http://localhost/map-app/api).
 
-### 1. Install Minikube
+## Deployment Instructions
 
-You can easily install Minikube using Homebrew. Run the following command:
+### Prerequisites
 
-```bash
-brew install minikube
-```
+- **Minikube**: Ensure that Minikube is installed on your machine. You can install it using Homebrew:
 
-### 2. Start Minikube
+  ```bash
+  brew install minikube
+  ```
 
-After installing Minikube, start your cluster with:
+- **Docker**: Make sure Docker is installed and running on your system.
 
-```bash
-minikube start
-```
+### Steps to Deploy
 
-### 3. Verify Minikube Status
+1. **Start Minikube**:
 
-You can check the status of the Minikube cluster using:
+   ```bash
+   minikube start
+   ```
 
-```bash
-kubectl get nodes
-```
+2. **Set Permissions**:
 
-or:
+   Before running the deployment scripts for the first time, give execute permissions to the necessary scripts:
 
-```bash
-minikube status
-```
+   ```bash
+   chmod +x deploy.sh clean.sh
+   ```
 
-## Creating a Simple "Hello World" Docker Application
+3. **Deploy the Application**:
 
-Next, create a simple application that responds with "Hello, World!". You can use Flask or a built-in Python HTTP server.
+   From the root directory of the project, run:
 
-### Using Flask
+   ```bash
+   ./deploy.sh
+   ```
 
-Create a file named `app.py` with the following content:
+4. **Start the Minikube Tunnel**:
 
-```python
-# app.py
-from flask import Flask
-app = Flask(__name__)
+   This command will expose your services:
 
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
+   ```bash
+   minikube tunnel
+   ```
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-```
+5. **Cleanup**:
 
-### Alternative: Using Python's Built-in HTTP Server
+   To clean up your deployments, you can run:
 
-If you prefer not to use Flask, you can use Python’s built-in HTTP server:
+   ```bash
+   ./clean.sh
+   ```
 
-```python
-from http.server import BaseHTTPRequestHandler, HTTPServer
+## Deployment Script Overview
 
-class HelloWorldHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        # Send a 200 OK response
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
-        # Send the response body
-        self.wfile.write(b"Hello, World!")
+The `deploy.sh` script automates the deployment process and consists of the following steps:
 
-def run(server_class=HTTPServer, handler_class=HelloWorldHandler, port=5000):
-    server_address = ('', port)
-    httpd = server_class(server_address, handler_class)
-    print(f'Starting HTTP server on port {port}...')
-    httpd.serve_forever()
+- **Check if Minikube is Running**: The script verifies that Minikube is active before proceeding.
+- **Configure Docker**: It sets Docker to use Minikube's Docker daemon.
+- **Build Docker Image**: It builds the Docker image for the application.
+- **Apply Kubernetes Configurations**: It deploys the application to Kubernetes using the specified YAML configuration files.
 
-if __name__ == '__main__':
-    run()
-```
+### Cleanup Script Overview
 
-### Creating the Dockerfile
-
-To containerize the application, create a `Dockerfile` in the same directory:
-
-```dockerfile
-# Dockerfile
-FROM python:3.9-slim
-WORKDIR /app
-COPY app.py /app
-RUN pip install flask
-CMD ["python", "app.py"]
-```
-
-## Building the Docker Image
-
-Before building the Docker image, ensure that you are connected to Minikube's Docker environment:
-
-```bash
-eval $(minikube docker-env)
-```
-
-Then, build the Docker image using the following command:
-
-```bash
-docker build -t hello-k8s .
-```
-
-To verify that the image was successfully created, list your Docker images:
-
-```bash
-docker images
-```
-
-## Creating a Kubernetes Deployment
-
-A Deployment defines the desired state for your application, including the number of replicas and update strategies. Create a `deployment.yaml` file with the following content:
-
-```yaml
-# deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: hello-k8s-deployment
-spec:
-  replicas: 1 # Number of app instances
-  selector:
-    matchLabels:
-      app: hello-k8s
-  template:
-    metadata:
-      labels:
-        app: hello-k8s
-    spec:
-      containers:
-        - name: hello-k8s
-          image: hello-k8s # The Docker image we just built
-          imagePullPolicy: Never
-          ports:
-            - containerPort: 5000
-```
-
-Deploy the application to Kubernetes with the following command:
-
-```bash
-kubectl apply -f deployment.yaml
-```
-
-### Checking the Deployment
-
-You can check the status of your deployment and pods using:
-
-```bash
-kubectl get deployments
-kubectl get pods
-```
-
-The output should show that your pod is running:
-
-```
-NAME                                    READY   STATUS    RESTARTS       AGE
-hello-k8s-deployment-866659cd9f-d7lsh   1/1     Running   0              8s
-```
-
-## Exposing Your App with a Kubernetes Service
-
-To make your application accessible from outside the Kubernetes cluster, you need to create a Service. Create a `service.yaml` file with the following content:
-
-```yaml
-# service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: hello-k8s-service
-spec:
-  selector:
-    app: hello-k8s # Match the label from Deployment
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 5000 # Forward traffic to the container’s port
-  type: LoadBalancer # Use this to expose the service outside the cluster
-```
-
-Apply the service configuration using:
-
-```bash
-kubectl apply -f service.yaml
-```
-
-### Accessing Your Application
-
-Finally, retrieve the service URL to access your application:
-
-```bash
-minikube service hello-k8s-service --url
-```
-
-Open the provided URL in your browser, and you should see "Hello, World!" displayed.
-
-## When You're Finished Working
-
-Stop Minikube:
-
-If you want to stop your Minikube cluster when you’re done, use:
-bash
-
-```bash
-minikube stop
-```
-
-This command will stop the Minikube VM but keep your configurations and state.
-
-You can reopen it later with :
-
-```bash
-minikube sart
-```
-
-## Modifing the Application
-
-After making changes to your app.py code you have to rebuild your Docker image:
-
-```bash
-docker build -t hello-k8s .
-```
-
-And reapply the deployment to update your running application.
+The `clean.sh` script is responsible for cleaning up the Kubernetes resources associated with your application. It deletes the deployments and services as defined in the configuration files.
 
 ## Conclusion
 
-Thank you for reading this. You have successfully deployed a "Hello World" application on Kubernetes using Minikube.
+The Map Application serves as a crucial component in the broader **Brussels Traffic Monitoring** project, utilizing modern technologies like Kubernetes and Docker for deployment. By following the provided instructions, you can deploy and run the application locally and access the map and its API.

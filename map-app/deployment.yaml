@@ -4,18 +4,18 @@ kind: Deployment
 metadata:
   name: map-app-deployment
 spec:
-  replicas: 1
+  replicas: 1 # Number of pod, a pod is a group of one or more containers, it runs the container.
   selector:
     matchLabels:
-      app: map-app
-  template:
+      app: map-app # select which Pods this Deployment will manage
+  template: # describes the Pods
     metadata:
       labels:
-        app: map-app
+        app: map-app # name of the pod
     spec:
-      containers:
+      containers: # defines the container that will run inside each Pod
         - name: map-app
-          image: map-app
+          image: map-app # The container is based on a Docker image we previously built
           imagePullPolicy: Never
           ports:
-            - containerPort: 5000
+            - containerPort: 3000

@@ -1,0 +1,100 @@
+openapi: 3.0.0
+info:
+  title: Camera-app API
+  description: API for managing cameras
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Local server
+
+paths:
+  /cameras:
+    get:
+      summary: List all cameras
+      operationId: listCameras
+      responses:
+        "200":
+          description: A list of cameras
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Camera"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /add-camera:
+    post:
+      summary: Create a new camera
+      operationId: createCamera
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cameraName:
+                  type: string
+                  example: "Main Gate Camera"
+                cameraNumber:
+                  type: string
+                  example: "C123"
+                position:
+                  type: array
+                  items:
+                    type: number
+                  minItems: 2
+                  maxItems: 2
+                  example: [48, 2]
+      responses:
+        "201":
+          description: Camera created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Camera"
+        "400":
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Camera:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "5f6abcdf234a0e5b5cbb8abf"
+        cameraName:
+          type: string
+          example: "Main Gate Camera"
+        cameraNumber:
+          type: string
+          example: "C123"
+        position:
+          type: array
+          items:
+            type: string
+          example: ["72", "25"]
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Failed to fetch cameras"
