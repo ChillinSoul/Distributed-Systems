@@ -57,7 +57,16 @@ else
   exit 1
 fi
 
-# Step 5: Apply Kubernetes configurations
+# Step 5: Apply To Deploy The Database
+echo "Deploying The Database To Kubernetes..."
+if kubectl apply -f mysql-pv.yaml && kubectl apply -f mysql-deployment.yaml && kubectl apply -f mysql-service.yaml && npx prisma migrate deploy; then
+  echo "Deployment of MySQL database to Kubernetes succeeded."
+else
+  echo "Deployment of MySQL database failed. Exiting..."
+  exit 1
+fi
+
+# Step 6: Apply Kubernetes configurations
 echo "Deploying to Kubernetes..."
 if kubectl apply -f ./deployment.yaml && kubectl apply -f ./service.yaml && kubectl apply -f ./ingress.yaml; then
   echo "Deployment to Kubernetes completed successfully."
