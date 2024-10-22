@@ -75,6 +75,6 @@ else
   exit 1
 fi
 
-npx prisma migrate deploy
+#npx prisma migrate deploy
 
 echo "Deployment process for nuxt-app completed successfully."

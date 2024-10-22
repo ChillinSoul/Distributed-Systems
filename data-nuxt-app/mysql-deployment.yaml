@@ -19,10 +19,6 @@ spec:
               value: root
             - name: MYSQL_DATABASE
               value: manneken
-            - name: MYSQL_USER
-              value: root
-            - name: MYSQL_PASSWORD
-              value: root
           ports:
             - containerPort: 3306
           volumeMounts:

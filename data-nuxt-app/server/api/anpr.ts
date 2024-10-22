@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
-//import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
-//const prisma = new PrismaClient();
+const prisma = new PrismaClient();
 
 export default defineEventHandler(async () => {
   const anprData = {
@@ -13,7 +13,7 @@ export default defineEventHandler(async () => {
   };
 
   // Store in the database
-//  await prisma.aNPRData.create({ data: anprData });
+  await prisma.aNPRData.create({ data: anprData });
 
   return anprData;
 });

@@ -1,6 +1,6 @@
 # Use node 22.9.0 slim image
 FROM node:22.9.0-slim
-
+RUN apt-get update && apt-get install -y openssl
 # Set the working directory inside the container
 WORKDIR /src
 
