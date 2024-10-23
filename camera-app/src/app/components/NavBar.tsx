@@ -34,7 +34,7 @@ const Navbar = () => {
         <Link href="./cameras" style={styles.link}>
           Cameras
         </Link>
-        <Link href="./add-camera" style={styles.link}>
+        <Link href="./camera-app/add-camera" style={styles.link}>
           Add Camera
         </Link>
       </div>
