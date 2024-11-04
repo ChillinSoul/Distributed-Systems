@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 interface Intersection {
   id: number;
@@ -19,31 +19,7 @@ interface MapData {
   roads: Road[];
 }
 
-const SvgMap: React.FC = () => {
-  const [mapData, setMapData] = useState<MapData | null>(null); // État pour stocker les données de la carte
-
-  useEffect(() => {
-    const fetchMapData = async () => {
-      try {
-        const response = await fetch("/api"); // URL de ton API
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data: MapData = await response.json();
-        setMapData(data); // Mettre à jour l'état avec les données récupérées
-      } catch (error) {
-        console.error("Failed to fetch map data:", error);
-      }
-    };
-
-    fetchMapData();
-  }, []);
-
-  // Afficher un message de chargement ou une erreur si les données ne sont pas encore disponibles
-  if (!mapData) {
-    return <div>Loading...</div>;
-  }
-
+const SvgMap: React.FC<{ mapData: MapData }> = ({ mapData }) => {
   return (
     <svg width="400" height="500" style={{ border: "1px solid black" }}>
       {/* Draw roads */}
@@ -80,7 +56,7 @@ const SvgMap: React.FC = () => {
             fill="red"
           />
           <text
-            x={intersection.coordinates[0] + 10} // Position text to the right of the circle
+            x={intersection.coordinates[0] + 10}
             y={intersection.coordinates[1]}
             fontSize="12"
             fill="black"
