@@ -5,22 +5,22 @@
           <h2 class="text-2xl absolute w-full text-center pointer-events-none">Manneken Data</h2>
           <ul class="flex gap-4">
             <li>
-              <NuxtLink to="/">Home</NuxtLink>
+              <a to="./">Home</a>
             </li>
             <li>
-              <NuxtLink to="/about">About</NuxtLink>
+              <a to="./about">About</a>
             </li>
             <li>
-              <NuxtLink to="/formulas">Formulas</NuxtLink>
+              <a to="./formulas">Formulas</a>
             </li>
             <li>
-              <NuxtLink to="/traffic-data">Traffic Data</NuxtLink>
+              <a to="./traffic-data">Traffic Data</a>
             </li>
             <li>
-              <NuxtLink to="/data-view">Data View</NuxtLink>
+              <a to="./data-view">Data View</a>
             </li>
             <li>
-              <NuxtLink to="/api-docs">API Docs</NuxtLink>
+              <a to="./api-docs">API Docs</a>
             </li>
           </ul>
         </div>
