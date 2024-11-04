@@ -5,22 +5,22 @@
           <h2 class="text-2xl absolute w-full text-center pointer-events-none">Manneken Data</h2>
           <ul class="flex gap-4">
             <li>
-              <a to="./">Home</a>
+              <a href="./">Home</a>
             </li>
             <li>
-              <a to="./about">About</a>
+              <a href="./about">About</a>
             </li>
             <li>
-              <a to="./formulas">Formulas</a>
+              <a href="./formulas">Formulas</a>
             </li>
             <li>
-              <a to="./traffic-data">Traffic Data</a>
+              <a href="./traffic-data">Traffic Data</a>
             </li>
             <li>
-              <a to="./data-view">Data View</a>
+              <a href="./data-view">Data View</a>
             </li>
             <li>
-              <a to="./api-docs">API Docs</a>
+              <a href="./api-docs">API Docs</a>
             </li>
           </ul>
         </div>
