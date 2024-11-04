@@ -1,0 +1,713 @@
+[
+  {
+    "roadId": "R2",
+    "roadName": "Beech Drive",
+    "vehicleDensity": 58,
+    "avgSpeed": 43,
+    "congestionLevel": "Low",
+    "accidentsReported": 2,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Lenna Knoll",
+    "vehicleDensity": 51,
+    "avgSpeed": 116,
+    "congestionLevel": "High",
+    "accidentsReported": 3,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "Fourth Avenue",
+    "vehicleDensity": 99,
+    "avgSpeed": 118,
+    "congestionLevel": "Medium",
+    "accidentsReported": 3,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "Maurice Greens",
+    "vehicleDensity": 86,
+    "avgSpeed": 33,
+    "congestionLevel": "Low",
+    "accidentsReported": 1,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R5",
+    "roadName": "Hawthorn Avenue",
+    "vehicleDensity": 32,
+    "avgSpeed": 63,
+    "congestionLevel": "High",
+    "accidentsReported": 3,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R5",
+    "roadName": "Dooley Dale",
+    "vehicleDensity": 33,
+    "avgSpeed": 94,
+    "congestionLevel": "Low",
+    "accidentsReported": 0,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Cleveland Street",
+    "vehicleDensity": 59,
+    "avgSpeed": 79,
+    "congestionLevel": "Low",
+    "accidentsReported": 0,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R4",
+    "roadName": "Upton Walks",
+    "vehicleDensity": 95,
+    "avgSpeed": 105,
+    "congestionLevel": "Low",
+    "accidentsReported": 1,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "Abe Glen",
+    "vehicleDensity": 21,
+    "avgSpeed": 43,
+    "congestionLevel": "Low",
+    "accidentsReported": 0,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "O'Connell Radial",
+    "vehicleDensity": 53,
+    "avgSpeed": 49,
+    "congestionLevel": "Medium",
+    "accidentsReported": 0,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "Becker Streets",
+    "vehicleDensity": 84,
+    "avgSpeed": 114,
+    "congestionLevel": "High",
+    "accidentsReported": 1,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R1",
+    "roadName": "Haley Forest",
+    "vehicleDensity": 37,
+    "avgSpeed": 87,
+    "congestionLevel": "Medium",
+    "accidentsReported": 0,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Watson Spring",
+    "vehicleDensity": 38,
+    "avgSpeed": 86,
+    "congestionLevel": "High",
+    "accidentsReported": 3,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Dannie Estate",
+    "vehicleDensity": 82,
+    "avgSpeed": 101,
+    "congestionLevel": "High",
+    "accidentsReported": 2,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Ebert Stravenue",
+    "vehicleDensity": 43,
+    "avgSpeed": 39,
+    "congestionLevel": "Low",
+    "accidentsReported": 2,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "Stark Turnpike",
+    "vehicleDensity": 97,
+    "avgSpeed": 88,
+    "congestionLevel": "High",
+    "accidentsReported": 0,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R4",
+    "roadName": "Dan Shoal",
+    "vehicleDensity": 73,
+    "avgSpeed": 119,
+    "congestionLevel": "Medium",
+    "accidentsReported": 3,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "Judge Glen",
+    "vehicleDensity": 100,
+    "avgSpeed": 88,
+    "congestionLevel": "Medium",
+    "accidentsReported": 3,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Aida Meadow",
+    "vehicleDensity": 53,
+    "avgSpeed": 120,
+    "congestionLevel": "High",
+    "accidentsReported": 2,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Willie Flat",
+    "vehicleDensity": 44,
+    "avgSpeed": 73,
+    "congestionLevel": "High",
+    "accidentsReported": 3,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R1",
+    "roadName": "Koepp Ramp",
+    "vehicleDensity": 95,
+    "avgSpeed": 45,
+    "congestionLevel": "Medium",
+    "accidentsReported": 1,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R1",
+    "roadName": "Water Street",
+    "vehicleDensity": 92,
+    "avgSpeed": 76,
+    "congestionLevel": "Low",
+    "accidentsReported": 0,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "Magdalen Drive",
+    "vehicleDensity": 90,
+    "avgSpeed": 59,
+    "congestionLevel": "Low",
+    "accidentsReported": 3,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Meadow Lane",
+    "vehicleDensity": 23,
+    "avgSpeed": 105,
+    "congestionLevel": "High",
+    "accidentsReported": 1,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "E 4th Street",
+    "vehicleDensity": 97,
+    "avgSpeed": 42,
+    "congestionLevel": "High",
+    "accidentsReported": 2,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Tomas Trail",
+    "vehicleDensity": 33,
+    "avgSpeed": 85,
+    "congestionLevel": "High",
+    "accidentsReported": 1,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "Cartwright Prairie",
+    "vehicleDensity": 49,
+    "avgSpeed": 115,
+    "congestionLevel": "Medium",
+    "accidentsReported": 1,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R4",
+    "roadName": "Eva Brooks",
+    "vehicleDensity": 46,
+    "avgSpeed": 65,
+    "congestionLevel": "High",
+    "accidentsReported": 0,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Marquardt Meadow",
+    "vehicleDensity": 72,
+    "avgSpeed": 53,
+    "congestionLevel": "High",
+    "accidentsReported": 0,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Nyah Mountain",
+    "vehicleDensity": 21,
+    "avgSpeed": 92,
+    "congestionLevel": "Medium",
+    "accidentsReported": 1,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R1",
+    "roadName": "W Division Street",
+    "vehicleDensity": 76,
+    "avgSpeed": 61,
+    "congestionLevel": "Low",
+    "accidentsReported": 3,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "Liberty Street",
+    "vehicleDensity": 44,
+    "avgSpeed": 76,
+    "congestionLevel": "High",
+    "accidentsReported": 0,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R1",
+    "roadName": "W Church Street",
+    "vehicleDensity": 56,
+    "avgSpeed": 120,
+    "congestionLevel": "Medium",
+    "accidentsReported": 2,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R1",
+    "roadName": "Danial Landing",
+    "vehicleDensity": 59,
+    "avgSpeed": 61,
+    "congestionLevel": "Low",
+    "accidentsReported": 3,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "W Franklin Street",
+    "vehicleDensity": 73,
+    "avgSpeed": 76,
+    "congestionLevel": "Low",
+    "accidentsReported": 2,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R4",
+    "roadName": "Rippin Well",
+    "vehicleDensity": 95,
+    "avgSpeed": 118,
+    "congestionLevel": "Low",
+    "accidentsReported": 3,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R5",
+    "roadName": "Post Road",
+    "vehicleDensity": 35,
+    "avgSpeed": 99,
+    "congestionLevel": "Low",
+    "accidentsReported": 2,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R5",
+    "roadName": "Loren Pine",
+    "vehicleDensity": 22,
+    "avgSpeed": 111,
+    "congestionLevel": "Low",
+    "accidentsReported": 2,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Walsh Falls",
+    "vehicleDensity": 27,
+    "avgSpeed": 70,
+    "congestionLevel": "Low",
+    "accidentsReported": 2,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "Zboncak Lane",
+    "vehicleDensity": 60,
+    "avgSpeed": 44,
+    "congestionLevel": "Low",
+    "accidentsReported": 2,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Mohammed Heights",
+    "vehicleDensity": 45,
+    "avgSpeed": 76,
+    "congestionLevel": "High",
+    "accidentsReported": 1,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R5",
+    "roadName": "Hickory Street",
+    "vehicleDensity": 79,
+    "avgSpeed": 42,
+    "congestionLevel": "Medium",
+    "accidentsReported": 0,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R4",
+    "roadName": "Stokes Dam",
+    "vehicleDensity": 45,
+    "avgSpeed": 98,
+    "congestionLevel": "High",
+    "accidentsReported": 3,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "St George's Road",
+    "vehicleDensity": 72,
+    "avgSpeed": 47,
+    "congestionLevel": "High",
+    "accidentsReported": 1,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R5",
+    "roadName": "Wilkinson Creek",
+    "vehicleDensity": 87,
+    "avgSpeed": 51,
+    "congestionLevel": "Medium",
+    "accidentsReported": 3,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "Schneider Ranch",
+    "vehicleDensity": 57,
+    "avgSpeed": 107,
+    "congestionLevel": "High",
+    "accidentsReported": 0,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "S 14th Street",
+    "vehicleDensity": 25,
+    "avgSpeed": 35,
+    "congestionLevel": "High",
+    "accidentsReported": 0,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "Dianna Ridge",
+    "vehicleDensity": 75,
+    "avgSpeed": 39,
+    "congestionLevel": "High",
+    "accidentsReported": 3,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R1",
+    "roadName": "Arianna Field",
+    "vehicleDensity": 25,
+    "avgSpeed": 80,
+    "congestionLevel": "Low",
+    "accidentsReported": 1,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R1",
+    "roadName": "O'Keefe Rapid",
+    "vehicleDensity": 81,
+    "avgSpeed": 42,
+    "congestionLevel": "Low",
+    "accidentsReported": 3,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "Modesta Passage",
+    "vehicleDensity": 33,
+    "avgSpeed": 55,
+    "congestionLevel": "High",
+    "accidentsReported": 2,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Brenda Skyway",
+    "vehicleDensity": 60,
+    "avgSpeed": 56,
+    "congestionLevel": "Medium",
+    "accidentsReported": 0,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R5",
+    "roadName": "Javon Landing",
+    "vehicleDensity": 36,
+    "avgSpeed": 43,
+    "congestionLevel": "Low",
+    "accidentsReported": 2,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R1",
+    "roadName": "Franklin Road",
+    "vehicleDensity": 66,
+    "avgSpeed": 38,
+    "congestionLevel": "Low",
+    "accidentsReported": 0,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R5",
+    "roadName": "Yundt Light",
+    "vehicleDensity": 46,
+    "avgSpeed": 42,
+    "congestionLevel": "Medium",
+    "accidentsReported": 3,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "Vanessa Plaza",
+    "vehicleDensity": 53,
+    "avgSpeed": 74,
+    "congestionLevel": "High",
+    "accidentsReported": 2,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Gideon Creek",
+    "vehicleDensity": 69,
+    "avgSpeed": 49,
+    "congestionLevel": "Medium",
+    "accidentsReported": 3,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Park Crescent",
+    "vehicleDensity": 40,
+    "avgSpeed": 92,
+    "congestionLevel": "Low",
+    "accidentsReported": 3,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "Schiller Highway",
+    "vehicleDensity": 39,
+    "avgSpeed": 39,
+    "congestionLevel": "Low",
+    "accidentsReported": 3,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R4",
+    "roadName": "Hoppe Plaza",
+    "vehicleDensity": 66,
+    "avgSpeed": 105,
+    "congestionLevel": "Medium",
+    "accidentsReported": 3,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R5",
+    "roadName": "Tod Overpass",
+    "vehicleDensity": 57,
+    "avgSpeed": 111,
+    "congestionLevel": "Low",
+    "accidentsReported": 0,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Emmie Village",
+    "vehicleDensity": 97,
+    "avgSpeed": 67,
+    "congestionLevel": "High",
+    "accidentsReported": 2,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R1",
+    "roadName": "Pearl Street",
+    "vehicleDensity": 100,
+    "avgSpeed": 77,
+    "congestionLevel": "High",
+    "accidentsReported": 3,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R1",
+    "roadName": "The Glebe",
+    "vehicleDensity": 45,
+    "avgSpeed": 64,
+    "congestionLevel": "Medium",
+    "accidentsReported": 3,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R4",
+    "roadName": "Boehm Mill",
+    "vehicleDensity": 61,
+    "avgSpeed": 90,
+    "congestionLevel": "Medium",
+    "accidentsReported": 3,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "Streich Court",
+    "vehicleDensity": 85,
+    "avgSpeed": 82,
+    "congestionLevel": "High",
+    "accidentsReported": 0,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R1",
+    "roadName": "Serenity Roads",
+    "vehicleDensity": 28,
+    "avgSpeed": 84,
+    "congestionLevel": "Low",
+    "accidentsReported": 1,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R1",
+    "roadName": "Gleason Highway",
+    "vehicleDensity": 29,
+    "avgSpeed": 46,
+    "congestionLevel": "High",
+    "accidentsReported": 2,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Trevor Valley",
+    "vehicleDensity": 39,
+    "avgSpeed": 57,
+    "congestionLevel": "High",
+    "accidentsReported": 0,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R2",
+    "roadName": "Green Trace",
+    "vehicleDensity": 21,
+    "avgSpeed": 66,
+    "congestionLevel": "Low",
+    "accidentsReported": 2,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R5",
+    "roadName": "Thiel Motorway",
+    "vehicleDensity": 94,
+    "avgSpeed": 94,
+    "congestionLevel": "Medium",
+    "accidentsReported": 2,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R1",
+    "roadName": "Quarry Lane",
+    "vehicleDensity": 38,
+    "avgSpeed": 90,
+    "congestionLevel": "Low",
+    "accidentsReported": 2,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R5",
+    "roadName": "Church Walk",
+    "vehicleDensity": 51,
+    "avgSpeed": 63,
+    "congestionLevel": "Medium",
+    "accidentsReported": 1,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "S Bridge Street",
+    "vehicleDensity": 34,
+    "avgSpeed": 96,
+    "congestionLevel": "Medium",
+    "accidentsReported": 0,
+    "weatherCondition": "Rain"
+  },
+  {
+    "roadId": "R4",
+    "roadName": "Hilda Street",
+    "vehicleDensity": 51,
+    "avgSpeed": 97,
+    "congestionLevel": "Low",
+    "accidentsReported": 1,
+    "weatherCondition": "Fog"
+  },
+  {
+    "roadId": "R3",
+    "roadName": "Jean Gateway",
+    "vehicleDensity": 82,
+    "avgSpeed": 32,
+    "congestionLevel": "High",
+    "accidentsReported": 2,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R5",
+    "roadName": "Vicarage Lane",
+    "vehicleDensity": 39,
+    "avgSpeed": 77,
+    "congestionLevel": "Low",
+    "accidentsReported": 3,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R4",
+    "roadName": "Klocko Route",
+    "vehicleDensity": 62,
+    "avgSpeed": 38,
+    "congestionLevel": "Low",
+    "accidentsReported": 0,
+    "weatherCondition": "Clear"
+  },
+  {
+    "roadId": "R5",
+    "roadName": "Kassandra Park",
+    "vehicleDensity": 80,
+    "avgSpeed": 92,
+    "congestionLevel": "High",
+    "accidentsReported": 3,
+    "weatherCondition": "Clear"
+  }
+]

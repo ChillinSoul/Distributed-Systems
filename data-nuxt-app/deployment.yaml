@@ -18,6 +18,3 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 3000
-          env:
-            - name: DATABASE_URL
-              value: "mysql://root:root@mysql:3306/manneken"

@@ -5,6 +5,11 @@ export default defineNuxtConfig({
     experimental: {
       openAPI: true,
     },
+    routeRules: {
+      '/api/**': {
+        cors: true,
+      },
+    },
   },
   devtools: { enabled: true },
   postcss: {

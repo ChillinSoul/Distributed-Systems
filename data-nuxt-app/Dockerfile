@@ -11,14 +11,11 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Run Prisma generate
-RUN npx prisma generate
-
-# Run the build step
-RUN npm run build
+# Create data directory
+RUN mkdir -p /src/data/json
 
 # Expose the port the app will run on
 EXPOSE 3000
 
-# Command to run the application
-CMD ["node", "./.output/server/index.mjs", "-p", "3000"]
+# Start the application
+CMD ["npm", "run", "start"]

@@ -1,0 +1,6 @@
+[
+  {
+    "id": 1730736024937,
+    "formula": "anpr.getVehicleCount(data => data.vehicleType === 'Sedan')"
+  }
+]
