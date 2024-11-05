@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { promises as fs } from 'fs';
+import { resolve } from 'path';
 
 export default defineEventHandler(async () => {
   const mapData = {
@@ -14,8 +13,20 @@ export default defineEventHandler(async () => {
     weatherCondition: faker.helpers.arrayElement(['Clear', 'Rain', 'Fog'])
   };
 
-  // Store in the database
-  await prisma.mapData.create({ data: mapData });
+  // Store in the JSON file
+  const dataPath = resolve('./data/json/mapData.json');
+  let existingData = [];
+
+  try {
+    const fileContent = await fs.readFile(dataPath, 'utf8');
+    existingData = JSON.parse(fileContent);
+  } catch (err) {
+    existingData = [];
+  }
+
+  existingData.push(mapData);
+
+  await fs.writeFile(dataPath, JSON.stringify(existingData, null, 2));
 
   return mapData;
 });

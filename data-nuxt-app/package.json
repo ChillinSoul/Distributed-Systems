@@ -28,6 +28,7 @@
     "pinia": "^2.2.2",
     "prisma": "^5.20.0",
     "sqlite3": "^5.1.7",
+    "swagger-ui-dist": "^5.17.14",
     "vm2": "^3.9.19",
     "vue": "latest",
     "vue-router": "latest"

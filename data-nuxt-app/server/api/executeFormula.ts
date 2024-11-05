@@ -1,7 +1,6 @@
 import { VM } from 'vm2';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { promises as fs } from 'fs';
+import { resolve } from 'path';
 
 // Define types for the data in your ANPR and Map endpoints
 interface ANPRData {
@@ -25,9 +24,26 @@ interface MapData {
 export default defineEventHandler(async (event) => {
   const { formula } = await readBody(event);
 
-  // Fetch all data from the database
-  const allAnprData: ANPRData[] = await prisma.aNPRData.findMany();
-  const allMapData: MapData[] = await prisma.mapData.findMany();
+  // Fetch all data from the JSON files
+  const anprDataPath = resolve('./data/json/anprData.json');
+  const mapDataPath = resolve('./data/json/mapData.json');
+
+  let allAnprData: ANPRData[] = [];
+  let allMapData: MapData[] = [];
+
+  try {
+    const anprFileContent = await fs.readFile(anprDataPath, 'utf8');
+    allAnprData = JSON.parse(anprFileContent);
+  } catch (err) {
+    allAnprData = [];
+  }
+
+  try {
+    const mapFileContent = await fs.readFile(mapDataPath, 'utf8');
+    allMapData = JSON.parse(mapFileContent);
+  } catch (err) {
+    allMapData = [];
+  }
 
   // VM for secure formula execution
   const vm = new VM({

@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { promises as fs } from 'fs';
+import { resolve } from 'path';
 
 export default defineEventHandler(async () => {
   const anprData = {
@@ -12,8 +11,20 @@ export default defineEventHandler(async () => {
     location: `C${faker.number.int({ min: 1, max: 5 })}`
   };
 
-  // Store in the database
-  await prisma.aNPRData.create({ data: anprData });
+  // Store in the JSON file
+  const dataPath = resolve('./data/json/anprData.json');
+  let existingData = [];
+
+  try {
+    const fileContent = await fs.readFile(dataPath, 'utf8');
+    existingData = JSON.parse(fileContent);
+  } catch (err) {
+    existingData = [];
+  }
+
+  existingData.push(anprData);
+
+  await fs.writeFile(dataPath, JSON.stringify(existingData, null, 2));
 
   return anprData;
 });
