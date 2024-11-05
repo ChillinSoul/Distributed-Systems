@@ -12,7 +12,7 @@ const editingFormulaContent = ref('');
 
 // Fetch existing formulas
 async function fetchFormulas() {
-  const { data } = await useFetch('/api/formulas');
+  const { data } = await useFetch('api/formulas');
   formulas.value = data.value || [];
 }
 

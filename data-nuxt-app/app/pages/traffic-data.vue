@@ -14,7 +14,7 @@ function refreshData() {
 </script>
 
 <template>
-  <div class="container bg-gray-700 text-white">
+  <div class="container bg-gray-700 text-white pt-20">
     <h2 class="text-3xl">Traffic Data Visualization</h2>
 
     <button @click="refreshData" class="bg-blue-500 text-white px-4 py-2">Refresh Data</button>
