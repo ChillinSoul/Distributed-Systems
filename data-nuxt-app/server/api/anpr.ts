@@ -12,7 +12,7 @@ export default defineEventHandler(async () => {
   };
 
   // Store in the JSON file
-  const dataPath = resolve('./data/json/anprData.json');
+  const dataPath = resolve('../data/json/anprData.json');
   let existingData = [];
 
   try {

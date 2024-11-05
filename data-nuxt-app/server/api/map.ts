@@ -14,14 +14,14 @@ export default defineEventHandler(async () => {
   };
 
   // Store in the JSON file
-  const dataPath = resolve('./data/json/mapData.json');
+  const dataPath = resolve('../data/json/mapData.json');
   let existingData = [];
 
   try {
     const fileContent = await fs.readFile(dataPath, 'utf8');
     existingData = JSON.parse(fileContent);
   } catch (err) {
-    existingData = [];
+    existingData = [err];
   }
 
   existingData.push(mapData);

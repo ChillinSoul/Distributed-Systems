@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
 import { resolve } from 'path';
 
-const formulasPath = resolve('./data/json/formulas.json');
+const formulasPath = resolve('../data/json/anprData.json');
 
 export default defineEventHandler(async (event) => {
   const method = event.req.method;
@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
         const fileContent = await fs.readFile(formulasPath, 'utf8');
         formulas = JSON.parse(fileContent);
       } catch (err) {
-        formulas = [];
+        formulas = [err];
       }
       return formulas;
 

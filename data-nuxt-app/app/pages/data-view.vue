@@ -7,7 +7,7 @@ const allData = ref({ anpr: [], map: [] });
 
 async function fetchAllData() {
   loading.value = true;
-  const { data, error } = await useFetch('/api/allData');
+  const { data, error } = await useFetch('api/allData');
   if (!error.value) {
     allData.value = data.value;
   }

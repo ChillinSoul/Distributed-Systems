@@ -58,6 +58,10 @@ export default defineNuxtConfig({
       omitLineBreaks: false
     }
   },
+  app: {
+    baseURL: '/data-nuxt-app/',
+    cdnURL: 'http://localhost/data-nuxt-app/',
+  },
 
   compatibilityDate: '2024-09-27'
 })

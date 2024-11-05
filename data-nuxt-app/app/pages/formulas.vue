@@ -20,7 +20,7 @@ async function fetchFormulas() {
 async function addFormula() {
   if (!formula.value) return;
 
-  const { data, error } = await useFetch('/api/formulas', {
+  const { data, error } = await useFetch('api/formulas', {
     method: 'POST',
     body: { formula: formula.value }
   });
@@ -42,7 +42,7 @@ async function deleteFormula(id) {
 
 // Execute a formula
 async function executeFormula(formulaObj) {
-  const { data, error } = await useFetch('/api/executeFormula', {
+  const { data, error } = await useFetch('api/executeFormula', {
     method: 'POST',
     body: { formula: formulaObj.formula }
   });
@@ -70,7 +70,7 @@ function editFormula(formulaObj) {
 async function saveEditedFormula() {
   if (!editingFormulaContent.value) return;
 
-  const { data, error } = await useFetch(`/api/formulas/${editingFormulaId.value}`, {
+  const { data, error } = await useFetch(`api/formulas/${editingFormulaId.value}`, {
     method: 'PUT',
     body: { formula: editingFormulaContent.value }
   });

@@ -25,8 +25,8 @@ export default defineEventHandler(async (event) => {
   const { formula } = await readBody(event);
 
   // Fetch all data from the JSON files
-  const anprDataPath = resolve('./data/json/anprData.json');
-  const mapDataPath = resolve('./data/json/mapData.json');
+  const anprDataPath = resolve('../data/json/anprData.json');
+  const mapDataPath = resolve('../data/json/mapData.json');
 
   let allAnprData: ANPRData[] = [];
   let allMapData: MapData[] = [];

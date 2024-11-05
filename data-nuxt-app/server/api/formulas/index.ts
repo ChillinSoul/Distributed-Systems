@@ -2,7 +2,7 @@
 import { promises as fs } from 'fs';
 import { resolve } from 'path';
 
-const formulasPath = resolve('./data/json/formulas.json');
+const formulasPath = resolve('../data/json/formulas.json');
 
 export default defineEventHandler(async (event) => {
   const method = event.req.method;

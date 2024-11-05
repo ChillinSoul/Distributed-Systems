@@ -1,6 +1,6 @@
 <script setup>
-const anprEndpoint = '/api/anpr';
-const mapEndpoint = '/api/map';
+const anprEndpoint = 'api/anpr';
+const mapEndpoint = 'api/map';
 
 // Fetch data from both ANPR and Map endpoints
 const { data: anprData, refresh: refreshAnpr } = await useFetch(anprEndpoint);
