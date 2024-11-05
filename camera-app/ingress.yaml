@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: services-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: camera-app-host
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: camera-app-service
+              port:
+                number: 80
+    - host: data-nuxt-app-host
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: data-nuxt-app-service
+              port:
+                number: 80
+    - host: nginx-home-host
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: nginx-home-service
+              port:
+                number: 80
+    - host: map-app-host
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: map-app-service
+              port:
+                number: 80

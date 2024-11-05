@@ -57,6 +57,7 @@ const styles: { [key: string]: CSSProperties } = {
 };
 
 export default function AddCameraPage() {
+  const [available, setAvailable] = useState('');
   const [cameraName, setCameraName] = useState('');
   const [cameraNumber, setCameraNumber] = useState('');
   const [latitude, setLatitude] = useState('');
@@ -77,6 +78,7 @@ export default function AddCameraPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          available,
           cameraName,
           cameraNumber,
           position: [latitude, longitude], // Combine latitude and longitude into an array
@@ -86,7 +88,8 @@ export default function AddCameraPage() {
       if (response.ok) {
         setSuccessMessage('Camera added successfully!');
         setCameraName('');
-        setCameraNumber('');
+        setAvailable('');
+        setCameraNumber('true');
         setLatitude('');
         setLongitude('');
         router.push('/cameras'); // Redirect to cameras page after adding

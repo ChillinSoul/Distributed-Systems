@@ -9,6 +9,7 @@ datasource db {
 
 model Cameras {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  available    Boolean
   cameraName   String
   cameraNumber String
   position     String[]
