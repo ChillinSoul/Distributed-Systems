@@ -1,4 +1,6 @@
-<script lang="ts" setup>
+<script lang="js" setup>
+import { unref } from 'vue';
+
 const props = defineProps({
   endpoint: {
     type: String,
@@ -19,7 +21,8 @@ const { data, pending, error } = await useFetch(props.endpoint)
     <div v-if="pending">Loading...</div>
     <div v-else-if="error">Error: {{ error.message }}</div>
     <div v-else>
-      <p>Data: {{ data }}</p>
+      <!-- Using `unref` and slicing the data if it's a string -->
+      <p>Data: {{ typeof unref(data) === 'string' ? unref(data).slice(0, 100) : JSON.stringify(unref(data)).slice(0, 100) }}</p>
     </div>
   </div>
 </template>
