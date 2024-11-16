@@ -13,7 +13,7 @@
           class="text-white bg-blue-500 px-4 py-2 rounded-md w-full"
           >Manneken Data
       </a>
-      <APITest endpoint="http://data-nuxt-app-service.default.svc.cluster.local/data-nuxt-app/api/mock" />
+      <APITest endpoint="http://data-nuxt-app-service/data-nuxt-app/api/mock" />
         <p>camera-app</p>
         <a
         href="/camera-app/"
