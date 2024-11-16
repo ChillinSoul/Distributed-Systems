@@ -1,76 +1,66 @@
 import { VM } from 'vm2';
-import { promises as fs } from 'fs';
-import { resolve } from 'path';
-
-// Define types for the data in your ANPR and Map endpoints
-interface ANPRData {
-  licensePlate: string;
-  timestamp: Date;
-  vehicleType: string;
-  speed: number;
-  location: string;
-}
-
-interface MapData {
-  roadId: string;
-  roadName: string;
-  vehicleDensity: number;
-  avgSpeed: number;
-  congestionLevel: string;
-  accidentsReported: number;
-  weatherCondition: string;
-}
+import { prisma } from './db';
 
 export default defineEventHandler(async (event) => {
-  const { formula } = await readBody(event);
-
-  // Fetch all data from the JSON files
-  const anprDataPath = resolve('../data/json/anprData.json');
-  const mapDataPath = resolve('../data/json/mapData.json');
-
-  let allAnprData: ANPRData[] = [];
-  let allMapData: MapData[] = [];
-
   try {
-    const anprFileContent = await fs.readFile(anprDataPath, 'utf8');
-    allAnprData = JSON.parse(anprFileContent);
-  } catch (err) {
-    allAnprData = [];
-  }
+    const { formula } = await readBody(event);
 
-  try {
-    const mapFileContent = await fs.readFile(mapDataPath, 'utf8');
-    allMapData = JSON.parse(mapFileContent);
-  } catch (err) {
-    allMapData = [];
-  }
+    // Fetch data from database
+    const [allAnprData, allMapData] = await Promise.all([
+      prisma.aNPRData.findMany(),
+      prisma.mapData.findMany()
+    ]);
 
-  // VM for secure formula execution
-  const vm = new VM({
-    timeout: 1000, // Safety measure to prevent infinite loops
-    sandbox: {
-      map: {
-        getSpeed: (roadId: string): number[] => allMapData.filter((d) => d.roadId === roadId).map((d) => d.avgSpeed),
-        getDensity: (roadId: string): number[] => allMapData.filter((d) => d.roadId === roadId).map((d) => d.vehicleDensity),
-        getAccidents: (roadId: string): number[] => allMapData.filter((d) => d.roadId === roadId).map((d) => d.accidentsReported),
-        getCongestion: (roadId: string): string[] => allMapData.filter((d) => d.roadId === roadId).map((d) => d.congestionLevel),
+    const vm = new VM({
+      timeout: 1000,
+      sandbox: {
+        map: {
+          getSpeed: (roadId: string) => allMapData
+            .filter(d => d.roadId === roadId)
+            .map(d => d.avgSpeed),
+          getDensity: (roadId: string) => allMapData
+            .filter(d => d.roadId === roadId)
+            .map(d => d.vehicleDensity),
+          getAccidents: (roadId: string) => allMapData
+            .filter(d => d.roadId === roadId)
+            .map(d => d.accidentsReported),
+          getCongestion: (roadId: string) => allMapData
+            .filter(d => d.roadId === roadId)
+            .map(d => d.congestionLevel),
+        },
+        anpr: {
+          getVehicleCount: (criteria: Function) => allAnprData.filter(data => {
+            try {
+              return criteria(data);
+            } catch {
+              return false;
+            }
+          }).length,
+          getAverageSpeed: (criteria: Function) => allAnprData
+            .filter(data => {
+              try {
+                return criteria(data);
+              } catch {
+                return false;
+              }
+            })
+            .map(d => d.speed),
+        },
+        avg: (array: number[]) => array.length ? 
+          array.reduce((a, b) => a + b, 0) / array.length : 0,
+        sum: (array: number[]) => array.length ? 
+          array.reduce((a, b) => a + b, 0) : 0,
+        count: (array: any[]) => array.length,
       },
-      anpr: {
-        getVehicleCount: (criteria: (data: ANPRData) => boolean): number => allAnprData.filter(criteria).length,
-        getAverageSpeed: (criteria: (data: ANPRData) => boolean): number[] => allAnprData.filter(criteria).map(d => d.speed),
-      },
-      avg: (array: number[]): number => array.length ? array.reduce((a: number, b: number) => a + b, 0) / array.length : 0,
-      sum: (array: number[]): number => array.length ? array.reduce((a: number, b: number) => a + b, 0) : 0,
-      count: (array: any[]): number => array.length,
-    },
-  });
+    });
 
-  let result;
-  try {
-    result = await vm.run(`(async () => { return ${formula}; })()`);
-  } catch (err) {
-    throw new Error('Error executing formula: ' + (err as Error).message);
+    const result = await vm.run(`(async () => { return ${formula}; })()`);
+    return { result };
+  } catch (error) {
+    console.error('Error executing formula:', error);
+    throw createError({
+      statusCode: 500,
+      message: `Error executing formula: ${error.message}`
+    });
   }
-
-  return { result };
 });

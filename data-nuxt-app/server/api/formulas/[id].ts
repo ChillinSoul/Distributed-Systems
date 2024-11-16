@@ -1,63 +1,64 @@
-// server/api/formulas/[id].ts
-import { promises as fs } from 'fs';
-import { resolve } from 'path';
-
-const formulasPath = resolve('../data/json/formulas.json');
+import { prisma } from '../db';
 
 export default defineEventHandler(async (event) => {
-  const method = event.req.method;
-  const { id } = event.context.params as unknown as { id: string };
-
-  let formulas = [];
   try {
-    const fileContent = await fs.readFile(formulasPath, 'utf8');
-    formulas = JSON.parse(fileContent);
-  } catch (err) {
-    formulas = [];
-  }
+    const method = event.req.method;
+    const { id } = event.context.params as { id: string };
+    const formulaId = parseInt(id);
 
-  const formulaId = parseInt(id);
-
-  switch (method) {
-    case 'GET':
-      // Retrieve a specific formula
-      const formula = formulas.find((f: { id: number; }) => f.id === formulaId);
-      if (formula) {
+    switch (method) {
+      case 'GET':
+        const formula = await prisma.formula.findUnique({
+          where: { id: formulaId }
+        });
+        
+        if (!formula) {
+          throw createError({
+            statusCode: 404,
+            message: 'Formula not found'
+          });
+        }
+        
         return formula;
-      } else {
-        throw createError({ statusCode: 404, message: 'Formula not found' });
-      }
 
-    case 'PUT':
-      // Update a formula
-      const body = await readBody(event);
-      const updatedFormula = body.formula;
+      case 'PUT':
+        const body = await readBody(event);
+        if (!body.formula) {
+          throw createError({
+            statusCode: 400,
+            message: 'No formula provided'
+          });
+        }
 
-      if (!updatedFormula) {
-        throw createError({ statusCode: 400, message: 'No formula provided' });
-      }
+        const updated = await prisma.formula.update({
+          where: { id: formulaId },
+          data: { formula: body.formula }
+        });
 
-      const index = formulas.findIndex((f: { id: number; }) => f.id === formulaId);
-      if (index !== -1) {
-        formulas[index].formula = updatedFormula;
-        await fs.writeFile(formulasPath, JSON.stringify(formulas, null, 2));
-        return { success: true, formula: formulas[index] };
-      } else {
-        throw createError({ statusCode: 404, message: 'Formula not found' });
-      }
+        return {
+          success: true,
+          formula: updated
+        };
 
-    case 'DELETE':
-      // Delete a formula
-      const newFormulas = formulas.filter((f: { id: number; }) => f.id !== formulaId);
+      case 'DELETE':
+        await prisma.formula.delete({
+          where: { id: formulaId }
+        });
 
-      if (newFormulas.length !== formulas.length) {
-        await fs.writeFile(formulasPath, JSON.stringify(newFormulas, null, 2));
         return { success: true };
-      } else {
-        throw createError({ statusCode: 404, message: 'Formula not found' });
-      }
 
-    default:
-      throw createError({ statusCode: 405, message: 'Method not allowed' });
+      default:
+        throw createError({
+          statusCode: 405,
+          message: 'Method not allowed'
+        });
+    }
+  } catch (error) {
+    console.error('Error in formula ID endpoint:', error);
+    if (error.statusCode) throw error;
+    throw createError({
+      statusCode: 500,
+      message: 'Internal server error'
+    });
   }
 });

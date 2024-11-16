@@ -1,50 +1,47 @@
-// server/api/formulas/index.ts
-import { promises as fs } from 'fs';
-import { resolve } from 'path';
-
-const formulasPath = resolve('../data/json/formulas.json');
+import { prisma } from '../db';
 
 export default defineEventHandler(async (event) => {
-  const method = event.req.method;
+  try {
+    const method = event.req.method;
 
-  switch (method) {
-    case 'GET':
-      // Return list of formulas
-      let formulas = [];
-      try {
-        const fileContent = await fs.readFile(formulasPath, 'utf8');
-        formulas = JSON.parse(fileContent);
-      } catch (err) {
-        formulas = [];
-      }
-      return formulas;
+    switch (method) {
+      case 'GET':
+        return await prisma.formula.findMany({
+          orderBy: { createdAt: 'desc' }
+        });
 
-    case 'POST':
-      // Add a new formula
-      const body = await readBody(event);
-      const newFormula = body.formula;
+      case 'POST':
+        const body = await readBody(event);
+        if (!body.formula) {
+          throw createError({
+            statusCode: 400,
+            message: 'No formula provided'
+          });
+        }
 
-      if (!newFormula) {
-        throw createError({ statusCode: 400, message: 'No formula provided' });
-      }
+        const created = await prisma.formula.create({
+          data: {
+            formula: body.formula
+          }
+        });
 
-      let existingFormulas = [];
-      try {
-        const fileContent = await fs.readFile(formulasPath, 'utf8');
-        existingFormulas = JSON.parse(fileContent);
-      } catch (err) {
-        existingFormulas = [];
-      }
+        return {
+          success: true,
+          formula: created
+        };
 
-      const newFormulaObj = { id: Date.now(), formula: newFormula };
-
-      existingFormulas.push(newFormulaObj);
-
-      await fs.writeFile(formulasPath, JSON.stringify(existingFormulas, null, 2));
-
-      return { success: true, formula: newFormulaObj };
-
-    default:
-      throw createError({ statusCode: 405, message: 'Method not allowed' });
+      default:
+        throw createError({
+          statusCode: 405,
+          message: 'Method not allowed'
+        });
+    }
+  } catch (error) {
+    console.error('Error in formulas endpoint:', error);
+    if (error.statusCode) throw error;
+    throw createError({
+      statusCode: 500,
+      message: 'Internal server error'
+    });
   }
 });

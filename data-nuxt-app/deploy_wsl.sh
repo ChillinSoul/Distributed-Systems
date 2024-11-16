@@ -13,6 +13,7 @@ fi
 
 echo "Enabling ingress in Minikube on $OS..."
 minikube addons enable ingress
+
 echo "Starting deployment process for nuxt-app..."
 
 # Step 1: Build the Nuxt application
@@ -34,11 +35,7 @@ fi
 # Step 3: Point Docker to Minikube's Docker daemon
 if [ "$IS_WINDOWS" = true ]; then
   echo "Detected Windows environment. Configuring Docker for Minikube on Windows..."
-  
-  # For Windows (Git Bash/Cygwin), use winpty to set Minikube Docker environment
   winpty eval $(minikube docker-env)
-
-  # If you're using Docker Desktop, it might already be configured properly, and you may skip this part.
 else
   echo "Configuring Docker to use Minikube's Docker daemon..."
   eval $(minikube docker-env)
@@ -53,7 +50,19 @@ else
   exit 1
 fi
 
-# Step 5: Apply Kubernetes configurations
+# Step 5: Deploy MySQL configurations
+echo "Deploying MySQL to Kubernetes..."
+minikube kubectl -- apply -f k8s/db/mysql-secret.yaml
+minikube kubectl -- apply -f k8s/db/mysql-pv.yaml
+minikube kubectl -- apply -f k8s/db/mysql-pvc.yaml
+minikube kubectl -- apply -f k8s/db/mysql-deployment.yaml
+minikube kubectl -- apply -f k8s/db/mysql-service.yaml
+
+# Step 6: Wait for MySQL to be ready
+echo "Waiting for MySQL to be ready..."
+minikube kubectl -- wait --for=condition=ready pod -l app=mysql --timeout=300s
+
+# Step 7: Apply Kubernetes configurations
 echo "Deploying to Kubernetes..."
 if minikube kubectl -- apply -f ./deployment.yaml && minikube kubectl -- apply -f ./service.yaml && minikube kubectl -- apply -f ./ingress.yaml; then
   echo "Deployment to Kubernetes completed successfully."
