@@ -8,32 +8,32 @@
       <p>Master 2 Computer Science Project</p>
       <div class="m-4 flex flex-col justify-center gap-4 min-w-xl">
         <p>Manneken Data</p>
-        <Nuxt-link
-          to="/data-nuxt-app/"
+        <a
+        href="/data-nuxt-app/"
           class="text-white bg-blue-500 px-4 py-2 rounded-md w-full"
           >Manneken Data
-        </Nuxt-link>
-        <APITest endpoint="http://data-nuxt-app-service/api/mock" />
+      </a>
+      <APITest endpoint="http://data-nuxt-app-service.default.svc.cluster.local/data-nuxt-app/api/mock" />
         <p>camera-app</p>
-        <Nuxt-link
-          to="/camera-app/"
+        <a
+        href="/camera-app/"
           class="text-white bg-blue-500 px-4 py-2 rounded-md w-full"
           >camera-app
-        </Nuxt-link>
+    </a>
         <APITest endpoint="http://camera-app-service/api/cameras" />
         <p>map-app</p>
-        <Nuxt-link
-          to="/map-app/"
+        <a
+        href="/map-app/"
           class="text-white bg-blue-500 px-4 py-2 rounded-md w-full"
           >map-app
-        </Nuxt-link>
+  </a>
         <!-- <APITest endpoint="http://map-app-service/"/> -->
         <p>bb-demo</p>
-        <Nuxt-link
-          to="/bb-demo/"
+        <a
+          href="/bb-demo/"
           class="text-white bg-blue-500 px-4 py-2 rounded-md w-full"
           >bb-demo
-        </Nuxt-link>
+</a>
       </div>
     </div>
   </div>
