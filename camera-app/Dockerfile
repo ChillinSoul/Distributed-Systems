@@ -23,7 +23,7 @@ RUN npm run build
 EXPOSE 3000
 
 # Step 9: Set environment variables (e.g., NODE_ENV for production mode)
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 # Step 10: Start the Next.js application
 CMD ["npm", "start"]

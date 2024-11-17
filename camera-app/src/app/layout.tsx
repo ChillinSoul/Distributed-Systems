@@ -1,5 +1,5 @@
 import './globals.css';
-import Navbar from './components/NavBar';
+import Navbar from '../components/NavBar';
 
 export const metadata = {
   title: 'My Camera App',
