@@ -29,5 +29,7 @@
     "jest": "^29.3.1",
     "nodemon": "^2.0.20",
     "prettier": "^2.7.1"
-  }
+  },
+  "description": "This repository contains a sample application that demonstrates how to deploy a simple service on a Kubernetes cluster using Minikube. This guide is based on the Docker \"Getting Started\" tutorial and aims to help users understand how to containerize an application and deploy it on Kubernetes.",
+  "author": ""
 }

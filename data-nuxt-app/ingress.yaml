@@ -45,3 +45,17 @@ spec:
                 name: bb-demo-service
                 port:
                   number: 80
+          - path: /api(/|$)(.*) # Route for backend API
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 5000
+          - path: /frontend(/|$)(.*) # Route for frontend
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 3000
