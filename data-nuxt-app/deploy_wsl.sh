@@ -1,3 +1,4 @@
+# deploy_wsl.sh
 #!/bin/bash -e
 
 # Variables
