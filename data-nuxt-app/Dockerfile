@@ -1,21 +1,41 @@
-# Use node 22.9.0 slim image
 FROM node:22.9.0-slim
 
-# Set the working directory inside the container
+# Install required packages
+RUN apt-get update && apt-get install -y \
+    openssl \
+    netcat-openbsd \
+    default-mysql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set the working directory
 WORKDIR /src
 
-# Copy package files and install dependencies (npm install in this case)
+# Copy package files and prisma
 COPY package*.json ./
+COPY prisma ./prisma/
+
+# Install dependencies
 RUN npm install
+
+# Generate Prisma Client
+RUN npx prisma generate
 
 # Copy the rest of the application code
 COPY . .
 
-# Run the build step
+# Create required directories
+RUN mkdir -p /src/data/json /mnt/data
+
+# Build the application
 RUN npm run build
 
-# Expose the port the app will run on
+# Copy the entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Expose the port
 EXPOSE 3000
 
-# Command to run the application
-CMD ["node", "./.output/server/index.mjs", "-p", "3000"]
+# Use the entrypoint script
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["npm", "run", "start"]

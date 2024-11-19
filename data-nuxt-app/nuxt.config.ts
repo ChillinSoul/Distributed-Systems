@@ -1,23 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
-  vue:{
-    config: {
-      silent: true,
-    },
-  },
-  router: {
-    base: '/nuxt-app/',
-  },
-  server: {
-    port: 3000,
-    host: '0.0.0.0',
-  },
   nitro: {
     experimental: {
       openAPI: true,
     },
+    routeRules: {
+      '/api/**': {
+        cors: true,
+      },
+    },
   },
+  devtools: { enabled: true },
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -25,7 +19,22 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['@nuxt/fonts', '@pinia/nuxt', '@nuxt/ui', '@nuxt/icon'],
+  modules: [
+    '@nuxt/fonts',
+    '@pinia/nuxt',
+    '@nuxt/ui',
+    '@nuxt/icon',
+    'nuxt-openapi-docs-module',
+    [
+      'nuxt-openapi-docs-module',
+      {
+        folder: './docs',
+        name: 'Api Docs',
+        debug: true,
+        list: true,
+      }
+    ]
+  ],
 
   future: {
     compatibilityVersion: 4,
@@ -37,7 +46,6 @@ export default defineNuxtConfig({
     resetAsyncDataToUndefined: true,
     templateUtils: true,
     relativeWatchPaths: true,
-    normalizeComponentNames: false,
     defaults: {
       useAsyncData: {
         deep: true
@@ -49,6 +57,10 @@ export default defineNuxtConfig({
     renderSSRHeadOptions: {
       omitLineBreaks: false
     }
+  },
+  app: {
+    baseURL: '/data-nuxt-app/',
+    cdnURL: 'http://localhost/data-nuxt-app/',
   },
 
   compatibilityDate: '2024-09-27'

@@ -1,0 +1,555 @@
+[
+  {
+    "licensePlate": "IJ69JEP",
+    "timestamp": "2024-11-04T06:01:06.958Z",
+    "vehicleType": "Wagon",
+    "speed": 59,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "DQ20ZOE",
+    "timestamp": "2024-11-03T18:48:48.723Z",
+    "vehicleType": "Cargo Van",
+    "speed": 34,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "VR64DYY",
+    "timestamp": "2024-11-03T18:01:40.262Z",
+    "vehicleType": "Crew Cab Pickup",
+    "speed": 86,
+    "location": "C2"
+  },
+  {
+    "licensePlate": "EB47LUD",
+    "timestamp": "2024-11-03T19:44:45.239Z",
+    "vehicleType": "Sedan",
+    "speed": 63,
+    "location": "C2"
+  },
+  {
+    "licensePlate": "YK35OIB",
+    "timestamp": "2024-11-04T07:50:48.722Z",
+    "vehicleType": "SUV",
+    "speed": 99,
+    "location": "C2"
+  },
+  {
+    "licensePlate": "MW18DRN",
+    "timestamp": "2024-11-03T23:11:44.333Z",
+    "vehicleType": "Cargo Van",
+    "speed": 81,
+    "location": "C3"
+  },
+  {
+    "licensePlate": "UU11CTK",
+    "timestamp": "2024-11-03T19:43:40.262Z",
+    "vehicleType": "Minivan",
+    "speed": 73,
+    "location": "C5"
+  },
+  {
+    "licensePlate": "WY27CXR",
+    "timestamp": "2024-11-03T17:59:03.975Z",
+    "vehicleType": "Hatchback",
+    "speed": 83,
+    "location": "C2"
+  },
+  {
+    "licensePlate": "ZM01XLD",
+    "timestamp": "2024-11-04T08:29:59.356Z",
+    "vehicleType": "Hatchback",
+    "speed": 35,
+    "location": "C5"
+  },
+  {
+    "licensePlate": "ZD64QKA",
+    "timestamp": "2024-11-04T12:42:26.983Z",
+    "vehicleType": "Minivan",
+    "speed": 47,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "NH83GNS",
+    "timestamp": "2024-11-04T04:37:00.109Z",
+    "vehicleType": "Wagon",
+    "speed": 82,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "DN34QBC",
+    "timestamp": "2024-11-04T02:27:57.839Z",
+    "vehicleType": "Minivan",
+    "speed": 96,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "IU65YIM",
+    "timestamp": "2024-11-04T13:16:14.554Z",
+    "vehicleType": "Hatchback",
+    "speed": 114,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "BD48UDA",
+    "timestamp": "2024-11-04T07:20:25.122Z",
+    "vehicleType": "Extended Cab Pickup",
+    "speed": 90,
+    "location": "C3"
+  },
+  {
+    "licensePlate": "YT49ZLQ",
+    "timestamp": "2024-11-04T10:32:49.304Z",
+    "vehicleType": "Passenger Van",
+    "speed": 67,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "EN70XLP",
+    "timestamp": "2024-11-04T06:13:25.962Z",
+    "vehicleType": "Crew Cab Pickup",
+    "speed": 108,
+    "location": "C5"
+  },
+  {
+    "licensePlate": "WS22QLP",
+    "timestamp": "2024-11-04T12:01:30.197Z",
+    "vehicleType": "Sedan",
+    "speed": 83,
+    "location": "C2"
+  },
+  {
+    "licensePlate": "AW57ASF",
+    "timestamp": "2024-11-03T17:36:50.566Z",
+    "vehicleType": "Crew Cab Pickup",
+    "speed": 80,
+    "location": "C2"
+  },
+  {
+    "licensePlate": "QO16YBI",
+    "timestamp": "2024-11-03T20:42:17.898Z",
+    "vehicleType": "SUV",
+    "speed": 30,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "FI39KWO",
+    "timestamp": "2024-11-04T09:04:51.832Z",
+    "vehicleType": "Extended Cab Pickup",
+    "speed": 110,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "KC41PTO",
+    "timestamp": "2024-11-04T15:39:42.464Z",
+    "vehicleType": "Passenger Van",
+    "speed": 61,
+    "location": "C3"
+  },
+  {
+    "licensePlate": "LH25GZZ",
+    "timestamp": "2024-11-04T09:36:16.370Z",
+    "vehicleType": "Extended Cab Pickup",
+    "speed": 79,
+    "location": "C3"
+  },
+  {
+    "licensePlate": "XH96SKP",
+    "timestamp": "2024-11-04T12:13:26.397Z",
+    "vehicleType": "Convertible",
+    "speed": 104,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "DW50MKB",
+    "timestamp": "2024-11-04T09:22:45.415Z",
+    "vehicleType": "Coupe",
+    "speed": 45,
+    "location": "C3"
+  },
+  {
+    "licensePlate": "AL16DCK",
+    "timestamp": "2024-11-04T11:09:09.865Z",
+    "vehicleType": "Hatchback",
+    "speed": 63,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "RY88QER",
+    "timestamp": "2024-11-04T14:20:36.068Z",
+    "vehicleType": "Wagon",
+    "speed": 67,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "MD48TGI",
+    "timestamp": "2024-11-03T20:10:12.968Z",
+    "vehicleType": "Passenger Van",
+    "speed": 116,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "MO83FWS",
+    "timestamp": "2024-11-04T10:43:33.873Z",
+    "vehicleType": "Sedan",
+    "speed": 117,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "SR91AIG",
+    "timestamp": "2024-11-03T23:41:51.400Z",
+    "vehicleType": "Sedan",
+    "speed": 104,
+    "location": "C2"
+  },
+  {
+    "licensePlate": "MX50RGY",
+    "timestamp": "2024-11-03T17:59:52.590Z",
+    "vehicleType": "Crew Cab Pickup",
+    "speed": 98,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "SV85RMM",
+    "timestamp": "2024-11-03T23:55:31.176Z",
+    "vehicleType": "Hatchback",
+    "speed": 70,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "AQ94XOQ",
+    "timestamp": "2024-11-04T03:42:37.735Z",
+    "vehicleType": "Coupe",
+    "speed": 54,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "KL86YKH",
+    "timestamp": "2024-11-03T23:56:19.458Z",
+    "vehicleType": "Extended Cab Pickup",
+    "speed": 92,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "PW02CCW",
+    "timestamp": "2024-11-04T01:18:58.770Z",
+    "vehicleType": "Sedan",
+    "speed": 114,
+    "location": "C3"
+  },
+  {
+    "licensePlate": "JB53ZQV",
+    "timestamp": "2024-11-03T23:35:47.731Z",
+    "vehicleType": "Convertible",
+    "speed": 100,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "HH73CVQ",
+    "timestamp": "2024-11-04T10:21:11.086Z",
+    "vehicleType": "SUV",
+    "speed": 41,
+    "location": "C5"
+  },
+  {
+    "licensePlate": "AQ16RIW",
+    "timestamp": "2024-11-03T19:09:31.779Z",
+    "vehicleType": "Convertible",
+    "speed": 80,
+    "location": "C3"
+  },
+  {
+    "licensePlate": "RG98BJP",
+    "timestamp": "2024-11-04T06:44:43.733Z",
+    "vehicleType": "Passenger Van",
+    "speed": 68,
+    "location": "C2"
+  },
+  {
+    "licensePlate": "KT69ZRX",
+    "timestamp": "2024-11-03T22:05:59.732Z",
+    "vehicleType": "SUV",
+    "speed": 75,
+    "location": "C5"
+  },
+  {
+    "licensePlate": "SF97KNB",
+    "timestamp": "2024-11-03T23:19:54.308Z",
+    "vehicleType": "Extended Cab Pickup",
+    "speed": 108,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "US18ARM",
+    "timestamp": "2024-11-04T06:39:04.262Z",
+    "vehicleType": "Passenger Van",
+    "speed": 92,
+    "location": "C2"
+  },
+  {
+    "licensePlate": "TW83FGD",
+    "timestamp": "2024-11-03T23:37:50.037Z",
+    "vehicleType": "Passenger Van",
+    "speed": 107,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "AX53YHX",
+    "timestamp": "2024-11-04T10:02:23.505Z",
+    "vehicleType": "Minivan",
+    "speed": 54,
+    "location": "C5"
+  },
+  {
+    "licensePlate": "NR58LGI",
+    "timestamp": "2024-11-04T07:08:25.121Z",
+    "vehicleType": "Convertible",
+    "speed": 99,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "AP77KQU",
+    "timestamp": "2024-11-04T05:59:59.269Z",
+    "vehicleType": "Crew Cab Pickup",
+    "speed": 85,
+    "location": "C5"
+  },
+  {
+    "licensePlate": "NK78SMB",
+    "timestamp": "2024-11-03T18:49:29.518Z",
+    "vehicleType": "Sedan",
+    "speed": 65,
+    "location": "C3"
+  },
+  {
+    "licensePlate": "PI56QOQ",
+    "timestamp": "2024-11-03T20:08:06.329Z",
+    "vehicleType": "Extended Cab Pickup",
+    "speed": 82,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "GF17TWT",
+    "timestamp": "2024-11-03T22:47:44.739Z",
+    "vehicleType": "Minivan",
+    "speed": 107,
+    "location": "C2"
+  },
+  {
+    "licensePlate": "PS64GVK",
+    "timestamp": "2024-11-04T10:32:06.317Z",
+    "vehicleType": "Passenger Van",
+    "speed": 60,
+    "location": "C2"
+  },
+  {
+    "licensePlate": "HH70LGV",
+    "timestamp": "2024-11-04T03:22:58.413Z",
+    "vehicleType": "Hatchback",
+    "speed": 69,
+    "location": "C2"
+  },
+  {
+    "licensePlate": "WX05PIN",
+    "timestamp": "2024-11-04T00:11:48.502Z",
+    "vehicleType": "Extended Cab Pickup",
+    "speed": 80,
+    "location": "C2"
+  },
+  {
+    "licensePlate": "RC77KKJ",
+    "timestamp": "2024-11-03T20:44:01.685Z",
+    "vehicleType": "Hatchback",
+    "speed": 76,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "JO11YDR",
+    "timestamp": "2024-11-03T23:06:23.918Z",
+    "vehicleType": "Minivan",
+    "speed": 101,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "TN89UYG",
+    "timestamp": "2024-11-04T12:06:59.135Z",
+    "vehicleType": "Wagon",
+    "speed": 77,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "WX62IYC",
+    "timestamp": "2024-11-03T21:07:56.030Z",
+    "vehicleType": "Sedan",
+    "speed": 41,
+    "location": "C3"
+  },
+  {
+    "licensePlate": "KI28NBR",
+    "timestamp": "2024-11-04T10:38:29.907Z",
+    "vehicleType": "Minivan",
+    "speed": 45,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "EX69SEL",
+    "timestamp": "2024-11-03T20:59:18.478Z",
+    "vehicleType": "Convertible",
+    "speed": 52,
+    "location": "C5"
+  },
+  {
+    "licensePlate": "MV67VCJ",
+    "timestamp": "2024-11-04T10:03:51.537Z",
+    "vehicleType": "Passenger Van",
+    "speed": 48,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "YR31MJN",
+    "timestamp": "2024-11-04T11:34:57.523Z",
+    "vehicleType": "Cargo Van",
+    "speed": 63,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "HY47KHK",
+    "timestamp": "2024-11-04T01:46:43.395Z",
+    "vehicleType": "Wagon",
+    "speed": 39,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "CH84ALH",
+    "timestamp": "2024-11-03T17:19:13.001Z",
+    "vehicleType": "Sedan",
+    "speed": 86,
+    "location": "C5"
+  },
+  {
+    "licensePlate": "CV44KHV",
+    "timestamp": "2024-11-03T19:40:46.400Z",
+    "vehicleType": "Extended Cab Pickup",
+    "speed": 88,
+    "location": "C2"
+  },
+  {
+    "licensePlate": "BC67GUM",
+    "timestamp": "2024-11-04T14:50:21.799Z",
+    "vehicleType": "Sedan",
+    "speed": 109,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "AF20ISK",
+    "timestamp": "2024-11-04T04:00:32.802Z",
+    "vehicleType": "Coupe",
+    "speed": 109,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "AM05OWA",
+    "timestamp": "2024-11-04T10:13:50.672Z",
+    "vehicleType": "Coupe",
+    "speed": 116,
+    "location": "C2"
+  },
+  {
+    "licensePlate": "ZW56NFB",
+    "timestamp": "2024-11-04T07:02:43.055Z",
+    "vehicleType": "Coupe",
+    "speed": 71,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "GT95ITN",
+    "timestamp": "2024-11-04T15:26:01.852Z",
+    "vehicleType": "Hatchback",
+    "speed": 47,
+    "location": "C2"
+  },
+  {
+    "licensePlate": "FN18AGW",
+    "timestamp": "2024-11-04T10:29:03.194Z",
+    "vehicleType": "Passenger Van",
+    "speed": 78,
+    "location": "C2"
+  },
+  {
+    "licensePlate": "IB56DLK",
+    "timestamp": "2024-11-04T14:57:59.400Z",
+    "vehicleType": "Extended Cab Pickup",
+    "speed": 36,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "KE02ICR",
+    "timestamp": "2024-11-03T18:22:04.537Z",
+    "vehicleType": "SUV",
+    "speed": 53,
+    "location": "C5"
+  },
+  {
+    "licensePlate": "WL14JBC",
+    "timestamp": "2024-11-04T00:16:26.226Z",
+    "vehicleType": "SUV",
+    "speed": 68,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "ZV79QVK",
+    "timestamp": "2024-11-04T08:11:45.710Z",
+    "vehicleType": "Hatchback",
+    "speed": 103,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "TQ24XZG",
+    "timestamp": "2024-11-04T04:29:09.004Z",
+    "vehicleType": "Hatchback",
+    "speed": 97,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "MO55PCU",
+    "timestamp": "2024-11-04T04:10:36.634Z",
+    "vehicleType": "Passenger Van",
+    "speed": 76,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "PT42DOE",
+    "timestamp": "2024-11-04T03:43:31.978Z",
+    "vehicleType": "SUV",
+    "speed": 59,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "MG64FMI",
+    "timestamp": "2024-11-04T07:34:14.229Z",
+    "vehicleType": "Sedan",
+    "speed": 117,
+    "location": "C1"
+  },
+  {
+    "licensePlate": "ZN14QUO",
+    "timestamp": "2024-11-04T02:03:47.173Z",
+    "vehicleType": "Convertible",
+    "speed": 114,
+    "location": "C4"
+  },
+  {
+    "licensePlate": "EM48RKD",
+    "timestamp": "2024-11-04T12:42:21.596Z",
+    "vehicleType": "Wagon",
+    "speed": 90,
+    "location": "C5"
+  },
+  {
+    "licensePlate": "KL68NDR",
+    "timestamp": "2024-11-04T16:25:49.176Z",
+    "vehicleType": "Minivan",
+    "speed": 32,
+    "location": "C5"
+  }
+]

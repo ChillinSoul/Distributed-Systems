@@ -13,8 +13,15 @@ spec:
         app: camera-app
     spec:
       containers:
+      # Container 1: Camera App
       - name: camera-app
         image: camera-app-image
         imagePullPolicy: Never
         ports:
         - containerPort: 3000
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: DATABASE_URL

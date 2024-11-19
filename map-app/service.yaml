@@ -4,9 +4,11 @@ metadata:
   name: map-app-service # The name of the Service
 spec:
   selector:
-    app: map-app
+    app: map-app # This selects Pods with the label "map-app"
   type: ClusterIP
   ports:
     - protocol: TCP
       port: 80 # The port exposed by the Service (port 80 for HTTP)
-      targetPort: 5000 # The port in the container where the app is running (port 5000)
+      targetPort: 3000 # The port in the container where the app is running (port 3000)
+
+# A Service expose the Pods.

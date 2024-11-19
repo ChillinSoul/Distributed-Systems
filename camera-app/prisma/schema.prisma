@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Cameras {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  available    Boolean
+  cameraName   String
+  cameraNumber String
+  position     String[]
+}
+
+model Video {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  camID       String   @db.ObjectId
+  numberPlate String
+  time        DateTime @db.Date
+}

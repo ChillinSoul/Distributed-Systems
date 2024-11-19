@@ -1,0 +1,220 @@
+openapi: 3.1.0
+info:
+  title: Manneken Data API
+  version: 1.0.0
+servers:
+  - url: /data-nuxt-app/api
+
+paths:
+  /formulas:
+    get:
+      summary: Retrieve all formulas
+      responses:
+        "200":
+          description: A list of formulas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Formula"
+    post:
+      summary: Create a new formula
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewFormula"
+      responses:
+        "200":
+          description: Formula created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FormulaResponse"
+  /formulas/{id}:
+    get:
+      summary: Retrieve a specific formula
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Formula ID
+      responses:
+        "200":
+          description: A formula object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Formula"
+        "404":
+          description: Formula not found
+    put:
+      summary: Update a formula
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Formula ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewFormula"
+      responses:
+        "200":
+          description: Formula updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FormulaResponse"
+        "404":
+          description: Formula not found
+    delete:
+      summary: Delete a formula
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Formula ID
+      responses:
+        "200":
+          description: Formula deleted successfully
+        "404":
+          description: Formula not found
+  /executeFormula:
+    post:
+      summary: Execute a formula
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                formula:
+                  type: string
+                  description: The formula to execute
+                  example: "avg(map.getSpeed('R1'))"
+      responses:
+        "200":
+          description: Execution result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Result of the formula execution
+  /allData:
+    get:
+      summary: Retrieve all data
+      responses:
+        "200":
+          description: All stored data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  anpr:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ANPRData"
+                  map:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MapData"
+
+components:
+  schemas:
+    Formula:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the formula
+          example: 1698684847000
+        formula:
+          type: string
+          description: The formula expression
+          example: "avg(map.getSpeed('R1'))"
+    NewFormula:
+      type: object
+      properties:
+        formula:
+          type: string
+          description: The formula expression
+          example: "avg(map.getSpeed('R1'))"
+    FormulaResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Operation success status
+          example: true
+        formula:
+          $ref: "#/components/schemas/Formula"
+    ANPRData:
+      type: object
+      properties:
+        licensePlate:
+          type: string
+          description: Vehicle license plate number
+          example: "1ABC123"
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of the data capture
+        vehicleType:
+          type: string
+          description: Type of the vehicle
+          example: "Car"
+        speed:
+          type: integer
+          description: Speed of the vehicle in km/h
+          example: 80
+        location:
+          type: string
+          description: Location code
+          example: "C1"
+    MapData:
+      type: object
+      properties:
+        roadId:
+          type: string
+          description: Identifier for the road
+          example: "R1"
+        roadName:
+          type: string
+          description: Name of the road
+          example: "Main Street"
+        vehicleDensity:
+          type: integer
+          description: Number of vehicles per unit length
+          example: 50
+        avgSpeed:
+          type: integer
+          description: Average speed on the road in km/h
+          example: 60
+        congestionLevel:
+          type: string
+          description: Level of congestion
+          example: "Medium"
+        accidentsReported:
+          type: integer
+          description: Number of accidents reported
+          example: 2
+        weatherCondition:
+          type: string
+          description: Current weather condition
+          example: "Clear"

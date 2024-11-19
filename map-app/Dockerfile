@@ -1,20 +1,21 @@
-# Use an official Python runtime as a parent image
-FROM python:3.9-slim
+# Use node 22.9.0 slim image
+FROM node:22.9.0-slim
 
-# Set the working directory in the container to /app
-WORKDIR /app
+# Set the working directory inside the container
+WORKDIR /src
 
-# Copy the current directory contents into the container at /app
-COPY app.py /app
+# Copy package files and install dependencies (npm install in this case)
+COPY package*.json ./
+RUN npm install
 
-# Install Flask (Python web framework)
-RUN pip install flask
+# Copy the rest of the application code
+COPY . .
 
-# Make port 5000 available to the world outside this container
-EXPOSE 5000
+# Run the build step
+RUN npm run build
 
-# Define environment variable
-ENV FLASK_APP=app.py
+# Expose the port the app will run on
+EXPOSE 3000
 
-# Run app.py when the container launches
-CMD ["python", "app.py"]
+# Command to run the application
+CMD ["npm", "run", "start"]

@@ -4,7 +4,7 @@
 set -e
 
 # Variables
-IMAGE_NAME="bb-demo"
+IMAGE_NAME="bb-demo-image"
 
 # Detect the operating system
 OS="$(uname)"
