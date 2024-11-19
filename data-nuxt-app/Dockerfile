@@ -1,15 +1,16 @@
 FROM node:22.9.0-slim
 
-# Install required packages including netcat-openbsd
+# Install required packages
 RUN apt-get update && apt-get install -y \
     openssl \
     netcat-openbsd \
+    mysql-client \
     && rm -rf /var/lib/apt/lists/*
 
-# Set the working directory inside the container
+# Set the working directory
 WORKDIR /src
 
-# Copy package files
+# Copy package files and prisma
 COPY package*.json ./
 COPY prisma ./prisma/
 
@@ -32,7 +33,7 @@ RUN npm run build
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Expose the port the app will run on
+# Expose the port
 EXPOSE 3000
 
 # Use the entrypoint script
