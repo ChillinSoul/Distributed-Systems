@@ -7,15 +7,16 @@ data:
     [mysqld]
     server-id=1
     log-bin=mysql-bin
-    binlog_format=ROW
     default_authentication_plugin=mysql_native_password
+    skip-name-resolve
+    max_connections=1000
 
   replica.cnf: |
     [mysqld]
     server-id=2
-    relay-log=mysql-relay-bin
     log-bin=mysql-bin
-    binlog_format=ROW
     default_authentication_plugin=mysql_native_password
+    skip-name-resolve
+    max_connections=1000
     read_only=1
     super_read_only=1
