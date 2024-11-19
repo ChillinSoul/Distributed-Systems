@@ -41,7 +41,7 @@ const Home: React.FC<{ mapData: MapData }> = ({ mapData }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch("http://map-app-service/api"); // URL API
+  const res = await fetch("http://localhost:3000/api/map-data"); // URL API http://map-app-service/api/map-data
   const mapData: MapData = await res.json();
 
   return { props: { mapData } };

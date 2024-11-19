@@ -14,3 +14,10 @@ model Cameras {
   cameraNumber String
   position     String[]
 }
+
+model Video {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  camID       String   @db.ObjectId
+  numberPlate String
+  time        DateTime @db.Date
+}
