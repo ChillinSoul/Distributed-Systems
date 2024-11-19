@@ -4,7 +4,7 @@ FROM node:22.9.0-slim
 RUN apt-get update && apt-get install -y \
     openssl \
     netcat-openbsd \
-    mysql-client \
+    default-mysql-client \
     && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
