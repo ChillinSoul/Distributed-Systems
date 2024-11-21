@@ -28,20 +28,20 @@ const Navbar = () => {
         <h1 style={{ margin: 0 }}>My Camera App</h1>
       </div>
       <div style={styles.navLinks}>
-        <Link href="./" passHref>
-          <a style={styles.link}>Home</a>
+        <Link href="./" passHref style={styles.link}>
+          Home
         </Link>
-        <Link href="./cameras" passHref>
-          <a style={styles.link}>Cameras</a>
+        <Link href="./cameras" passHref style={styles.link}>
+          Cameras
         </Link>
-        <Link href="./add-camera" passHref>
-          <a style={styles.link}>Add Camera</a>
+        <Link href="./add-camera" passHref style={styles.link}>
+          Add Camera
         </Link>
-        <Link href="./videos" passHref>
-          <a style={styles.link}>Videos</a>
+        <Link href="./videos" passHref style={styles.link}>
+          Videos
         </Link>
-        <Link href="./create-video" passHref>
-          <a style={styles.link}>Create Video</a>
+        <Link href="./create-video" passHref style={styles.link}>
+          Create Video
         </Link>
       </div>
     </nav>
