@@ -7,6 +7,8 @@ data:
     [mysqld]
     server-id=1
     log-bin=mysql-bin
+    binlog_format=ROW
+    bind-address=0.0.0.0
     default_authentication_plugin=mysql_native_password
     skip-name-resolve
     max_connections=1000
@@ -15,8 +17,39 @@ data:
     [mysqld]
     server-id=2
     log-bin=mysql-bin
+    binlog_format=ROW
+    bind-address=0.0.0.0
     default_authentication_plugin=mysql_native_password
     skip-name-resolve
     max_connections=1000
     read_only=1
     super_read_only=1
+    relay_log=/var/lib/mysql/mysql-relay-bin
+    log_slave_updates=1
+
+  init-primary.sql: |
+    CREATE USER IF NOT EXISTS 'manneken'@'%' IDENTIFIED BY 'manneken123';
+    GRANT ALL PRIVILEGES ON mannekendata.* TO 'manneken'@'%';
+    CREATE USER IF NOT EXISTS 'repl'@'%' IDENTIFIED BY 'replpass';
+    GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
+    FLUSH PRIVILEGES;
+
+  init-replica.sh: |
+    #!/bin/bash
+    set -ex
+    until mysql -h mysql-0.mysql -u root -p"${MYSQL_ROOT_PASSWORD}" -e "SELECT 1"; do
+      echo "Waiting for primary..."
+      sleep 2
+    done
+
+    MASTER_STATUS=$(mysql -h mysql-0.mysql -u root -p"${MYSQL_ROOT_PASSWORD}" -e "SHOW MASTER STATUS\G")
+    CURRENT_LOG=$(echo "$MASTER_STATUS" | grep File | awk '{print $2}')
+    CURRENT_POS=$(echo "$MASTER_STATUS" | grep Position | awk '{print $2}')
+
+    mysql -u root -p"${MYSQL_ROOT_PASSWORD}" -e \
+    "CHANGE MASTER TO MASTER_HOST='mysql-0.mysql', \
+     MASTER_USER='repl', \
+     MASTER_PASSWORD='replpass', \
+     MASTER_LOG_FILE='$CURRENT_LOG', \
+     MASTER_LOG_POS=$CURRENT_POS; \
+     START SLAVE;"

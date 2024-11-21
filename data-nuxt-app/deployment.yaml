@@ -14,11 +14,18 @@ spec:
     spec:
       initContainers:
         - name: wait-for-mysql
-          image: busybox
+          image: mysql:8.0
           command:
             - "sh"
             - "-c"
-            - "until nc -z -w1 mysql 3306; do echo waiting for mysql; sleep 2; done;"
+            - |
+              until mysql -h mysql-read -u$MYSQL_USER -p$MYSQL_PASSWORD -e "SELECT 1"; do
+                echo "waiting for mysql connection..."
+                sleep 2
+              done
+          envFrom:
+            - secretRef:
+                name: mysql-secret
       containers:
         - name: data-nuxt-app
           image: data-nuxt-app-image

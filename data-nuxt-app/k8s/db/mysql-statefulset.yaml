@@ -28,14 +28,19 @@ spec:
               echo server-id=$((100 + $ordinal)) >> /mnt/conf.d/server-id.cnf
               if [[ $ordinal -eq 0 ]]; then
                 cp /mnt/config-map/primary.cnf /mnt/conf.d/
+                cp /mnt/config-map/init-primary.sql /docker-entrypoint-initdb.d/
               else
                 cp /mnt/config-map/replica.cnf /mnt/conf.d/
+                cp /mnt/config-map/init-replica.sh /docker-entrypoint-initdb.d/
+                chmod +x /docker-entrypoint-initdb.d/init-replica.sh
               fi
           volumeMounts:
             - name: conf
               mountPath: /mnt/conf.d
             - name: config-map
               mountPath: /mnt/config-map
+            - name: initdb
+              mountPath: /docker-entrypoint-initdb.d
       containers:
         - name: mysql
           image: mysql:8.0
@@ -69,6 +74,8 @@ spec:
               subPath: mysql
             - name: conf
               mountPath: /etc/mysql/conf.d
+            - name: initdb
+              mountPath: /docker-entrypoint-initdb.d
           resources:
             requests:
               cpu: "200m"
@@ -79,27 +86,32 @@ spec:
           livenessProbe:
             exec:
               command:
-                - /bin/bash
-                - -c
-                - mysqladmin ping -u root -p${MYSQL_ROOT_PASSWORD}
+                ["mysqladmin", "ping", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
             initialDelaySeconds: 30
             periodSeconds: 10
-            timeoutSeconds: 5
           readinessProbe:
             exec:
               command:
-                - /bin/bash
-                - -c
-                - mysqladmin ping -u root -p${MYSQL_ROOT_PASSWORD}
+                [
+                  "mysql",
+                  "-h",
+                  "127.0.0.1",
+                  "-u",
+                  "root",
+                  "-p${MYSQL_ROOT_PASSWORD}",
+                  "-e",
+                  "SELECT 1",
+                ]
             initialDelaySeconds: 10
             periodSeconds: 5
-            timeoutSeconds: 2
       volumes:
         - name: conf
           emptyDir: {}
         - name: config-map
           configMap:
             name: mysql
+        - name: initdb
+          emptyDir: {}
   volumeClaimTemplates:
     - metadata:
         name: data
