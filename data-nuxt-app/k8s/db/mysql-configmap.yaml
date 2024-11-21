@@ -9,8 +9,6 @@ data:
     [mysqld]
     log-bin
     binlog_format=ROW
-    default_authentication_plugin=mysql_native_password
   replica.cnf: |
     [mysqld]
     super-read-only
-    default_authentication_plugin=mysql_native_password

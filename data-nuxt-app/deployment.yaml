@@ -19,30 +19,16 @@ spec:
             - bash
             - "-c"
             - |
-              until mysql -h mysql-read -u${MYSQL_USER} -p${MYSQL_PASSWORD} -e "SELECT 1"; do
+              until mysql -h mysql-read -e "SELECT 1"; do
                 echo "waiting for mysql..."
                 sleep 2
               done
-          env:
-            - name: MYSQL_USER
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_USER
-            - name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_PASSWORD
       containers:
         - name: data-nuxt-app
           image: data-nuxt-app-image
           imagePullPolicy: Never
           ports:
             - containerPort: 3000
-          envFrom:
-            - secretRef:
-                name: mysql-secret
           env:
             - name: HOST
               value: "0.0.0.0"

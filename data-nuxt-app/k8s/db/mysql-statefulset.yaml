@@ -39,26 +39,8 @@ spec:
         - name: mysql
           image: mysql:8.0
           env:
-            - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_ROOT_PASSWORD
-            - name: MYSQL_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_DATABASE
-            - name: MYSQL_USER
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_USER
-            - name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_PASSWORD
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: "1"
           ports:
             - name: mysql
               containerPort: 3306
@@ -72,28 +54,14 @@ spec:
             requests:
               cpu: 500m
               memory: 1Gi
-            limits:
-              cpu: 1000m
-              memory: 2Gi
           livenessProbe:
             exec:
-              command:
-                ["mysqladmin", "ping", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+              command: ["mysqladmin", "ping"]
             initialDelaySeconds: 30
             periodSeconds: 10
           readinessProbe:
             exec:
-              command:
-                [
-                  "mysql",
-                  "-h",
-                  "127.0.0.1",
-                  "-u",
-                  "root",
-                  "-p${MYSQL_ROOT_PASSWORD}",
-                  "-e",
-                  "SELECT 1",
-                ]
+              command: ["mysql", "-h", "127.0.0.1", "-e", "SELECT 1"]
             initialDelaySeconds: 5
             periodSeconds: 2
       volumes:
