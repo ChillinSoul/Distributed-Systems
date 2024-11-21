@@ -64,7 +64,6 @@ fi
 # Step 6: Deploy MySQL configurations
 echo "Deploying MySQL to Kubernetes..."
 minikube kubectl -- apply -f k8s/db/mysql-secret.yaml
-minikube kubectl -- apply -f k8s/db/mysql-init-script.yaml
 minikube kubectl -- apply -f k8s/db/mysql-configmap.yaml
 minikube kubectl -- apply -f k8s/db/mysql-services.yaml
 minikube kubectl -- apply -f k8s/db/mysql-statefulset.yaml
