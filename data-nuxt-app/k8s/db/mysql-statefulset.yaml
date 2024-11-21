@@ -36,38 +36,6 @@ spec:
               mountPath: /mnt/conf.d
             - name: config-map
               mountPath: /mnt/config-map
-        - name: init-mysql-permissions
-          image: mysql:8.0
-          command:
-            - bash
-            - "-c"
-            - |
-              set -ex
-              until mysql -h localhost -u root -p${MYSQL_ROOT_PASSWORD} -e "SELECT 1"; do
-                echo "Waiting for MySQL to be ready..."
-                sleep 2
-              done
-              mysql -h localhost -u root -p${MYSQL_ROOT_PASSWORD} << EOF
-              CREATE USER IF NOT EXISTS 'manneken'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-              GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO 'manneken'@'%';
-              FLUSH PRIVILEGES;
-              EOF
-          env:
-            - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_ROOT_PASSWORD
-            - name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_PASSWORD
-            - name: MYSQL_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_DATABASE
       containers:
         - name: mysql
           image: mysql:8.0
