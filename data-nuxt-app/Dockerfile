@@ -42,5 +42,6 @@ ENV HOST=0.0.0.0
 ENV PORT=3000
 
 # Use the entrypoint script
-ENTRYPOINT ["docker-entrypoint.sh"]
+
+# ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["npm", "run", "start"]
