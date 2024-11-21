@@ -1,5 +1,6 @@
+'use client';
+
 import { CSSProperties, useState } from 'react';
-import { useRouter } from 'next/router';
 
 const styles: { [key: string]: CSSProperties } = {
   container: {
@@ -54,12 +55,14 @@ const styles: { [key: string]: CSSProperties } = {
   },
 };
 
-export default function CreateVideoPage() {
-  const [camID, setcamID] = useState('');
-  const [numberPlate, setNumberPlate] = useState('');
+export default function AddCameraPage() {
+  const [cameraName, setCameraName] = useState('');
+  const [cameraNumber, setCameraNumber] = useState('');
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const router = useRouter();
+  const [available, setAvailable] = useState('true');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,81 +70,103 @@ export default function CreateVideoPage() {
     setSuccessMessage('');
 
     try {
-      // Generate the current time in the same format as MongoDB example
-      const currentTime = new Date().toISOString(); // Converts to '2024-11-17T23:00:00.000Z' format
-
-      const response = await fetch('/api/videos', {
+      const response = await fetch('/api/add-camera', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          camID,
-          time: currentTime, // Use the generated timestamp
-          numberPlate,
+          available,
+          cameraName,
+          cameraNumber,
+          position: [latitude.toString(), longitude.toString()], // Ensure latitude and longitude are strings
         }),
       });
 
       if (response.ok) {
-        setSuccessMessage('Video created successfully!');
-        setcamID('');
-        setNumberPlate('');
-        router.push('/videos'); // Redirect to videos page after creation
+        setSuccessMessage('Camera added successfully!');
+        setCameraName('');
+        setCameraNumber('');
+        setLatitude('');
+        setLongitude('');
+        setAvailable('true');
       } else {
         const data = await response.json();
-        setErrorMessage(data.error || 'Failed to create video');
+        setErrorMessage(data.error || 'Failed to add camera');
       }
     } catch {
-      setErrorMessage('An error occurred while creating the video');
+      setErrorMessage('An error occurred while adding the camera');
     }
   };
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.heading}>Create New Video</h1>
+      <h1 style={styles.heading}>Add New Camera</h1>
 
       {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
       {successMessage && <p style={styles.successMessage}>{successMessage}</p>}
 
       <form onSubmit={handleSubmit}>
         <div style={styles.formGroup}>
-          <label style={styles.label} htmlFor="camID">
-            Camera ID
+          <label style={styles.label} htmlFor="cameraName">
+            Camera Name
           </label>
           <input
             style={styles.input}
             type="text"
-            id="camID"
-            value={camID}
-            onChange={(e) => setcamID(e.target.value)}
+            id="cameraName"
+            value={cameraName}
+            onChange={(e) => setCameraName(e.target.value)}
             required
           />
         </div>
 
         <div style={styles.formGroup}>
-          <label style={styles.label} htmlFor="numberPlate">
-            Number Plate
+          <label style={styles.label} htmlFor="cameraNumber">
+            Camera Number
           </label>
           <input
             style={styles.input}
             type="text"
-            id="numberPlate"
-            value={numberPlate}
-            onChange={(e) => setNumberPlate(e.target.value)}
+            id="cameraNumber"
+            value={cameraNumber}
+            onChange={(e) => setCameraNumber(e.target.value)}
+            required
+          />
+        </div>
+
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="latitude">
+            Latitude
+          </label>
+          <input
+            style={styles.input}
+            type="number"
+            id="latitude"
+            value={latitude}
+            onChange={(e) => setLatitude(e.target.value)}
+            required
+          />
+        </div>
+
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="longitude">
+            Longitude
+          </label>
+          <input
+            style={styles.input}
+            type="number"
+            id="longitude"
+            value={longitude}
+            onChange={(e) => setLongitude(e.target.value)}
             required
           />
         </div>
 
         <button style={styles.button} type="submit">
-          Create Video
+          Add Camera
         </button>
       </form>
     </div>
   );
-}
-
-// This function gets called at request time for server-side rendering
-export async function getServerSideProps() {
-  // You can fetch data here if you need to provide initial data to the page
-  return { props: {} };
 }

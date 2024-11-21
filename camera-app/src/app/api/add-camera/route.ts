@@ -30,8 +30,6 @@ export async function POST(req: Request) {
       return NextResponse.json(newCamera);
     } catch {
       return NextResponse.json({ error: 'Failed to create camera' }, { status: 500 });
-    } finally {
-      await prisma.$disconnect();
     }
   }
   
