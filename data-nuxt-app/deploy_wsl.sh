@@ -1,4 +1,3 @@
-# deploy_wsl.sh
 #!/bin/bash -e
 
 # Variables
@@ -44,7 +43,7 @@ fi
 # Step 4: Clean up any existing resources
 echo "Cleaning up existing resources..."
 minikube kubectl -- delete statefulset mysql --ignore-not-found=true
-minikube kubectl -- delete configmap mysql --ignore-not-found=true
+minikube kubectl -- delete configmap mysql mysql-init-script --ignore-not-found=true
 minikube kubectl -- delete service mysql mysql-read --ignore-not-found=true
 minikube kubectl -- delete deployment data-nuxt-app --ignore-not-found=true
 minikube kubectl -- delete service data-nuxt-app-service --ignore-not-found=true
@@ -71,9 +70,14 @@ minikube kubectl -- apply -f k8s/db/mysql-statefulset.yaml
 
 # Step 7: Wait for MySQL StatefulSet to be ready
 echo "Waiting for MySQL StatefulSet to be ready..."
-minikube kubectl -- rollout status statefulset/mysql --timeout=300s
+minikube kubectl -- wait --for=condition=ready pod -l app=mysql --timeout=300s
 
-# Step 8: Deploy application
+# Step 8: Create database schema and permissions
+echo "Initializing database..."
+MYSQL_POD=$(minikube kubectl -- get pods -l app=mysql -o jsonpath='{.items[0].metadata.name}')
+minikube kubectl -- exec $MYSQL_POD -- mysql -u root -p"${MYSQL_ROOT_PASSWORD}" < k8s/db/init.sql
+
+# Step 9: Deploy application
 echo "Deploying application to Kubernetes..."
 minikube kubectl -- apply -f deployment.yaml
 minikube kubectl -- apply -f service.yaml
