@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
 
 export async function GET() {
+  const prisma = new PrismaClient();
   try {
     // Fetch all videos from the database
     const videos = await prisma.video.findMany();
