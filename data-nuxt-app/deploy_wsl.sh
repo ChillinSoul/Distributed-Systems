@@ -70,7 +70,7 @@ minikube kubectl -- apply -f k8s/db/mysql-statefulset.yaml
 
 # Step 7: Wait for MySQL StatefulSet to be ready
 echo "Waiting for MySQL StatefulSet to be ready..."
-minikube kubectl -- rollout status statefulset/mysql --timeout=300s
+minikube kubectl -- rollout status statefulset/mysql --timeout=60s
 
 # Step 8: Deploy application
 echo "Deploying application to Kubernetes..."
