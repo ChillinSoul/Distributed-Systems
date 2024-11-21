@@ -36,11 +36,6 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 # Expose the port
 EXPOSE 3000
 
-# Environment variables
-ENV NODE_ENV=production
-ENV HOST=0.0.0.0
-ENV PORT=3000
-
 # Use the entrypoint script
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["npm", "run", "start"]
