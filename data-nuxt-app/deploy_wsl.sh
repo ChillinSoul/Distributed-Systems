@@ -61,27 +61,21 @@ else
   exit 1
 fi
 
-# Step 6A: Deploy Nuxt application
-echo "Deploying Nuxt application to Kubernetes..."
-minikube kubectl -- apply -f deployment.yaml
-
-
-# Step 6B: Deploy MySQL configurations
+# Step 6: Deploy MySQL configurations
 echo "Deploying MySQL to Kubernetes..."
 minikube kubectl -- apply -f k8s/db/mysql-secret.yaml
 minikube kubectl -- apply -f k8s/db/mysql-configmap.yaml
 minikube kubectl -- apply -f k8s/db/mysql-services.yaml
 minikube kubectl -- apply -f k8s/db/mysql-statefulset.yaml
 
-# Wait for MySQL StatefulSet to be ready
+# Step 7: Wait for MySQL StatefulSet to be ready
 echo "Waiting for MySQL StatefulSet to be ready..."
-minikube kubectl -- rollout status statefulset/mysql --timeout=60s
+minikube kubectl -- rollout status statefulset/mysql --timeout=300s
 
-# Initialize replication
-echo "Initializing MySQL replication..."
-minikube kubectl -- exec mysql-0 -- bash /mnt/config-map/init-primary.sh
-for i in 1 2; do
-  minikube kubectl -- exec mysql-$i -- bash /mnt/config-map/init-replica.sh
-done
+# Step 8: Deploy application
+echo "Deploying application to Kubernetes..."
+minikube kubectl -- apply -f deployment.yaml
+minikube kubectl -- apply -f service.yaml
+minikube kubectl -- apply -f ingress.yaml
 
 echo "Deployment process completed successfully."

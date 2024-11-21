@@ -21,13 +21,10 @@ spec:
             - "-c"
             - |
               set -ex
-              # Generate server-id from pod ordinal index
-              [[ `hostname` =~ -([0-9]+)$ ]] || exit 1
+              [[ $HOSTNAME =~ -([0-9]+)$ ]] || exit 1
               ordinal=${BASH_REMATCH[1]}
               echo [mysqld] > /mnt/conf.d/server-id.cnf
-              # Add 100 to avoid potential conflict
               echo server-id=$((100 + $ordinal)) >> /mnt/conf.d/server-id.cnf
-              # Copy appropriate config files
               if [[ $ordinal -eq 0 ]]; then
                 cp /mnt/config-map/primary.cnf /mnt/conf.d/
               else
@@ -62,17 +59,13 @@ spec:
                 secretKeyRef:
                   name: mysql-secret
                   key: MYSQL_PASSWORD
-            - name: MYSQL_REPLICATION_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_REPLICATION_PASSWORD
           ports:
             - name: mysql
               containerPort: 3306
           volumeMounts:
             - name: data
               mountPath: /var/lib/mysql
+              subPath: mysql
             - name: conf
               mountPath: /etc/mysql/conf.d
           resources:

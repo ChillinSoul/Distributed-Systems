@@ -16,16 +16,24 @@ spec:
         - name: wait-for-mysql
           image: mysql:8.0
           command:
-            - "sh"
+            - bash
             - "-c"
             - |
-              until mysql -h mysql-read -u$MYSQL_USER -p$MYSQL_PASSWORD -e "SELECT 1"; do
-                echo "waiting for mysql connection..."
+              until mysql -h mysql-read -u${MYSQL_USER} -p${MYSQL_PASSWORD} -e "SELECT 1"; do
+                echo "waiting for mysql..."
                 sleep 2
               done
-          envFrom:
-            - secretRef:
-                name: mysql-secret
+          env:
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_PASSWORD
       containers:
         - name: data-nuxt-app
           image: data-nuxt-app-image
@@ -36,21 +44,9 @@ spec:
             - secretRef:
                 name: mysql-secret
           env:
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: DATABASE_URL
             - name: HOST
               value: "0.0.0.0"
             - name: PORT
               value: "3000"
             - name: NODE_ENV
               value: "production"
-          resources:
-            requests:
-              memory: "256Mi"
-              cpu: "250m"
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
