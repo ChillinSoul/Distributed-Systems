@@ -6,6 +6,7 @@ export class ANPRService extends BaseShardService {
     const shardKey = this.shardRouter.generateShardKey(data.licensePlate)
     const shard = this.shardRouter.getShardForKey(shardKey)
     const prisma = this.getPrismaClient(shard.host)
+    console.log("shard: ",shard)
 
     return prisma.aNPRData.create({
       data: {

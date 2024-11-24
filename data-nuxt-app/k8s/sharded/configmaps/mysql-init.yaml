@@ -6,7 +6,7 @@ data:
   init.sql: |
     CREATE DATABASE IF NOT EXISTS mannekendata;
     USE mannekendata;
-    
+
     -- Create shard registry table
     CREATE TABLE IF NOT EXISTS ShardRegistry (
       id INT AUTO_INCREMENT PRIMARY KEY,
@@ -16,9 +16,54 @@ data:
       maxKey BIGINT NOT NULL,
       createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
-    
+
     -- Initialize shard registry
-    INSERT INTO ShardRegistry (shardId, host, minKey, maxKey) VALUES
+    INSERT INTO ShardRegistry (shardId, host, minKey, maxKey)
+    VALUES
       (0, 'mysql-shard-0.mysql-shard', 0, 500000),
       (1, 'mysql-shard-1.mysql-shard', 500001, 1000000)
-    ON DUPLICATE KEY UPDATE host=VALUES(host);
+    ON DUPLICATE KEY UPDATE
+      host = VALUES(host),
+      minKey = VALUES(minKey),
+      maxKey = VALUES(maxKey);
+
+    -- Create ANPRData table
+    CREATE TABLE IF NOT EXISTS ANPRData (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      licensePlate VARCHAR(20) NOT NULL,
+      timestamp TIMESTAMP NOT NULL,
+      vehicleType VARCHAR(50),
+      speed INT,
+      location VARCHAR(100),
+      createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      shardKey BIGINT
+    );
+
+    -- Create MapData table
+    CREATE TABLE IF NOT EXISTS MapData (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      roadId VARCHAR(50) NOT NULL,
+      roadName VARCHAR(100),
+      vehicleDensity INT,
+      avgSpeed INT,
+      congestionLevel VARCHAR(50),
+      accidentsReported INT,
+      weatherCondition VARCHAR(100),
+      createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      shardKey BIGINT
+    );
+
+    -- Create Formula table
+    CREATE TABLE IF NOT EXISTS Formula (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      shardKey BIGINT NOT NULL,
+      formula TEXT NOT NULL,
+      createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );
+
+    -- Add indexes for performance optimization
+    CREATE INDEX idx_shardKey ON ANPRData(shardKey);
+    CREATE INDEX idx_createdAt ON ANPRData(createdAt);
+    CREATE INDEX idx_vehicleDensity ON MapData(vehicleDensity);
+    CREATE INDEX idx_congestionLevel ON MapData(congestionLevel);
