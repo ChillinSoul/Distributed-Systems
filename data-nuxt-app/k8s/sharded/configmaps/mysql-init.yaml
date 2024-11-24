@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-init
+data:
+  init.sql: |
+    CREATE DATABASE IF NOT EXISTS mannekendata;
+    USE mannekendata;
+    
+    -- Create shard registry table
+    CREATE TABLE IF NOT EXISTS ShardRegistry (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      shardId INT UNIQUE NOT NULL,
+      host VARCHAR(255) NOT NULL,
+      minKey BIGINT NOT NULL,
+      maxKey BIGINT NOT NULL,
+      createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    
+    -- Initialize shard registry
+    INSERT INTO ShardRegistry (shardId, host, minKey, maxKey) VALUES
+      (0, 'mysql-shard-0.mysql-shard', 0, 500000),
+      (1, 'mysql-shard-1.mysql-shard', 500001, 1000000)
+    ON DUPLICATE KEY UPDATE host=VALUES(host);

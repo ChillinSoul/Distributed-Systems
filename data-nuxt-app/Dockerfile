@@ -29,13 +29,13 @@ RUN mkdir -p /src/data/json /mnt/data
 # Build the application
 RUN npm run build
 
-# Copy the entrypoint script
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+# Set environment variables
+ENV HOST=0.0.0.0
+ENV PORT=3000
+ENV NODE_ENV=production
 
 # Expose the port
 EXPOSE 3000
 
-# Use the entrypoint script
-# ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["npm", "run", "start"]
+# Start the application
+CMD ["node", ".output/server/index.mjs"]

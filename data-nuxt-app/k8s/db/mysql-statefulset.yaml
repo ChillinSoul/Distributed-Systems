@@ -21,26 +21,46 @@ spec:
             - "-c"
             - |
               set -ex
-              [[ $HOSTNAME =~ -([0-9]+)$ ]] || exit 1
-              ordinal=${BASH_REMATCH[1]}
-              echo [mysqld] > /mnt/conf.d/server-id.cnf
-              echo server-id=$((100 + $ordinal)) >> /mnt/conf.d/server-id.cnf
-              if [[ $ordinal -eq 0 ]]; then
-                cp /mnt/config-map/primary.cnf /mnt/conf.d/
+              echo "Starting initialization..."
+              ls -la /etc/mysql/conf.d || mkdir -p /etc/mysql/conf.d
+              
+              if [[ "$HOSTNAME" == "mysql-0" ]]; then
+                echo "Configuring primary node..."
+                echo "[mysqld]
+                server-id=1
+                log-bin=mysql-bin
+                binlog_format=ROW
+                gtid_mode=ON
+                enforce_gtid_consistency=ON" > /etc/mysql/conf.d/my.cnf
               else
-                cp /mnt/config-map/replica.cnf /mnt/conf.d/
+                echo "Configuring replica node..."
+                echo "[mysqld]
+                server-id=2
+                gtid_mode=ON
+                enforce_gtid_consistency=ON
+                read_only=ON" > /etc/mysql/conf.d/my.cnf
               fi
+              
+              echo "Configuration created:"
+              cat /etc/mysql/conf.d/my.cnf
+              echo "Done."
           volumeMounts:
             - name: conf
-              mountPath: /mnt/conf.d
-            - name: config-map
-              mountPath: /mnt/config-map
+              mountPath: /etc/mysql/conf.d
       containers:
         - name: mysql
           image: mysql:8.0
           env:
-            - name: MYSQL_ALLOW_EMPTY_PASSWORD
-              value: "1"
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_DATABASE
           ports:
             - name: mysql
               containerPort: 3306
@@ -52,24 +72,26 @@ spec:
               mountPath: /etc/mysql/conf.d
           resources:
             requests:
-              cpu: 500m
-              memory: 1Gi
+              memory: "256Mi"
+              cpu: "100m"
           livenessProbe:
             exec:
-              command: ["mysqladmin", "ping"]
+              command: ["mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
             initialDelaySeconds: 30
             periodSeconds: 10
+          readinessProbe:
+            exec:
+              command: ["mysql", "-h", "127.0.0.1", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}", "-e", "SELECT 1"]
+            initialDelaySeconds: 10
+            periodSeconds: 2
       volumes:
         - name: conf
           emptyDir: {}
-        - name: config-map
-          configMap:
-            name: mysql
   volumeClaimTemplates:
     - metadata:
         name: data
       spec:
-        accessModes: ["ReadWriteOnce"]
+        accessModes: [ "ReadWriteOnce" ]
         resources:
           requests:
-            storage: 10Gi
+            storage: 1Gi

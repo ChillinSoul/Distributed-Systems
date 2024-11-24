@@ -10,7 +10,17 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://mysql-read:3306/mannekendata"
+  url      = env("DATABASE_URL")
+}
+
+// Shard management table
+model ShardRegistry {
+  id        Int      @id @default(autoincrement())
+  shardId   Int      @unique
+  host      String
+  minKey    BigInt
+  maxKey    BigInt
+  createdAt DateTime @default(now())
 }
 
 model ANPRData {
@@ -21,6 +31,7 @@ model ANPRData {
   speed        Int
   location     String
   createdAt    DateTime @default(now())
+  shardKey     BigInt?
 }
 
 model MapData {
@@ -33,11 +44,14 @@ model MapData {
   accidentsReported Int
   weatherCondition String
   createdAt        DateTime @default(now())
+  shardKey         BigInt?
 }
 
 model Formula {
   id        Int      @id @default(autoincrement())
+  shardKey     BigInt
   formula   String   @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
 }

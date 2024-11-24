@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-init
+data:
+  init.sh: |
+    #!/bin/bash
+    set -ex
+    
+    # Wait for MySQL to be ready
+    until mysqladmin ping -h 127.0.0.1 -u root -p"${MYSQL_ROOT_PASSWORD}"; do
+      echo "Waiting for MySQL to be ready..."
+      sleep 2
+    done
+    
+    if [[ "$HOSTNAME" == "mysql-0" ]]; then
+      mysql -h 127.0.0.1 -u root -p"${MYSQL_ROOT_PASSWORD}" -e "
+        CREATE USER IF NOT EXISTS 'repl'@'%' IDENTIFIED WITH mysql_native_password BY '${MYSQL_REPLICATION_PASSWORD}';
+        GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
+        FLUSH PRIVILEGES;
+      "
+    else
+      # Calculate unique server-id based on pod ordinal
+      [[ "$HOSTNAME" =~ -([0-9]+)$ ]] || exit 1
+      ordinal=${BASH_REMATCH[1]}
+      server_id=$((100 + ordinal))
+      
+      # Wait for primary to be ready
+      until mysql -h mysql-0.mysql -u root -p"${MYSQL_ROOT_PASSWORD}" -e "SELECT 1"; do
+        echo "Waiting for primary to be ready..."
+        sleep 5
+      done
+      
+      mysql -h 127.0.0.1 -u root -p"${MYSQL_ROOT_PASSWORD}" -e "
+        STOP SLAVE;
+        CHANGE MASTER TO
+          MASTER_HOST='mysql-0.mysql',
+          MASTER_USER='repl',
+          MASTER_PASSWORD='${MYSQL_REPLICATION_PASSWORD}',
+          MASTER_AUTO_POSITION=1,
+          GET_MASTER_PUBLIC_KEY=1;
+        START SLAVE;
+      "
+    fi

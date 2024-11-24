@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-init-script
+data:
+  init.sql: |
+    SET @@GLOBAL.read_only = ON;
+    SET @@GLOBAL.super_read_only = ON;
+    CHANGE MASTER TO MASTER_HOST='mysql-0.mysql',
+      MASTER_USER='repl',
+      MASTER_PASSWORD='replpass',
+      MASTER_AUTO_POSITION=1;
+    START SLAVE;

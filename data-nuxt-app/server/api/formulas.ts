@@ -1,70 +1,61 @@
-import { promises as fs } from 'fs';
-import { resolve } from 'path';
+import { faker } from '@faker-js/faker'
+import { ServiceFactory } from '../../services/ServiceFactory'
 
-const formulasPath = resolve('../data/json/formulas.json');
+const generateFakeFormula = () => {
+  const variables = ['vehicle_density', 'avg_speed', 'accidents', 'weather_factor']
+  const operators = ['+', '-', '*', '/']
+  
+  const formula = variables
+    .slice(0, faker.number.int({ min: 2, max: 4 }))
+    .map(v => `${v} * ${faker.number.float({ min: 0.1, max: 2 })}`)
+    .join(faker.helpers.arrayElement(operators))
+  
+  return {
+    formula: `risk_index = ${formula}`
+  }
+}
 
 export default defineEventHandler(async (event) => {
-  const method = event.req.method;
+  const method = event.method
+  const serviceFactory = ServiceFactory.getInstance()
+  const formulaService = await serviceFactory.getFormulaService()
 
   switch (method) {
-    case 'GET':
-      // Return list of formulas
-      let formulas = [];
-      try {
-        const fileContent = await fs.readFile(formulasPath, 'utf8');
-        formulas = JSON.parse(fileContent);
-      } catch (err) {
-        formulas = [err];
-      }
-      return formulas;
-
     case 'POST':
-      // Add a new formula
-      const body = await readBody(event);
-      const newFormula = body.formula;
+      const body = await readBody(event)
+      
+      // Generate fake formula if no body is provided
+      if (!body || Object.keys(body).length === 0) {
+        const fakeFormula = generateFakeFormula()
+        return await formulaService.create(fakeFormula)
+      }
+      
+      return await formulaService.create(body)
 
-      if (!newFormula) {
-        throw new Error('No formula provided');
+    case 'GET':
+      const query = getQuery(event)
+      
+      // Generate multiple fake formulas
+      if (query.generate === 'true') {
+        const count = parseInt(query.count as string) || 5
+        const promises = Array.from({ length: count }, () => 
+          formulaService.create(generateFakeFormula())
+        )
+        return await Promise.all(promises)
       }
 
-      let existingFormulas = [];
-      try {
-        const fileContent = await fs.readFile(formulasPath, 'utf8');
-        existingFormulas = JSON.parse(fileContent);
-      } catch (err) {
-        existingFormulas = [];
-      }
-
-      existingFormulas.push({ id: Date.now(), formula: newFormula });
-
-      await fs.writeFile(formulasPath, JSON.stringify(existingFormulas, null, 2));
-
-      return { success: true };
-
-    case 'DELETE':
-      // Remove a formula
-      const deleteBody = await readBody(event);
-      const formulaId = deleteBody.id;
-
-      if (!formulaId) {
-        throw new Error('No formula ID provided');
-      }
-
-      let formulasToDeleteFrom = [];
-      try {
-        const fileContent = await fs.readFile(formulasPath, 'utf8');
-        formulasToDeleteFrom = JSON.parse(fileContent);
-      } catch (err) {
-        formulasToDeleteFrom = [];
-      }
-
-      formulasToDeleteFrom = formulasToDeleteFrom.filter((f: { id: any; }) => f.id !== formulaId);
-
-      await fs.writeFile(formulasPath, JSON.stringify(formulasToDeleteFrom, null, 2));
-
-      return { success: true };
+      return await formulaService.findAll({
+        skip: query.skip ? parseInt(query.skip as string) : undefined,
+        take: query.take ? parseInt(query.take as string) : 10,
+        orderBy: query.orderBy ? {
+          [query.orderBy as string]: query.order || 'desc'
+        } : { createdAt: 'desc' }
+      })
 
     default:
-      throw new Error('Method not allowed');
+      throw createError({
+        statusCode: 405,
+        statusMessage: 'Method Not Allowed'
+      })
   }
-});
+})
