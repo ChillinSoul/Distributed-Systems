@@ -1,61 +1,49 @@
-import { faker } from '@faker-js/faker'
-import { ServiceFactory } from '../../services/ServiceFactory'
-
-const generateFakeFormula = () => {
-  const variables = ['vehicle_density', 'avg_speed', 'accidents', 'weather_factor']
-  const operators = ['+', '-', '*', '/']
-  
-  const formula = variables
-    .slice(0, faker.number.int({ min: 2, max: 4 }))
-    .map(v => `${v} * ${faker.number.float({ min: 0.1, max: 2 })}`)
-    .join(faker.helpers.arrayElement(operators))
-  
-  return {
-    formula: `risk_index = ${formula}`
-  }
-}
+import { ServiceFactory } from '../../services/ServiceFactory';
 
 export default defineEventHandler(async (event) => {
-  const method = event.method
-  const serviceFactory = ServiceFactory.getInstance()
-  const formulaService = await serviceFactory.getFormulaService()
+  const serviceFactory = ServiceFactory.getInstance();
+  const formulaService = await serviceFactory.getFormulaService();
 
-  switch (method) {
-    case 'POST':
-      const body = await readBody(event)
-      
-      // Generate fake formula if no body is provided
-      if (!body || Object.keys(body).length === 0) {
-        const fakeFormula = generateFakeFormula()
-        return await formulaService.create(fakeFormula)
-      }
-      
-      return await formulaService.create(body)
+  try {
+    const method = event.req.method;
 
-    case 'GET':
-      const query = getQuery(event)
-      
-      // Generate multiple fake formulas
-      if (query.generate === 'true') {
-        const count = parseInt(query.count as string) || 5
-        const promises = Array.from({ length: count }, () => 
-          formulaService.create(generateFakeFormula())
-        )
-        return await Promise.all(promises)
+    switch (method) {
+      case 'GET': {
+        const query = getQuery(event);
+        return await formulaService.findAll({});
       }
 
-      return await formulaService.findAll({
-        skip: query.skip ? parseInt(query.skip as string) : undefined,
-        take: query.take ? parseInt(query.take as string) : 10,
-        orderBy: query.orderBy ? {
-          [query.orderBy as string]: query.order || 'desc'
-        } : { createdAt: 'desc' }
-      })
+      case 'POST': {
+        const body = await readBody(event);
 
-    default:
-      throw createError({
-        statusCode: 405,
-        statusMessage: 'Method Not Allowed'
-      })
+        // If formula execution is requested
+        if (body.execute && body.formula) {
+          const formulaResult = await formulaService.execute(body.formula);
+          return { result: formulaResult };
+        }
+
+        if (!body.formula) {
+          throw createError({ statusCode: 400, message: 'Formula is required.' });
+        }
+
+        return await formulaService.create(body);
+      }
+
+      case 'DELETE': {
+        const body = await readBody(event);
+        if (!body.shardKey) {
+          throw createError({ statusCode: 400, message: 'Shard key is required.' });
+        }
+
+        const success = await formulaService.delete(body.shardKey);
+        return { success };
+      }
+
+      default:
+        throw createError({ statusCode: 405, message: 'Method Not Allowed' });
+    }
+  } catch (error) {
+    console.error('Error in Formula API operation:', error);
+    throw createError({ statusCode: 500, message: 'Internal Server Error' });
   }
-})
+});

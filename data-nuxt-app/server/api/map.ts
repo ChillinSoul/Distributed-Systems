@@ -10,34 +10,35 @@ const generateFakeMapData = (count: number = 1) => {
     congestionLevel: faker.helpers.arrayElement(['Low', 'Medium', 'High']),
     accidentsReported: faker.number.int({ min: 0, max: 5 }),
     weatherCondition: faker.helpers.arrayElement([
-      'Clear', 'Rainy', 'Cloudy', 'Foggy', 'Snowy'
-    ])
+      'Clear', 'Rainy', 'Cloudy', 'Foggy', 'Snowy',
+    ]),
   }));
-}
+};
 
 export default defineEventHandler(async (event) => {
-  const method = event.method;
   const serviceFactory = ServiceFactory.getInstance();
   const mapService = await serviceFactory.getMapDataService();
 
-  switch (method) {
-    case 'POST':
+  try {
+    const query = getQuery(event);
+    const method = event.method;
+
+    if (method === 'POST') {
       const body = await readBody(event);
-      
+
       // Generate fake data if no body is provided
       if (!body || Object.keys(body).length === 0) {
         const fakeData = generateFakeMapData(1)[0];
         return await mapService.create(fakeData);
       }
-      
-      return await mapService.create(body);
 
-    case 'GET':
-      const query = getQuery(event);
-      
+      return await mapService.create(body);
+    }
+
+    if (method === 'GET') {
       // Generate multiple fake records
       if (query.generate === 'true') {
-        const count = parseInt(query.count as string) || 10;
+        const count = parseInt(query.count as string)||1;
         const fakeDataArray = generateFakeMapData(count);
         const promises = fakeDataArray.map(data => mapService.create(data));
         return await Promise.all(promises);
@@ -50,15 +51,21 @@ export default defineEventHandler(async (event) => {
       return await mapService.findAll({
         skip: query.skip ? parseInt(query.skip as string) : undefined,
         take: query.take ? parseInt(query.take as string) : 10,
-        orderBy: query.orderBy ? {
-          [query.orderBy as string]: query.order || 'desc'
-        } : { createdAt: 'desc' }
+        // orderBy: query.orderBy
+        //   ? { [query.orderBy as string]: query.order || 'desc' }
+        //   : { createdAt: 'desc' },
       });
+    }
 
-    default:
-      throw createError({
-        statusCode: 405,
-        statusMessage: 'Method Not Allowed'
-      });
+    throw createError({
+      statusCode: 405,
+      statusMessage: 'Method Not Allowed',
+    });
+  } catch (error) {
+    console.error('Error in MapData operation:', error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Failed to process MapData request',
+    });
   }
 });

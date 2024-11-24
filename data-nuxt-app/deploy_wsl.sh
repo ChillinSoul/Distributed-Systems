@@ -74,7 +74,7 @@ minikube kubectl -- apply -f k8s/sharded/statefulsets/mysql-shards.yaml
 
 echo "Waiting for MySQL shards to be ready..."
 minikube kubectl -- rollout status statefulset/mysql-shard --timeout=180s
-
+kubectl wait --for=condition=ready pod -l app=mysql-shard --timeout=120s
 # Step 7: Initialize shards
 echo "Initializing shards..."
 for i in {0..1}; do
