@@ -35,8 +35,6 @@ export default defineEventHandler(async (event) => {
           return await anprService.findByLicensePlate(query.licensePlate as string)
         }
         return await anprService.findAll({
-          skip: query.skip ? parseInt(query.skip as string) : undefined,
-          take: query.take ? parseInt(query.take as string) : 10,
           orderBy: { createdAt: 'desc' }
         })
 

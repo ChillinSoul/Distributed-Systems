@@ -48,13 +48,7 @@ export default defineEventHandler(async (event) => {
         return await mapService.findByRoadId(query.roadId as string);
       }
 
-      return await mapService.findAll({
-        skip: query.skip ? parseInt(query.skip as string) : undefined,
-        take: query.take ? parseInt(query.take as string) : 10,
-        // orderBy: query.orderBy
-        //   ? { [query.orderBy as string]: query.order || 'desc' }
-        //   : { createdAt: 'desc' },
-      });
+      return await mapService.findAll({});
     }
 
     throw createError({

@@ -1,7 +1,7 @@
 import { BaseShardService } from './base/BaseShardService';
-import type { ANPRData, Prisma } from '@prisma/client';
+import type { ANPRData } from '@prisma/client';
 import * as mysql from 'mysql2/promise';
-import type { RowDataPacket, FieldPacket, ResultSetHeader } from 'mysql2';
+import type { ResultSetHeader } from 'mysql2';
 
 export class ANPRService extends BaseShardService {
   async create(data: Omit<ANPRData, 'id' | 'createdAt' | 'shardKey'>) {
