@@ -62,14 +62,9 @@ export class MapDataService extends BaseShardService {
     }
   }
 
-  async findAll(params: { skip?: number; take?: number; orderBy?: { createdAt: 'desc' | 'asc' } }) {
+  async findAll(params: { orderBy?: { createdAt: 'desc' | 'asc' } }) {
     const results: any[] = [];
-    const skip = params.skip ?? 0; // Default to 0 if undefined
-    const take = params.take ?? 10; // Default to 10 if undefined
 
-    if (typeof skip !== 'number' || typeof take !== 'number') {
-      throw new Error('Invalid skip or take parameters. Both must be numbers.');
-    }
 
     for (const shard of this.shardRouter.getShards().values()) {
       const connection = await mysql.createConnection({
@@ -83,7 +78,6 @@ export class MapDataService extends BaseShardService {
         const query = `
           SELECT * FROM MapData 
           ORDER BY createdAt DESC 
-          LIMIT ${skip}, ${take};
         `;
         const [rows] = await connection.query(query);
         results.push(...(rows as any[]));

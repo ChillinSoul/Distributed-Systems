@@ -96,7 +96,7 @@ export class FormulaService extends BaseShardService {
       const context = {
         anpr: {
           getVehicleCount: async (criteria: (data: any) => boolean) => {
-            const data = await this.anprService.findAll({ skip: 0, take: 100 }); // Fetch ANPR data
+            const data = await this.anprService.findAll({});
             return data.filter(criteria).length;
           },
         },

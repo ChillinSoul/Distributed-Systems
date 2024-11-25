@@ -8,8 +8,7 @@ export default defineEventHandler(async (event) => {
   try {
     // Get query parameters
     const query = getQuery(event)
-    //const generateFake = query.generate === 'true'
-    const generateFake = true
+    const generateFake = query.generate === 'true'
     if (generateFake) {
       // Generate fake ANPR data
       const anprData = {
