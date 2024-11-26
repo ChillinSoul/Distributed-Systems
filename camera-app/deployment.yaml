@@ -20,4 +20,4 @@ spec:
         - containerPort: 3000
         env:
         - name: DATABASE_URL
-          value: "mongodb://root:password@mongodb:27017/mydatabase?authSource=admin"
+          value: "postgres://root@cockroachdb-public:26257/cameradata?sslmode=disable"

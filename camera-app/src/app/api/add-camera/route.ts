@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   const prisma = new PrismaClient();
   try {
     const data = await req.json();
-    const { available, cameraName, cameraNumber, position } = data;
+    const { available, cameraname, cameranumber, position } = data;
 
     // Validate position array
     if (position.length !== 2) {
@@ -20,11 +20,11 @@ export async function POST(req: Request) {
     }
 
     // Create a new camera record in the database
-    const newCamera = await prisma.cameras.create({
+    const newCamera = await prisma.camera.create({
       data: {
         available,
-        cameraName,
-        cameraNumber,
+        cameraname,
+        cameranumber,
         position: [latitude.toString(), longitude.toString()],
       },
     });

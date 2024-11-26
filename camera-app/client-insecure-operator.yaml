@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cockroachdb-client-insecure
+spec:
+  containers:
+  - name: cockroachdb-client-insecure
+    image: cockroachdb/cockroach:v24.2.5
+    command:
+    - sleep
+    - "2147483648"

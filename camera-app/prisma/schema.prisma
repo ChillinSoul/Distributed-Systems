@@ -3,21 +3,22 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "cockroachdb"
   url      = env("DATABASE_URL")
 }
 
-model Cameras {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  available    String
-  cameraName   String
-  cameraNumber String
-  position     String[]
+model camera {
+  id           Int      @id @default(sequence()) // Primary key
+  available    String   // Equivalent to varchar(255)
+  cameraname   String   // Equivalent to varchar(255)
+  cameranumber String   // Equivalent to varchar(255)
+  position     Int[]    // Equivalent to INTEGER[]
 }
 
-model Video {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  camID       String   @db.ObjectId
+model video {
+  id          Int   @id @default(sequence())
+  camID       String   
   numberPlate String
   time        DateTime @db.Date
+  // Foreign key relationship
 }

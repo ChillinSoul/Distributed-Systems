@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   const prisma = new PrismaClient();
   try {
-    const cameras = await prisma.cameras.findMany();
+    const cameras = await prisma.camera.findMany();
     return NextResponse.json(cameras);
   } catch (error) {
     console.error('Error fetching cameras:', error);

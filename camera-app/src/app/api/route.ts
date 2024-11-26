@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export async function GET() {
   try {
     // Fetch all cameras from the database
-    const cameras = await prisma.cameras.findMany();
+    const cameras = await prisma.camera.findMany();
     
     // Return the cameras as JSON
     return NextResponse.json(cameras);
