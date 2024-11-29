@@ -92,6 +92,7 @@ The API to create a new camera
 http://camera-app-service/api/add-camera
 ```
 Here is an exemple of what you can post with postman
+
 ![image](https://github.com/user-attachments/assets/51cf17d1-e391-41de-a425-ce93fbaaf7ec)
 
 
