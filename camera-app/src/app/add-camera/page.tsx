@@ -56,8 +56,8 @@ const styles: { [key: string]: CSSProperties } = {
 };
 
 export default function AddCameraPage() {
-  const [cameraName, setCameraName] = useState('');
-  const [cameraNumber, setCameraNumber] = useState('');
+  const [cameraname, setcameraname] = useState('');
+  const [cameranumber, setcameranumber] = useState('');
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -70,23 +70,26 @@ export default function AddCameraPage() {
     setSuccessMessage('');
 
     try {
+      const latitudeInt = parseInt(latitude)
+      const longitudeInt = parseInt(longitude)
+
       const response = await fetch('/api/add-camera', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          available,
-          cameraName,
-          cameraNumber,
-          position: [latitude.toString(), longitude.toString()], // Ensure latitude and longitude are strings
+          "available": available,
+          "cameraname": cameraname,
+          "cameranumber": cameranumber,
+          "position": [latitudeInt, longitudeInt], // Ensure latitude and longitude are strings
         }),
       });
 
       if (response.ok) {
         setSuccessMessage('Camera added successfully!');
-        setCameraName('');
-        setCameraNumber('');
+        setcameraname('');
+        setcameranumber('');
         setLatitude('');
         setLongitude('');
         setAvailable('true');
@@ -108,29 +111,29 @@ export default function AddCameraPage() {
 
       <form onSubmit={handleSubmit}>
         <div style={styles.formGroup}>
-          <label style={styles.label} htmlFor="cameraName">
+          <label style={styles.label} htmlFor="cameraname">
             Camera Name
           </label>
           <input
             style={styles.input}
             type="text"
-            id="cameraName"
-            value={cameraName}
-            onChange={(e) => setCameraName(e.target.value)}
+            id="cameraname"
+            value={cameraname}
+            onChange={(e) => setcameraname(e.target.value)}
             required
           />
         </div>
 
         <div style={styles.formGroup}>
-          <label style={styles.label} htmlFor="cameraNumber">
+          <label style={styles.label} htmlFor="cameranumber">
             Camera Number
           </label>
           <input
             style={styles.input}
             type="text"
-            id="cameraNumber"
-            value={cameraNumber}
-            onChange={(e) => setCameraNumber(e.target.value)}
+            id="cameranumber"
+            value={cameranumber}
+            onChange={(e) => setcameranumber(e.target.value)}
             required
           />
         </div>

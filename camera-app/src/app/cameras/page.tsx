@@ -3,8 +3,8 @@ import { CSSProperties, useEffect, useState } from 'react';
 interface Camera {
   id: string;
   available: boolean;
-  cameraName: string;
-  cameraNumber: string;
+  cameraname: string;
+  cameranumber: string;
   position: string[];
 }
 const styles: { [key: string]: CSSProperties } = {
@@ -36,12 +36,12 @@ const styles: { [key: string]: CSSProperties } = {
         borderRadius: '4px',
         boxShadow: '0 1px 5px rgba(0, 0, 0, 0.05)',
     },
-    cameraName: {
+    cameraname: {
         fontWeight: 'bold',
         fontSize: '1.5rem',
         color: '#333',
     },
-    cameraNumber: {
+    cameranumber: {
         color: '#777',
         fontSize: '1rem',
         marginTop: '0.5rem',
@@ -80,8 +80,8 @@ export default function CamerasPage() {
         <ul style={styles.list}>
           {cameras.map((camera) => (
             <li key={camera.id} style={styles.listItem}>
-              <div style={styles.cameraName}>{camera.cameraName}</div>
-              <div style={styles.cameraNumber}>Number: {camera.cameraNumber}</div>
+              <div style={styles.cameraname}>{camera.cameraname}</div>
+              <div style={styles.cameranumber}>Number: {camera.cameranumber}</div>
               <div style={styles.position}>
                 Position: {camera.position.join(', ')}
               </div>
