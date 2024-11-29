@@ -68,12 +68,33 @@ If you're running Minikube with Docker Desktop as the container driver, a Miniku
 minikube tunnel
 ```
 
-You only need to click on the HTTP link generated to open the pages.
+### Create the database and the table
+
+First you need to connect to the database for this use the following command:
+```
+kubectl exec -it cockroachdb-client-insecure -- ./cockroach sql --insecure --host=cockroachdb-public
+```
+
+Once you have open the CockroachDB SQL shell, you can create the database **cameradata** and the table **camera** with the following SQL command:
+
+```
+CREATE DATABASE cameradata;
+USE cameradata;
+CREATE TABLE camera (
+    id INT PRIMARY KEY DEFAULT unique_rowid(),
+    available VARCHAR(255),
+    cameraname VARCHAR(255),
+    cameranumber VARCHAR(255),
+    position INTEGER[]
+);
+INSERT INTO camera (available, cameraname, cameranumber, position) 
+VALUES ('yes', 'Camera A', '123', '{"10", "30"}');
+```
 
 ### Communication between pods
 Here is the list of API available for this project
 
-
+=============================================================
 The api to fetch all the cameras
 ```
 http://camera-app-service/api/cameras
@@ -87,6 +108,9 @@ Here is what you will obtained
   position     Int[]
 ```
 
+![image](https://github.com/user-attachments/assets/25eefa96-1a69-4a22-b57d-1a251393f696)
+
+=============================================================
 The API to create a new camera
 ```
 http://camera-app-service/api/add-camera
@@ -95,6 +119,6 @@ Here is an exemple of what you can post with postman
 
 ![image](https://github.com/user-attachments/assets/51cf17d1-e391-41de-a425-ce93fbaaf7ec)
 
-
+=============================================================
 ## documentation
 link : "https://htmlpreview.github.io/?https://github.com/ChillinSoul/Distributed-Systems/blob/main/camera-app/docs/index.html"
