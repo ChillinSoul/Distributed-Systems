@@ -95,6 +95,7 @@ VALUES ('yes', 'Camera A', '123', '{"10", "30"}');
 Here is the list of API available for this project
 
 =============================================================
+
 The api to fetch all the cameras
 ```
 http://camera-app-service/api/cameras
@@ -111,6 +112,7 @@ Here is what you will obtained
 ![image](https://github.com/user-attachments/assets/25eefa96-1a69-4a22-b57d-1a251393f696)
 
 =============================================================
+
 The API to create a new camera
 ```
 http://camera-app-service/api/add-camera
@@ -120,5 +122,6 @@ Here is an exemple of what you can post with postman
 ![image](https://github.com/user-attachments/assets/51cf17d1-e391-41de-a425-ce93fbaaf7ec)
 
 =============================================================
+
 ## documentation
 link : "https://htmlpreview.github.io/?https://github.com/ChillinSoul/Distributed-Systems/blob/main/camera-app/docs/index.html"
