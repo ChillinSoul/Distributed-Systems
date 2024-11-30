@@ -3,9 +3,9 @@ import { CSSProperties, useEffect, useState } from 'react';
 
 interface Video {
   id: string;
-  camID: string;
-  time: string;
-  numberPlate: string;
+  cameranumber: string;
+  numberplate: string;
+  createat: string;
 }
 
 const styles: { [key: string]: CSSProperties } = {
@@ -81,12 +81,12 @@ export default function VideosPage() {
           {videos.map((video) => (
             <li key={video.id} style={styles.listItem}>
               <div style={styles.videoInfo}>Video ID: {video.id}</div>
-              <div style={styles.videoDetails}>Camera ID: {video.camID}</div>
+              <div style={styles.videoDetails}>Camera ID: {video.cameranumber}</div>
               <div style={styles.videoDetails}>
-                Time: {new Date(video.time).toLocaleString()}
+                Number Plate: {video.numberplate}
               </div>
               <div style={styles.videoDetails}>
-                Number Plate: {video.numberPlate}
+                Time: {video.createat}
               </div>
             </li>
           ))}

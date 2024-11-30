@@ -56,9 +56,8 @@ const styles: { [key: string]: CSSProperties } = {
 };
 
 export default function CreateVideoPage() {
-  const [camID, setCamID] = useState('');
-  const [numberPlate, setNumberPlate] = useState('');
-  const [time, setTime] = useState('');
+  const [cameranumber, setCameranumber] = useState('');
+  const [numberplate, setNumberPlate] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -74,17 +73,15 @@ export default function CreateVideoPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          camID,
-          numberPlate,
-          time, // Ensure time is in ISO format
+          "cameranumber": cameranumber,
+          "numberplate": numberplate,
         }),
       });
 
       if (response.ok) {
         setSuccessMessage('Video added successfully!');
-        setCamID('');
+        setCameranumber('');
         setNumberPlate('');
-        setTime('');
       } else {
         const data = await response.json();
         setErrorMessage(data.error || 'Failed to add video');
@@ -110,8 +107,8 @@ export default function CreateVideoPage() {
             style={styles.input}
             type="text"
             id="camID"
-            value={camID}
-            onChange={(e) => setCamID(e.target.value)}
+            value={cameranumber}
+            onChange={(e) => setCameranumber(e.target.value)}
             required
           />
         </div>
@@ -124,22 +121,8 @@ export default function CreateVideoPage() {
             style={styles.input}
             type="text"
             id="numberPlate"
-            value={numberPlate}
+            value={numberplate}
             onChange={(e) => setNumberPlate(e.target.value)}
-            required
-          />
-        </div>
-
-        <div style={styles.formGroup}>
-          <label style={styles.label} htmlFor="time">
-            Time
-          </label>
-          <input
-            style={styles.input}
-            type="datetime-local"
-            id="time"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
             required
           />
         </div>

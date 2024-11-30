@@ -35,7 +35,7 @@ else
 fi
 
 echo "Deploying to Kubernetes..."
-if kubectl create secret generic mongodb-secret --from-env-file=.env && kubectl apply -f ./deployment.yaml && kubectl apply -f ./service.yaml; then
+if kubectl apply -f ./deployment.yaml && kubectl apply -f ./service.yaml; then
   echo "Deployment to Kubernetes completed successfully."
 else
   echo "Kubernetes deployment failed. Exiting..."

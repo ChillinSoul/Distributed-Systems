@@ -16,9 +16,8 @@ model camera {
 }
 
 model video {
-  id          Int   @id @default(sequence())
-  camID       String   
-  numberPlate String
-  time        DateTime @db.Date
-  // Foreign key relationship
+  id              Int   @id @default(sequence())
+  cameranumber    String    
+  numberplate     String
+  createat        DateTime @default(now())
 }
