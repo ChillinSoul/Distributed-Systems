@@ -1,12 +1,14 @@
 {
   "name": "camera-app",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-openapi": "node swaggerconfig.js"
   },
   "dependencies": {
     "@prisma/client": "^5.20.0",
@@ -14,7 +16,8 @@
     "react": "^18",
     "react-dom": "^18",
     "swagger-ui": "^5.18.2",
-    "swagger-ui-react": "^5.18.2"
+    "swagger-ui-react": "^5.18.2",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@types/node": "^20",
