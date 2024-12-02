@@ -124,4 +124,4 @@ Here is an exemple of what you can post with postman
 =============================================================
 
 ## documentation
-link : "https://htmlpreview.github.io/?https://github.com/ChillinSoul/Distributed-Systems/blob/main/camera-app/docs/index.html"
+link : "https://htmlpreview.github.io/?https://github.com/ChillinSoul/Distributed-Systems/blob/main/camera-app/public/docs/index.html"
