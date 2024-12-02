@@ -1,23 +1,23 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 const styles = {
   navbar: {
-    backgroundColor: '#0070f3',
-    padding: '1rem',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    color: '#fff',
+    backgroundColor: "#0070f3",
+    padding: "1rem",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    color: "#fff",
   },
   navLinks: {
-    display: 'flex',
-    gap: '1.5rem',
+    display: "flex",
+    gap: "1.5rem",
   },
   link: {
-    color: '#fff',
-    textDecoration: 'none',
-    fontSize: '1.25rem',
-    fontWeight: 'bold',
+    color: "#fff",
+    textDecoration: "none",
+    fontSize: "1.25rem",
+    fontWeight: "bold",
   },
 };
 
@@ -42,6 +42,15 @@ const Navbar = () => {
         </Link>
         <Link href="./create-video" passHref style={styles.link}>
           Create Video
+        </Link>
+        <Link
+          href="./api-doc"
+          passHref
+          target="_blank"
+          rel="noopener noreferrer"
+          style={styles.link}
+        >
+          Documentation
         </Link>
       </div>
     </nav>
