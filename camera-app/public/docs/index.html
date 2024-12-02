@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Camera-app API</title>
+  <title>My API</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta charset="UTF-8" />
@@ -689,58 +689,87 @@
   <script>
     // Script section to load models into a JS Var
     var defs = {}
-            defs["addcamera_body"] = {
+            defs["api_addcamera_body"] = {
+  "required" : [ "available", "cameraname", "cameranumber", "position" ],
   "type" : "object",
   "properties" : {
-    "cameraName" : {
+    "available" : {
       "type" : "string",
-      "example" : "Main Gate Camera"
+      "description" : "Availability status of the camera (e.g., 'true' or 'false')"
     },
-    "cameraNumber" : {
+    "cameraname" : {
       "type" : "string",
-      "example" : "C123"
+      "description" : "Name of the camera"
+    },
+    "cameranumber" : {
+      "type" : "string",
+      "description" : "Unique camera number"
     },
     "position" : {
-      "maxItems" : 2,
-      "minItems" : 2,
       "type" : "array",
-      "example" : [ 48, 2 ],
+      "description" : "Array representing the latitude and longitude of the camera's position",
+      "example" : [ 48.8566, 2.3522 ],
       "items" : {
         "type" : "number"
       }
     }
   }
 };
-            defs["Camera"] = {
+            defs["api_createvideo_body"] = {
+  "type" : "object",
+  "properties" : {
+    "cameranumber" : {
+      "type" : "string",
+      "description" : "The unique identifier of the camera that captured the video."
+    },
+    "numberplate" : {
+      "type" : "string",
+      "description" : "The number plate of the vehicle captured in the video."
+    }
+  }
+};
+            defs["inline_response_200"] = {
   "type" : "object",
   "properties" : {
     "id" : {
-      "type" : "string",
-      "example" : "5f6abcdf234a0e5b5cbb8abf"
+      "type" : "integer",
+      "description" : "The unique ID of the camera"
     },
-    "cameraName" : {
+    "available" : {
       "type" : "string",
-      "example" : "Main Gate Camera"
+      "description" : "Availability status of the camera"
     },
-    "cameraNumber" : {
+    "cameraname" : {
       "type" : "string",
-      "example" : "C123"
+      "description" : "Name of the camera"
+    },
+    "cameranumber" : {
+      "type" : "string",
+      "description" : "Unique camera number"
     },
     "position" : {
       "type" : "array",
-      "example" : [ "72", "25" ],
+      "description" : "The position (latitude, longitude) of the camera",
       "items" : {
-        "type" : "string"
+        "type" : "number"
       }
     }
   }
 };
-            defs["Error"] = {
+            defs["inline_response_201"] = {
   "type" : "object",
   "properties" : {
-    "error" : {
+    "id" : {
+      "type" : "integer",
+      "description" : "The unique ID of the video"
+    },
+    "cameranumber" : {
       "type" : "string",
-      "example" : "Failed to fetch cameras"
+      "description" : "The camera number associated with the video"
+    },
+    "numberplate" : {
+      "type" : "string",
+      "description" : "The number plate recorded in the video"
     }
   }
 };
@@ -761,11 +790,17 @@
             <li class="nav-fixed nav-header active" data-group="_"><a href="#api-_">API Summary</a></li>
 
                   <li class="nav-header" data-group="Default"><a href="#api-Default">API Methods - Default</a></li>
-                    <li data-group="Default" data-name="createCamera" class="">
-                      <a href="#api-Default-createCamera">createCamera</a>
+                    <li data-group="Default" data-name="apiAddCameraPost" class="">
+                      <a href="#api-Default-apiAddCameraPost">apiAddCameraPost</a>
                     </li>
-                    <li data-group="Default" data-name="listCameras" class="">
-                      <a href="#api-Default-listCameras">listCameras</a>
+                    <li data-group="Default" data-name="apiCamerasGet" class="">
+                      <a href="#api-Default-apiCamerasGet">apiCamerasGet</a>
+                    </li>
+                    <li data-group="Default" data-name="apiCreateVideoPost" class="">
+                      <a href="#api-Default-apiCreateVideoPost">apiCreateVideoPost</a>
+                    </li>
+                    <li data-group="Default" data-name="apiVideosGet" class="">
+                      <a href="#api-Default-apiVideosGet">apiVideosGet</a>
                     </li>
           </ul>
         </nav>
@@ -773,7 +808,7 @@
       <div id="content">
         <div id="project">
           <div class="pull-left">
-            <h1>Camera-app API</h1>
+            <h1>My API</h1>
           </div>
           <div class="clearfix"></div>
         </div>
@@ -782,50 +817,50 @@
             <h2 id="welcome-to-apidoc">API and SDK Documentation</h2>
               <div class="app-desc">Version: 1.0.0</div>
             <hr>
-            <div>API for managing cameras</div>
+            <div>Documentation of my API</div>
           </div>
         </div>
         <div id="sections">
                 <section id="api-Default">
                   <h1>Default</h1>
-                    <div id="api-Default-createCamera">
-                      <article id="api-Default-createCamera-0" data-group="User" data-name="createCamera" data-version="0">
+                    <div id="api-Default-apiAddCameraPost">
+                      <article id="api-Default-apiAddCameraPost-0" data-group="User" data-name="apiAddCameraPost" data-version="0">
                         <div class="pull-left">
-                          <h1>createCamera</h1>
+                          <h1>apiAddCameraPost</h1>
                           <p>Create a new camera</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked"></p>
+                        <p class="marked">This route allows the user to create a new camera with details such as availability, camera name, camera number, and position (latitude and longitude).</p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/add-camera</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/api/add-camera</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
                         <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-createCamera-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-createCamera-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-createCamera-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-createCamera-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-createCamera-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-createCamera-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-createCamera-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-createCamera-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-createCamera-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-createCamera-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-createCamera-0-python">Python</a></li>
+                          <li class="active"><a href="#examples-Default-apiAddCameraPost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-apiAddCameraPost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-apiAddCameraPost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-apiAddCameraPost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-apiAddCameraPost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-apiAddCameraPost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-apiAddCameraPost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-apiAddCameraPost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-apiAddCameraPost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-apiAddCameraPost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-apiAddCameraPost-0-python">Python</a></li>
                         </ul>
 
                         <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-createCamera-0-curl">
+                          <div class="tab-pane active" id="examples-Default-apiAddCameraPost-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"http://localhost:3000/add-camera"</code></pre>
+"//api/add-camera"</code></pre>
                           </div>
-                          <div class="tab-pane" id="examples-Default-createCamera-0-java">
+                          <div class="tab-pane" id="examples-Default-apiAddCameraPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
 import io.swagger.client.auth.*;
 import io.swagger.client.model.*;
@@ -839,48 +874,48 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         
         DefaultApi apiInstance = new DefaultApi();
-        Addcamera_body body = ; // Addcamera_body | 
+        Api_addcamera_body body = ; // Api_addcamera_body | 
         try {
-            Camera result = apiInstance.createCamera(body);
+            inline_response_200 result = apiInstance.apiAddCameraPost(body);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#createCamera");
+            System.err.println("Exception when calling DefaultApi#apiAddCameraPost");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
 
-                          <div class="tab-pane" id="examples-Default-createCamera-0-android">
+                          <div class="tab-pane" id="examples-Default-apiAddCameraPost-0-android">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
 
 public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        Addcamera_body body = ; // Addcamera_body | 
+        Api_addcamera_body body = ; // Api_addcamera_body | 
         try {
-            Camera result = apiInstance.createCamera(body);
+            inline_response_200 result = apiInstance.apiAddCameraPost(body);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#createCamera");
+            System.err.println("Exception when calling DefaultApi#apiAddCameraPost");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
   <!--
-  <div class="tab-pane" id="examples-Default-createCamera-0-groovy">
+  <div class="tab-pane" id="examples-Default-apiAddCameraPost-0-groovy">
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
-                            <div class="tab-pane" id="examples-Default-createCamera-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">Addcamera_body *body = ; // 
+                            <div class="tab-pane" id="examples-Default-apiAddCameraPost-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Api_addcamera_body *body = ; // 
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
 // Create a new camera
-[apiInstance createCameraWith:body
-              completionHandler: ^(Camera output, NSError* error) {
+[apiInstance apiAddCameraPostWith:body
+              completionHandler: ^(inline_response_200 output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -891,11 +926,11 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-createCamera-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var CameraAppApi = require('camera_app_api');
+                            <div class="tab-pane" id="examples-Default-apiAddCameraPost-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var MyApi = require('my_api');
 
-var api = new CameraAppApi.DefaultApi()
-var body = ; // {{Addcamera_body}} 
+var api = new MyApi.DefaultApi()
+var body = ; // {{Api_addcamera_body}} 
 
 var callback = function(error, data, response) {
   if (error) {
@@ -904,14 +939,14 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.createCamera(body, callback);
+api.apiAddCameraPost(body, callback);
 </code></pre>
                             </div>
 
-                            <!--<div class="tab-pane" id="examples-Default-createCamera-0-angular">
+                            <!--<div class="tab-pane" id="examples-Default-apiAddCameraPost-0-angular">
               <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
             </div>-->
-                            <div class="tab-pane" id="examples-Default-createCamera-0-csharp">
+                            <div class="tab-pane" id="examples-Default-apiAddCameraPost-0-csharp">
                               <pre class="prettyprint"><code class="language-cs">using System;
 using System.Diagnostics;
 using IO.Swagger.Api;
@@ -920,23 +955,23 @@ using IO.Swagger.Model;
 
 namespace Example
 {
-    public class createCameraExample
+    public class apiAddCameraPostExample
     {
         public void main()
         {
 
             var apiInstance = new DefaultApi();
-            var body = new Addcamera_body(); // Addcamera_body | 
+            var body = new Api_addcamera_body(); // Api_addcamera_body | 
 
             try
             {
                 // Create a new camera
-                Camera result = apiInstance.createCamera(body);
+                inline_response_200 result = apiInstance.apiAddCameraPost(body);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling DefaultApi.createCamera: " + e.Message );
+                Debug.Print("Exception when calling DefaultApi.apiAddCameraPost: " + e.Message );
             }
         }
     }
@@ -944,40 +979,40 @@ namespace Example
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-createCamera-0-php">
+                            <div class="tab-pane" id="examples-Default-apiAddCameraPost-0-php">
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
-$body = ; // Addcamera_body | 
+$body = ; // Api_addcamera_body | 
 
 try {
-    $result = $api_instance->createCamera($body);
+    $result = $api_instance->apiAddCameraPost($body);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->createCamera: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling DefaultApi->apiAddCameraPost: ', $e->getMessage(), PHP_EOL;
 }
 ?></code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-createCamera-0-perl">
+                            <div class="tab-pane" id="examples-Default-apiAddCameraPost-0-perl">
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $body = WWW::SwaggerClient::Object::Addcamera_body->new(); # Addcamera_body | 
+my $body = WWW::SwaggerClient::Object::Api_addcamera_body->new(); # Api_addcamera_body | 
 
 eval { 
-    my $result = $api_instance->createCamera(body => $body);
+    my $result = $api_instance->apiAddCameraPost(body => $body);
     print Dumper($result);
 };
 if ($@) {
-    warn "Exception when calling DefaultApi->createCamera: $@\n";
+    warn "Exception when calling DefaultApi->apiAddCameraPost: $@\n";
 }</code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-createCamera-0-python">
+                            <div class="tab-pane" id="examples-Default-apiAddCameraPost-0-python">
                               <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
 import time
 import swagger_client
@@ -986,14 +1021,14 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
-body =  # Addcamera_body | 
+body =  # Api_addcamera_body | 
 
 try: 
     # Create a new camera
-    api_response = api_instance.create_camera(body)
+    api_response = api_instance.api_add_camera_post(body)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->createCamera: %s\n" % e)</code></pre>
+    print("Exception when calling DefaultApi->apiAddCameraPost: %s\n" % e)</code></pre>
                             </div>
                           </div>
 
@@ -1017,7 +1052,7 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/addcamera_body"
+        "$ref" : "#/components/schemas/api_addcamera_body"
       }
     }
   },
@@ -1035,12 +1070,12 @@ except ApiException as e:
                                   }
                                 
                                   var view = new JSONSchemaView(schema,2,{isBodyParam: true});
-                                  var result = $('#d2e199_createCamera_body');
+                                  var result = $('#d2e199_apiAddCameraPost_body');
                                   result.empty();
                                   result.append(view.render());
                                 });
                                 </script>
-                                <div id="d2e199_createCamera_body"></div>
+                                <div id="d2e199_apiAddCameraPost_body"></div>
                                 </td>
                                 </tr>
                             </table>
@@ -1048,26 +1083,26 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 201 - Camera created successfully </h3>
+                            <h3> Status: 200 - Camera successfully created </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-createCamera-201-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-apiAddCameraPost-200-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-createCamera-201-schema">
-                                  <div id='responses-createCamera-201-schema-201' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-apiAddCameraPost-200-schema">
+                                  <div id='responses-apiAddCameraPost-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Camera created successfully",
+  "description" : "Camera successfully created",
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/Camera"
+        "$ref" : "#/components/schemas/inline_response_200"
       }
     }
   }
@@ -1085,153 +1120,73 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-createCamera-201-schema-data').val(stringify(schema));
-                                        var result = $('#responses-createCamera-201-schema-201');
+                                        $('#responses-apiAddCameraPost-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-apiAddCameraPost-200-schema-200');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-createCamera-201-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-apiAddCameraPost-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 
-                            <h3> Status: 400 - Invalid input data </h3>
+                            <h3> Status: 400 - Bad Request - Missing or invalid data </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-createCamera-400-schema">Schema</a>
-                                </li>
-
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-createCamera-400-schema">
-                                  <div id='responses-createCamera-400-schema-400' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "Invalid input data",
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/Error"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.content["application/json"].schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.components = {};
-                                          schemaWrapper.components.schemas = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        //console.log(JSON.stringify(schema));
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-createCamera-400-schema-data').val(stringify(schema));
-                                        var result = $('#responses-createCamera-400-schema-400');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-createCamera-400-schema-data' type='hidden' value=''></input>
-                                </div>
                             </div>
 
                             <h3> Status: 500 - Internal server error </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-createCamera-500-schema">Schema</a>
-                                </li>
-
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-createCamera-500-schema">
-                                  <div id='responses-createCamera-500-schema-500' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "Internal server error",
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/Error"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.content["application/json"].schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.components = {};
-                                          schemaWrapper.components.schemas = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        //console.log(JSON.stringify(schema));
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-createCamera-500-schema-data').val(stringify(schema));
-                                        var result = $('#responses-createCamera-500-schema-500');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-createCamera-500-schema-data' type='hidden' value=''></input>
-                                </div>
                             </div>
 
                         </article>
                       </div>
                       <hr>
-                    <div id="api-Default-listCameras">
-                      <article id="api-Default-listCameras-0" data-group="User" data-name="listCameras" data-version="0">
+                    <div id="api-Default-apiCamerasGet">
+                      <article id="api-Default-apiCamerasGet-0" data-group="User" data-name="apiCamerasGet" data-version="0">
                         <div class="pull-left">
-                          <h1>listCameras</h1>
-                          <p>List all cameras</p>
+                          <h1>apiCamerasGet</h1>
+                          <p>Retrieve a list of all cameras</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked"></p>
+                        <p class="marked">This route allows the user to retrieve all camera records stored in the database.</p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/cameras</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/api/cameras</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
                         <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-listCameras-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-listCameras-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-listCameras-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-listCameras-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-listCameras-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-listCameras-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-listCameras-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-listCameras-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-listCameras-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-listCameras-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-listCameras-0-python">Python</a></li>
+                          <li class="active"><a href="#examples-Default-apiCamerasGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-apiCamerasGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-apiCamerasGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-apiCamerasGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-apiCamerasGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-apiCamerasGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-apiCamerasGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-apiCamerasGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-apiCamerasGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-apiCamerasGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-apiCamerasGet-0-python">Python</a></li>
                         </ul>
 
                         <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-listCameras-0-curl">
+                          <div class="tab-pane active" id="examples-Default-apiCamerasGet-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"http://localhost:3000/cameras"</code></pre>
+"//api/cameras"</code></pre>
                           </div>
-                          <div class="tab-pane" id="examples-Default-listCameras-0-java">
+                          <div class="tab-pane" id="examples-Default-apiCamerasGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
 import io.swagger.client.auth.*;
 import io.swagger.client.model.*;
@@ -1246,17 +1201,17 @@ public class DefaultApiExample {
         
         DefaultApi apiInstance = new DefaultApi();
         try {
-            array[Camera] result = apiInstance.listCameras();
+            array[inline_response_200] result = apiInstance.apiCamerasGet();
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#listCameras");
+            System.err.println("Exception when calling DefaultApi#apiCamerasGet");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
 
-                          <div class="tab-pane" id="examples-Default-listCameras-0-android">
+                          <div class="tab-pane" id="examples-Default-apiCamerasGet-0-android">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
 
 public class DefaultApiExample {
@@ -1264,26 +1219,26 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
         try {
-            array[Camera] result = apiInstance.listCameras();
+            array[inline_response_200] result = apiInstance.apiCamerasGet();
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#listCameras");
+            System.err.println("Exception when calling DefaultApi#apiCamerasGet");
             e.printStackTrace();
         }
     }
 }</code></pre>
                           </div>
   <!--
-  <div class="tab-pane" id="examples-Default-listCameras-0-groovy">
+  <div class="tab-pane" id="examples-Default-apiCamerasGet-0-groovy">
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
-                            <div class="tab-pane" id="examples-Default-listCameras-0-objc">
+                            <div class="tab-pane" id="examples-Default-apiCamerasGet-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
-// List all cameras
-[apiInstance listCamerasWithCompletionHandler: 
-              ^(array[Camera] output, NSError* error) {
+// Retrieve a list of all cameras
+[apiInstance apiCamerasGetWithCompletionHandler: 
+              ^(array[inline_response_200] output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -1294,10 +1249,10 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-listCameras-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var CameraAppApi = require('camera_app_api');
+                            <div class="tab-pane" id="examples-Default-apiCamerasGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var MyApi = require('my_api');
 
-var api = new CameraAppApi.DefaultApi()
+var api = new MyApi.DefaultApi()
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -1305,14 +1260,14 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.listCameras(callback);
+api.apiCamerasGet(callback);
 </code></pre>
                             </div>
 
-                            <!--<div class="tab-pane" id="examples-Default-listCameras-0-angular">
+                            <!--<div class="tab-pane" id="examples-Default-apiCamerasGet-0-angular">
               <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
             </div>-->
-                            <div class="tab-pane" id="examples-Default-listCameras-0-csharp">
+                            <div class="tab-pane" id="examples-Default-apiCamerasGet-0-csharp">
                               <pre class="prettyprint"><code class="language-cs">using System;
 using System.Diagnostics;
 using IO.Swagger.Api;
@@ -1321,7 +1276,7 @@ using IO.Swagger.Model;
 
 namespace Example
 {
-    public class listCamerasExample
+    public class apiCamerasGetExample
     {
         public void main()
         {
@@ -1330,13 +1285,13 @@ namespace Example
 
             try
             {
-                // List all cameras
-                array[Camera] result = apiInstance.listCameras();
+                // Retrieve a list of all cameras
+                array[inline_response_200] result = apiInstance.apiCamerasGet();
                 Debug.WriteLine(result);
             }
             catch (Exception e)
             {
-                Debug.Print("Exception when calling DefaultApi.listCameras: " + e.Message );
+                Debug.Print("Exception when calling DefaultApi.apiCamerasGet: " + e.Message );
             }
         }
     }
@@ -1344,22 +1299,22 @@ namespace Example
 </code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-listCameras-0-php">
+                            <div class="tab-pane" id="examples-Default-apiCamerasGet-0-php">
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
 
 try {
-    $result = $api_instance->listCameras();
+    $result = $api_instance->apiCamerasGet();
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->listCameras: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling DefaultApi->apiCamerasGet: ', $e->getMessage(), PHP_EOL;
 }
 ?></code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-listCameras-0-perl">
+                            <div class="tab-pane" id="examples-Default-apiCamerasGet-0-perl">
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
@@ -1367,15 +1322,15 @@ use WWW::SwaggerClient::DefaultApi;
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
 
 eval { 
-    my $result = $api_instance->listCameras();
+    my $result = $api_instance->apiCamerasGet();
     print Dumper($result);
 };
 if ($@) {
-    warn "Exception when calling DefaultApi->listCameras: $@\n";
+    warn "Exception when calling DefaultApi->apiCamerasGet: $@\n";
 }</code></pre>
                             </div>
 
-                            <div class="tab-pane" id="examples-Default-listCameras-0-python">
+                            <div class="tab-pane" id="examples-Default-apiCamerasGet-0-python">
                               <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
 import time
 import swagger_client
@@ -1386,11 +1341,11 @@ from pprint import pprint
 api_instance = swagger_client.DefaultApi()
 
 try: 
-    # List all cameras
-    api_response = api_instance.list_cameras()
+    # Retrieve a list of all cameras
+    api_response = api_instance.api_cameras_get()
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->listCameras: %s\n" % e)</code></pre>
+    print("Exception when calling DefaultApi->apiCamerasGet: %s\n" % e)</code></pre>
                             </div>
                           </div>
 
@@ -1402,28 +1357,28 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - A list of cameras </h3>
+                            <h3> Status: 200 - List of cameras </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-listCameras-200-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-apiCamerasGet-200-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-listCameras-200-schema">
-                                  <div id='responses-listCameras-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-apiCamerasGet-200-schema">
+                                  <div id='responses-apiCamerasGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "A list of cameras",
+  "description" : "List of cameras",
   "content" : {
     "application/json" : {
       "schema" : {
         "type" : "array",
         "items" : {
-          "$ref" : "#/components/schemas/Camera"
+          "$ref" : "#/components/schemas/inline_response_200"
         },
         "x-content-type" : "application/json"
       }
@@ -1443,37 +1398,308 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-listCameras-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-listCameras-200-schema-200');
+                                        $('#responses-apiCamerasGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-apiCamerasGet-200-schema-200');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-listCameras-200-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-apiCamerasGet-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 
                             <h3> Status: 500 - Internal server error </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Default-apiCreateVideoPost">
+                      <article id="api-Default-apiCreateVideoPost-0" data-group="User" data-name="apiCreateVideoPost" data-version="0">
+                        <div class="pull-left">
+                          <h1>apiCreateVideoPost</h1>
+                          <p>Create a new video record</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">This route allows the user to create a new video record by providing the camera number and number plate.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/api/create-video</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Default-apiCreateVideoPost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-apiCreateVideoPost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-apiCreateVideoPost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-apiCreateVideoPost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-apiCreateVideoPost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-apiCreateVideoPost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-apiCreateVideoPost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-apiCreateVideoPost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-apiCreateVideoPost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-apiCreateVideoPost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-apiCreateVideoPost-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Default-apiCreateVideoPost-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+-H "Accept: application/json"\
+-H "Content-Type: application/json"\
+"//api/create-video"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Default-apiCreateVideoPost-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.DefaultApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        
+        DefaultApi apiInstance = new DefaultApi();
+        Api_createvideo_body body = ; // Api_createvideo_body | 
+        try {
+            inline_response_201 result = apiInstance.apiCreateVideoPost(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#apiCreateVideoPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Default-apiCreateVideoPost-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        DefaultApi apiInstance = new DefaultApi();
+        Api_createvideo_body body = ; // Api_createvideo_body | 
+        try {
+            inline_response_201 result = apiInstance.apiCreateVideoPost(body);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#apiCreateVideoPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Default-apiCreateVideoPost-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Default-apiCreateVideoPost-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Api_createvideo_body *body = ; // 
+
+DefaultApi *apiInstance = [[DefaultApi alloc] init];
+
+// Create a new video record
+[apiInstance apiCreateVideoPostWith:body
+              completionHandler: ^(inline_response_201 output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-apiCreateVideoPost-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var MyApi = require('my_api');
+
+var api = new MyApi.DefaultApi()
+var body = ; // {{Api_createvideo_body}} 
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.apiCreateVideoPost(body, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Default-apiCreateVideoPost-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Default-apiCreateVideoPost-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class apiCreateVideoPostExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new DefaultApi();
+            var body = new Api_createvideo_body(); // Api_createvideo_body | 
+
+            try
+            {
+                // Create a new video record
+                inline_response_201 result = apiInstance.apiCreateVideoPost(body);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling DefaultApi.apiCreateVideoPost: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-apiCreateVideoPost-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiDefaultApi();
+$body = ; // Api_createvideo_body | 
+
+try {
+    $result = $api_instance->apiCreateVideoPost($body);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->apiCreateVideoPost: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-apiCreateVideoPost-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::DefaultApi;
+
+my $api_instance = WWW::SwaggerClient::DefaultApi->new();
+my $body = WWW::SwaggerClient::Object::Api_createvideo_body->new(); # Api_createvideo_body | 
+
+eval { 
+    my $result = $api_instance->apiCreateVideoPost(body => $body);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling DefaultApi->apiCreateVideoPost: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-apiCreateVideoPost-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+body =  # Api_createvideo_body | 
+
+try: 
+    # Create a new video record
+    api_response = api_instance.api_create_video_post(body)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->apiCreateVideoPost: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body <span style="color:red;">*</span></td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/api_createvideo_body"
+      }
+    }
+  },
+  "required" : true
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_apiCreateVideoPost_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_apiCreateVideoPost_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 201 - Video successfully created </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
-                                  <a data-toggle="tab" href="#responses-listCameras-500-schema">Schema</a>
+                                  <a data-toggle="tab" href="#responses-apiCreateVideoPost-201-schema">Schema</a>
                                 </li>
 
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-listCameras-500-schema">
-                                  <div id='responses-listCameras-500-schema-500' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                <div class="tab-pane active" id="responses-apiCreateVideoPost-201-schema">
+                                  <div id='responses-apiCreateVideoPost-201-schema-201' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Internal server error",
+  "description" : "Video successfully created",
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/Error"
+        "$ref" : "#/components/schemas/inline_response_201"
       }
     }
   }
@@ -1491,15 +1717,301 @@ except ApiException as e:
 
                                         //console.log(JSON.stringify(schema));
                                         var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-listCameras-500-schema-data').val(stringify(schema));
-                                        var result = $('#responses-listCameras-500-schema-500');
+                                        $('#responses-apiCreateVideoPost-201-schema-data').val(stringify(schema));
+                                        var result = $('#responses-apiCreateVideoPost-201-schema-201');
                                         result.empty();
                                         result.append(view.render());
                                       });
                                     </script>
                                   </div>
-                                  <input id='responses-listCameras-500-schema-data' type='hidden' value=''></input>
+                                  <input id='responses-apiCreateVideoPost-201-schema-data' type='hidden' value=''></input>
                                 </div>
+                            </div>
+
+                            <h3> Status: 400 - Missing required fields </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                            <h3> Status: 500 - Internal server error </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Default-apiVideosGet">
+                      <article id="api-Default-apiVideosGet-0" data-group="User" data-name="apiVideosGet" data-version="0">
+                        <div class="pull-left">
+                          <h1>apiVideosGet</h1>
+                          <p>Fetch all video records</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">This route retrieves all video records from the database.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/api/videos</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Default-apiVideosGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-apiVideosGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-apiVideosGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-apiVideosGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-apiVideosGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-apiVideosGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-apiVideosGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-apiVideosGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-apiVideosGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-apiVideosGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-apiVideosGet-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Default-apiVideosGet-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: application/json"\
+"//api/videos"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Default-apiVideosGet-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.DefaultApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        
+        DefaultApi apiInstance = new DefaultApi();
+        try {
+            array[inline_response_201] result = apiInstance.apiVideosGet();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#apiVideosGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Default-apiVideosGet-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        DefaultApi apiInstance = new DefaultApi();
+        try {
+            array[inline_response_201] result = apiInstance.apiVideosGet();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#apiVideosGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Default-apiVideosGet-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Default-apiVideosGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">
+DefaultApi *apiInstance = [[DefaultApi alloc] init];
+
+// Fetch all video records
+[apiInstance apiVideosGetWithCompletionHandler: 
+              ^(array[inline_response_201] output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-apiVideosGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var MyApi = require('my_api');
+
+var api = new MyApi.DefaultApi()
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.apiVideosGet(callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Default-apiVideosGet-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Default-apiVideosGet-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class apiVideosGetExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new DefaultApi();
+
+            try
+            {
+                // Fetch all video records
+                array[inline_response_201] result = apiInstance.apiVideosGet();
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling DefaultApi.apiVideosGet: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-apiVideosGet-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiDefaultApi();
+
+try {
+    $result = $api_instance->apiVideosGet();
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->apiVideosGet: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-apiVideosGet-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::DefaultApi;
+
+my $api_instance = WWW::SwaggerClient::DefaultApi->new();
+
+eval { 
+    my $result = $api_instance->apiVideosGet();
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling DefaultApi->apiVideosGet: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-apiVideosGet-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+
+try: 
+    # Fetch all video records
+    api_response = api_instance.api_videos_get()
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->apiVideosGet: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - List of videos fetched successfully </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-apiVideosGet-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-apiVideosGet-200-schema">
+                                  <div id='responses-apiVideosGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "List of videos fetched successfully",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/inline_response_201"
+        },
+        "x-content-type" : "application/json"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-apiVideosGet-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-apiVideosGet-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-apiVideosGet-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 500 - Internal server error </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
                             </div>
 
                         </article>
