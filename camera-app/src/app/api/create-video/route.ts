@@ -48,13 +48,14 @@ const prisma = new PrismaClient();
 interface NewVideo {
   cameranumber: string; 
   numberplate: string;
+  typevehicule: string;
 }
 
 export async function POST(req: Request) {
   try {
     const data: NewVideo = await req.json();
 
-    const { cameranumber, numberplate } = data;
+    const { cameranumber, numberplate, typevehicule} = data;
 
     // Validate the input
     if (!cameranumber || !numberplate) {
@@ -69,6 +70,7 @@ export async function POST(req: Request) {
       data: {
         cameranumber,
         numberplate,
+        typevehicule,
       },
     });
 

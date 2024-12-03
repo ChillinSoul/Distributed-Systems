@@ -5,6 +5,7 @@ interface Video {
   id: string;
   cameranumber: string;
   numberplate: string;
+  typevehicule: string;
   createat: string;
 }
 
@@ -84,6 +85,9 @@ export default function VideosPage() {
               <div style={styles.videoDetails}>Camera ID: {video.cameranumber}</div>
               <div style={styles.videoDetails}>
                 Number Plate: {video.numberplate}
+              </div>
+              <div style={styles.videoDetails}>
+                Type of vehicle: {video.typevehicule}
               </div>
               <div style={styles.videoDetails}>
                 Time: {video.createat}

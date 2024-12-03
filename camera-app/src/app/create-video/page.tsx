@@ -58,6 +58,7 @@ const styles: { [key: string]: CSSProperties } = {
 export default function CreateVideoPage() {
   const [cameranumber, setCameranumber] = useState('');
   const [numberplate, setNumberPlate] = useState('');
+  const [typevehicule, setTypevehicule] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -75,6 +76,7 @@ export default function CreateVideoPage() {
         body: JSON.stringify({
           "cameranumber": cameranumber,
           "numberplate": numberplate,
+          "typevehicule": typevehicule,
         }),
       });
 
@@ -82,6 +84,7 @@ export default function CreateVideoPage() {
         setSuccessMessage('Video added successfully!');
         setCameranumber('');
         setNumberPlate('');
+        setTypevehicule('');
       } else {
         const data = await response.json();
         setErrorMessage(data.error || 'Failed to add video');
@@ -123,6 +126,20 @@ export default function CreateVideoPage() {
             id="numberPlate"
             value={numberplate}
             onChange={(e) => setNumberPlate(e.target.value)}
+            required
+          />
+        </div>
+
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="numberPlate">
+            Type of vehicle
+          </label>
+          <input
+            style={styles.input}
+            type="text"
+            id="typevehicule"
+            value={typevehicule}
+            onChange={(e) => setTypevehicule(e.target.value)}
             required
           />
         </div>
