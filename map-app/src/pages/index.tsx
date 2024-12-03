@@ -44,7 +44,9 @@ const Home: React.FC<{ mapData: MapData }> = ({ mapData }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch("http://localhost:3000/api/map-data"); // URL API http://map-app-service/api/map-data
+  // Running in local with npm run dev use the path : http://localhost:3000/api/map-data
+  // Running in Kubernetes Cluster http://map-app-service/api/map-data
+  const res = await fetch("http://localhost/map-app/api/map-data"); // URL API http://map-app-service/api/map-data
   const mapData: MapData = await res.json();
 
   return { props: { mapData } };
