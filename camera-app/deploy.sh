@@ -16,6 +16,11 @@ fi
 
 echo "Starting deployment process for camera-app..."
 
+kubectl apply -f crds.yaml
+kubectl apply -f operator.yaml
+kubectl apply -f client-insecure-operator.yaml
+kubectl apply -f example.yaml
+
 echo "Checking if Minikube is running..."
 if ! minikube status > /dev/null 2>&1; then
   echo "Minikube is not running. Please start it first using 'minikube start'."
@@ -41,5 +46,8 @@ else
   echo "Kubernetes deployment failed. Exiting..."
   exit 1
 fi
+
+
+
 
 echo "Deployment process for camera-app completed successfully."
