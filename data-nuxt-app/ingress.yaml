@@ -45,13 +45,6 @@ spec:
                 name: map-app-service
                 port:
                   number: 80
-          - path: /camera-app(/|$)(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: camera-app-service
-                port:
-                  number: 80
           - path: /bb-demo(/|$)(.*)
             pathType: ImplementationSpecific
             backend:
@@ -73,3 +66,25 @@ spec:
                 name: frontend-service
                 port:
                   number: 3000
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: services-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: camera-app-host
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: camera-app-service
+              port:
+                number: 80

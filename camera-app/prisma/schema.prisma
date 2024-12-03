@@ -19,5 +19,6 @@ model video {
   id              Int   @id @default(sequence())
   cameranumber    String    
   numberplate     String
+  typevehicule    String
   createat        DateTime @default(now())
 }
