@@ -21,4 +21,4 @@ spec:
             - containerPort: 3000
           env:
             - name: DATABASE_URL
-              value: "postgresql://roach:roach@cockroachdb-public:26257/map?sslmode=disable"
+              value: "postgresql://root@cockroachdb-public:26257/map?sslmode=disable"
