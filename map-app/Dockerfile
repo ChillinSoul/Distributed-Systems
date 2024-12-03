@@ -1,21 +1,30 @@
-# Use node 22.9.0 slim image
+# Step 1: Use node 22.9.0 slim image
 FROM node:22.9.0-slim
 
-# Set the working directory inside the container
+# Step 2: Set the working directory inside the container
 WORKDIR /src
 
-# Copy package files and install dependencies (npm install in this case)
+# Step 3: Copy package.json and package-lock.json to the container
 COPY package*.json ./
+
+# Step 4: Install dependencies
 RUN npm install
 
-# Copy the rest of the application code
+# Step 5: Copy the rest of the application code to the container
 COPY . .
 
-# Run the build step
+# Step 6: Generate Prisma Client
+RUN npm install prisma @prisma/client
+RUN npx prisma generate
+
+# Step 7: Build the Next.js application for production
 RUN npm run build
 
-# Expose the port the app will run on
+# Step 8: Expose the port on which the application will run
 EXPOSE 3000
 
-# Command to run the application
+# Step 9: Set environment variables (e.g., NODE_ENV for production mode)
+ENV NODE_ENV=production
+
+# Step 10: Start the Next.js application
 CMD ["npm", "run", "start"]

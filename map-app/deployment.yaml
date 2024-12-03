@@ -1,21 +1,24 @@
-# deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: map-app-deployment
 spec:
-  replicas: 1 # Number of pod, a pod is a group of one or more containers, it runs the container.
+  replicas: 1
   selector:
     matchLabels:
-      app: map-app # select which Pods this Deployment will manage
-  template: # describes the Pods
+      app: map-app
+  template:
     metadata:
       labels:
-        app: map-app # name of the pod
+        app: map-app
     spec:
-      containers: # defines the container that will run inside each Pod
+      containers:
+        # Container for the map application
         - name: map-app
-          image: map-app # The container is based on a Docker image we previously built
+          image: map-app
           imagePullPolicy: Never
           ports:
             - containerPort: 3000
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://roach:roach@cockroachdb-public:26257/map?sslmode=disable"
