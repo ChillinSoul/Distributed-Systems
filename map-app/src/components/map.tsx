@@ -1,23 +1,6 @@
 "use client";
+import { MapData } from "@/types/map";
 import React from "react";
-
-interface Intersection {
-  id: number;
-  name: string;
-  coordinates: [number, number];
-}
-
-interface Road {
-  id: number;
-  start: number;
-  end: number;
-  length: number;
-}
-
-interface MapData {
-  intersections: Intersection[];
-  roads: Road[];
-}
 
 const SvgMap: React.FC<{ mapData: MapData }> = ({ mapData }) => {
   const width = 800; // Augmenter la largeur
@@ -47,16 +30,52 @@ const SvgMap: React.FC<{ mapData: MapData }> = ({ mapData }) => {
           (i) => i.id === road.end
         );
         if (startIntersection && endIntersection) {
+          // Calcul des coordonnées des extrémités de la route
+          const x1 = (startIntersection.coordinates[0] - minX) * scale + margin;
+          const y1 = (startIntersection.coordinates[1] - minY) * scale + margin;
+          const x2 = (endIntersection.coordinates[0] - minX) * scale + margin;
+          const y2 = (endIntersection.coordinates[1] - minY) * scale + margin;
+
+          // Calcul des coordonnées du milieu de la route
+          const midX = (x1 + x2) / 2;
+          const midY = (y1 + y2) / 2;
+
           return (
-            <line
-              key={road.id}
-              x1={(startIntersection.coordinates[0] - minX) * scale + margin}
-              y1={(startIntersection.coordinates[1] - minY) * scale + margin}
-              x2={(endIntersection.coordinates[0] - minX) * scale + margin}
-              y2={(endIntersection.coordinates[1] - minY) * scale + margin}
-              stroke="blue"
-              strokeWidth="2"
-            />
+            <g key={road.id}>
+              {/* Ligne de la route */}
+              <line
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+                stroke="blue"
+                strokeWidth="2"
+              />
+              {/* Cône orange pour les routes en construction */}
+              {road.underConstruction && (
+                <g>
+                  {/* Triangle du cône */}
+                  <polygon
+                    points={`${midX},${midY - 10} ${midX - 5},${midY + 10} ${
+                      midX + 5
+                    },${midY + 10}`}
+                    fill="orange"
+                    stroke="black"
+                    strokeWidth="0.5"
+                  />
+                  {/* Rectangle à la base du cône */}
+                  <rect
+                    x={midX - 6}
+                    y={midY + 10}
+                    width={12}
+                    height={4}
+                    fill="orange"
+                    stroke="black"
+                    strokeWidth="0.5"
+                  />
+                </g>
+              )}
+            </g>
           );
         }
         return null;
