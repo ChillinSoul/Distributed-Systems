@@ -4,11 +4,11 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   const prisma = new PrismaClient();
   try {
-    const intersections = await prisma.intersections.findMany();
-    return NextResponse.json(intersections);
+    await prisma.$connect();
+    return NextResponse.json('Database connected successfully');
   } catch (error) {
-    console.error('Error fetching intersections:', error);
-    return NextResponse.json({ error: 'Failed to fetch intersections' }, { status: 500 });
+    console.error('Database connection failed:', error);
+    return NextResponse.json({ error: error }, { status: 500 });
   }finally {
     await prisma.$disconnect();
   }
