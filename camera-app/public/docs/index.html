@@ -875,9 +875,8 @@ public class DefaultApiExample {
         
         DefaultApi apiInstance = new DefaultApi();
         Api_addcamera_body body = ; // Api_addcamera_body | 
-        String available = available_example; // String | availability status of the camera (e.g., 'true' or 'false')
         try {
-            inline_response_200 result = apiInstance.apiAddCameraPost(body, available);
+            inline_response_200 result = apiInstance.apiAddCameraPost(body);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#apiAddCameraPost");
@@ -895,9 +894,8 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
         Api_addcamera_body body = ; // Api_addcamera_body | 
-        String available = available_example; // String | availability status of the camera (e.g., 'true' or 'false')
         try {
-            inline_response_200 result = apiInstance.apiAddCameraPost(body, available);
+            inline_response_200 result = apiInstance.apiAddCameraPost(body);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#apiAddCameraPost");
@@ -912,13 +910,11 @@ public class DefaultApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-Default-apiAddCameraPost-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">Api_addcamera_body *body = ; // 
-String *available = available_example; // availability status of the camera (e.g., 'true' or 'false')
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
 // Create a new camera
 [apiInstance apiAddCameraPostWith:body
-    available:available
               completionHandler: ^(inline_response_200 output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -935,7 +931,6 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
 var api = new MyApi.DefaultApi()
 var body = ; // {{Api_addcamera_body}} 
-var available = available_example; // {{String}} availability status of the camera (e.g., 'true' or 'false')
 
 var callback = function(error, data, response) {
   if (error) {
@@ -944,7 +939,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.apiAddCameraPost(bodyavailable, callback);
+api.apiAddCameraPost(body, callback);
 </code></pre>
                             </div>
 
@@ -967,12 +962,11 @@ namespace Example
 
             var apiInstance = new DefaultApi();
             var body = new Api_addcamera_body(); // Api_addcamera_body | 
-            var available = available_example;  // String | availability status of the camera (e.g., 'true' or 'false')
 
             try
             {
                 // Create a new camera
-                inline_response_200 result = apiInstance.apiAddCameraPost(body, available);
+                inline_response_200 result = apiInstance.apiAddCameraPost(body);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -991,10 +985,9 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
 $body = ; // Api_addcamera_body | 
-$available = available_example; // String | availability status of the camera (e.g., 'true' or 'false')
 
 try {
-    $result = $api_instance->apiAddCameraPost($body, $available);
+    $result = $api_instance->apiAddCameraPost($body);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling DefaultApi->apiAddCameraPost: ', $e->getMessage(), PHP_EOL;
@@ -1009,10 +1002,9 @@ use WWW::SwaggerClient::DefaultApi;
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
 my $body = WWW::SwaggerClient::Object::Api_addcamera_body->new(); # Api_addcamera_body | 
-my $available = available_example; # String | availability status of the camera (e.g., 'true' or 'false')
 
 eval { 
-    my $result = $api_instance->apiAddCameraPost(body => $body, available => $available);
+    my $result = $api_instance->apiAddCameraPost(body => $body);
     print Dumper($result);
 };
 if ($@) {
@@ -1030,11 +1022,10 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
 body =  # Api_addcamera_body | 
-available = available_example # String | availability status of the camera (e.g., 'true' or 'false')
 
 try: 
     # Create a new camera
-    api_response = api_instance.api_add_camera_post(body, available)
+    api_response = api_instance.api_add_camera_post(body)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling DefaultApi->apiAddCameraPost: %s\n" % e)</code></pre>
@@ -1044,35 +1035,6 @@ except ApiException as e:
                           <h2>Parameters</h2>
 
 
-                            <div class="methodsubtabletitle">Header parameters</div>
-                            <table id="methodsubtable">
-                              <tr>
-                                <th width="150px">Name</th>
-                                <th>Description</th>
-                              </tr>
-                                  <tr><td style="width:150px;">available*</td>
-                                  <td>
-                                  
-                                  
-                                      <div id="d2e199_apiAddCameraPost_available">
-                                          <div class="json-schema-view">
-                                              <div class="primitive">
-                                                  <span class="type">
-                                                      String
-                                                  </span>
-                                  
-                                                      <div class="inner description">
-                                                          availability status of the camera (e.g., &#x27;true&#x27; or &#x27;false&#x27;)
-                                                      </div>
-                                              </div>
-                                                  <div class="inner required">
-                                                      Required
-                                                  </div>
-                                          </div>
-                                      </div>
-                                  </td>
-                                  </tr>
-                            </table>
 
                             <div class="methodsubtabletitle">Body parameters</div>
                             <table id="methodsubtable">
