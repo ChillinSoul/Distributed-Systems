@@ -1,0 +1,55 @@
+openapi: 3.0.3
+info:
+  title: Mini-Metrics API - OpenAPI 3.0
+  description: |-
+    This is a sample for mini-metrics backend documentation
+  version: 1.0.0
+
+paths:
+  /api/addition:
+    get:
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleResult"
+  /api/soustraction:
+    get:
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleResult"
+  /api/multiplication:
+    get:
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleResult"
+  /api/division:
+    get:
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleResult"
+  
+  
+components:
+  schemas:
+    SimpleResult:
+      type: object
+      properties:
+        result:
+          type: integer
+          format: int64
+          example: 10
