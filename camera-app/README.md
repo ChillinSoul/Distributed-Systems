@@ -89,6 +89,16 @@ CREATE TABLE camera (
 );
 INSERT INTO camera (available, cameraname, cameranumber, position) 
 VALUES ('yes', 'Camera A', '123', '{"10", "30"}');
+
+CREATE TABLE video (
+    id INT PRIMARY KEY DEFAULT unique_rowid(),
+    cameranumber VARCHAR(255),
+    numberplate VARCHAR(255),
+    typevehicule VARCHAR(255),
+    createat TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+INSERT INTO video (cameranumber, numberplate, typevehicule)
+VALUES ('C001', '1-LOL-666', 'voiture');
 ```
 
 ### Communication between pods
