@@ -3,12 +3,12 @@ generator client {
 }
 
 datasource db {
-  provider = "cockroachdb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model intersections {
-  id          Int    @id @default(sequence())
+  id          Int    @id @default(autoincrement())
   name        String
   x_coordinate Int
   y_coordinate Int
@@ -19,7 +19,7 @@ model intersections {
 }
 
 model roads {
-  id                Int          @id @default(sequence())
+  id                Int          @id @default(autoincrement())
   start_intersection Int
   end_intersection   Int
   length             Int
