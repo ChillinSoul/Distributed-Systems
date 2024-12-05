@@ -1,21 +1,29 @@
-# Use node 22.9.0 slim image
+# Step 1: Use the Node.js slim image as the base image
 FROM node:22.9.0-slim
 
-# Set the working directory inside the container
+# Step 2: Set the working directory
 WORKDIR /src
 
-# Copy package files and install dependencies (npm install in this case)
+# Step 3: Copy the package.json and package-lock.json
 COPY package*.json ./
+
+# Step 4: Install dependencies
 RUN npm install
 
-# Copy the rest of the application code
+# Step 5: Install OpenSSL
+RUN apt-get update -y && apt-get install -y openssl
+
+# Step 6: Copy the rest of the application files
 COPY . .
 
-# Run the build step
+# Step 7: Generate Prisma Client
+RUN npx prisma generate
+
+# Step 8: Build the application
 RUN npm run build
 
-# Expose the port the app will run on
+# Step 9: Expose the application port
 EXPOSE 3000
 
-# Command to run the application
-CMD ["npm", "run", "start"]
+# Step 10: Start the application
+CMD ["npm", "start"]

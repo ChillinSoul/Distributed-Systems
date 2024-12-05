@@ -1,19 +1,32 @@
+import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 
 export async function GET() {
-  // Crée le chemin vers le fichier JSON
-  const filePath = path.join(process.cwd(), 'data', 'mapData.json');
+  const prisma = new PrismaClient();
 
-  // Lis le fichier JSON
-  const jsonData = fs.readFileSync(filePath, 'utf-8');
+  try {
+    // Connect to the database
+    await prisma.$connect();
 
-  // Parse les données JSON
-  const data = JSON.parse(jsonData);
+    // Fetch data from the tables
+    const intersections = await prisma.intersections.findMany(); // Remplacez "intersections" par le nom exact de la table
+    const roads = await prisma.roads.findMany(); // Remplacez "roads" par le nom exact de la table
 
-  // Retourne les données
-  return NextResponse.json(data);
+    // Combine the data from both tables into a single response
+    const data = {
+      intersections,
+      roads,
+    };
+
+    // Return the data as JSON
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return NextResponse.json({ error: error }, { status: 500 });
+  } finally {
+    // Ensure the Prisma client disconnects
+    await prisma.$disconnect();
+  }
 }
 
 const dataPath = path.join(process.cwd(), "data", "mapData.json");

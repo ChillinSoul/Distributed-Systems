@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model intersections {
+  id          Int    @id @default(autoincrement())
+  name        String
+  x_coordinate Int
+  y_coordinate Int
+
+  // Relation to roads
+  // roads_start Road[] @relation("RoadStart")
+  // roads_end   Road[] @relation("RoadEnd")
+}
+
+model roads {
+  id                Int          @id @default(autoincrement())
+  start_intersection Int
+  end_intersection   Int
+  length             Int
+
+  // Foreign keys and relationships
+  // start Intersection @relation("RoadStart", fields: [start_intersection], references: [id])
+  // end   Intersection @relation("RoadEnd", fields: [end_intersection], references: [id])
+}

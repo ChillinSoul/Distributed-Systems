@@ -44,10 +44,23 @@ const Home: React.FC<{ mapData: MapData }> = ({ mapData }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  // To fetch data IN KUBERNETES use this path : http://localhost:3000/api/map-data
-  // It is a different path than the path you write in the url to access to the API which is : http://localhost/map-app/api/map-data
   const res = await fetch("http://localhost:3000/api/map-data");
-  const mapData: MapData = await res.json();
+  const rawData = await res.json();
+
+  // Transformation des données
+  const mapData: MapData = {
+    intersections: rawData.intersections.map((intersection: any) => ({
+      id: intersection.id,
+      name: intersection.name,
+      coordinates: [intersection.x_coordinate, intersection.y_coordinate],
+    })),
+    roads: rawData.roads.map((road: any) => ({
+      id: road.id,
+      start: road.start_intersection,
+      end: road.end_intersection,
+      length: road.length,
+    })),
+  };
 
   return { props: { mapData } };
 };
