@@ -1,24 +1,26 @@
-import React, { useState } from "react";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import SvgMap from "../components/map";
-import DeleteRoad from "../components/DeleteRoad";
-import { MapData } from "../types/map";
-import { Road } from "../types/map";
-import { Intersection } from "../types/map";
-import ToggleRoadConstruction from "../components/ToggleRoadConstruction";
+
+interface Intersection {
+  id: number;
+  name: string;
+  coordinates: [number, number];
+}
+
+interface Road {
+  id: number;
+  start: number;
+  end: number;
+  length: number;
+}
+
+interface MapData {
+  intersections: Intersection[];
+  roads: Road[];
+}
 
 const Home: React.FC<{ mapData: MapData }> = ({ mapData }) => {
-  const [roads, setRoads] = useState<Road[]>(mapData.roads);
-
-  const handleRoadDelete = (updatedRoads: Road[]) => {
-    setRoads(updatedRoads);
-  };
-
-  const handleRoadUnderConstruction = (updatedRoads: Road[]) => {
-    setRoads(updatedRoads);
-  };
-
   return (
     <div>
       <Head>
@@ -32,12 +34,7 @@ const Home: React.FC<{ mapData: MapData }> = ({ mapData }) => {
 
       <main style={{ padding: "20px" }}>
         <h1>Map Visualization</h1>
-        <SvgMap mapData={{ intersections: mapData.intersections, roads }} />
-        <DeleteRoad roads={roads} onRoadDelete={handleRoadDelete} />
-        <ToggleRoadConstruction
-          roads={roads}
-          onRoadUpdate={handleRoadUnderConstruction}
-        />
+        <SvgMap mapData={mapData} />
       </main>
     </div>
   );
