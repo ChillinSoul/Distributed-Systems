@@ -147,7 +147,6 @@ Here is an exemple of what you can post with postman
 
 =============================================================
 
-## documentation
+## Documentation
 
 link : "https://mouradmettioui.github.io/API-Documentation/#/"
-<a href="https://mouradmettioui.github.io/API-Documentation/#/" target="_blank">Voir la documentation de l'API</a>
