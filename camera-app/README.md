@@ -187,7 +187,7 @@ The API to create a new camera
 
 ```
 http://camera-app-service/api/add-camera
-
+```
 
 Here is an exemple of what you can post with postman
 
