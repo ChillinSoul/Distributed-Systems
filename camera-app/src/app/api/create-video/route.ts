@@ -20,6 +20,9 @@ import { PrismaClient } from '@prisma/client';
  *               numberplate:
  *                 type: string
  *                 description: "The number plate of the vehicle captured in the video."
+ *               typevehicule:
+ *                   type: string
+ *                   description: "The type of the vehicle recorded in the video"
  *     responses:
  *       201:
  *         description: "Video successfully created"
@@ -37,6 +40,9 @@ import { PrismaClient } from '@prisma/client';
  *                 numberplate:
  *                   type: string
  *                   description: "The number plate recorded in the video"
+ *                 typevehicule:
+ *                   type: string
+ *                   description: "The type of the vehicle recorded in the video"
  *       400:
  *         description: "Missing required fields"
  *       500:
