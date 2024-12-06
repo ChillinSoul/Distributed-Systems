@@ -73,6 +73,7 @@ export default function VideosPage() {
   if (loading) return <div>Loading...</div>;
 
   return (
+    
     <div style={styles.container}>
       <h1 style={styles.heading}>Videos List</h1>
       {videos.length === 0 ? (
@@ -82,7 +83,7 @@ export default function VideosPage() {
           {videos.map((video) => (
             <li key={video.id} style={styles.listItem}>
               <div style={styles.videoInfo}>Video ID: {video.id}</div>
-              <div style={styles.videoDetails}>Camera ID: {video.cameranumber}</div>
+              <div style={styles.videoDetails}>Camera Number: {video.cameranumber}</div>
               <div style={styles.videoDetails}>
                 Number Plate: {video.numberplate}
               </div>

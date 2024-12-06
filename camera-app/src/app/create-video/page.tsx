@@ -59,6 +59,7 @@ export default function CreateVideoPage() {
   const [cameranumber, setCameranumber] = useState('');
   const [numberplate, setNumberPlate] = useState('');
   const [typevehicule, setTypevehicule] = useState('');
+  const [createat, setCreateat] = useState(''); // Optional timestamp field
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -74,9 +75,10 @@ export default function CreateVideoPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          "cameranumber": cameranumber,
-          "numberplate": numberplate,
-          "typevehicule": typevehicule,
+          cameranumber,
+          numberplate,
+          typevehicule,
+          createat: createat || undefined, // Pass only if provided
         }),
       });
 
@@ -85,6 +87,7 @@ export default function CreateVideoPage() {
         setCameranumber('');
         setNumberPlate('');
         setTypevehicule('');
+        setCreateat('');
       } else {
         const data = await response.json();
         setErrorMessage(data.error || 'Failed to add video');
@@ -131,8 +134,8 @@ export default function CreateVideoPage() {
         </div>
 
         <div style={styles.formGroup}>
-          <label style={styles.label} htmlFor="numberPlate">
-            Type of vehicle
+          <label style={styles.label} htmlFor="typevehicule">
+            Type of Vehicle
           </label>
           <input
             style={styles.input}
@@ -141,6 +144,19 @@ export default function CreateVideoPage() {
             value={typevehicule}
             onChange={(e) => setTypevehicule(e.target.value)}
             required
+          />
+        </div>
+
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="createat">
+            Creation Time (Optional)
+          </label>
+          <input
+            style={styles.input}
+            type="datetime-local"
+            id="createat"
+            value={createat}
+            onChange={(e) => setCreateat(e.target.value)}
           />
         </div>
 

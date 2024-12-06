@@ -59,7 +59,7 @@ fi
 
 # Wait for the CockroachDB pod to be ready
 echo "Waiting for CockroachDB to be ready..."
-sleep 40
+sleep 60
 
 echo "Creating database and tables in CockroachDB..."
 kubectl exec -it cockroachdb-client-insecure -- ./cockroach sql --insecure --host=cockroachdb-public <<EOF

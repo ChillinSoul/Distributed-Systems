@@ -49,13 +49,14 @@ interface NewVideo {
   cameranumber: string; 
   numberplate: string;
   typevehicule: string;
+  createat?: Date;
 }
 
 export async function POST(req: Request) {
   try {
     const data: NewVideo = await req.json();
 
-    const { cameranumber, numberplate, typevehicule} = data;
+    const { cameranumber, numberplate, typevehicule, createat} = data;
 
     // Validate the input
     if (!cameranumber || !numberplate) {
@@ -66,16 +67,30 @@ export async function POST(req: Request) {
     }
 
     // Create a new video in the database
-    const newVideo = await prisma.video.create({
-      data: {
-        cameranumber,
-        numberplate,
-        typevehicule,
-      },
-    });
-
-    // Return the newly created video
-    return NextResponse.json(newVideo, { status: 201 });
+    if(createat){
+      const newVideo = await prisma.video.create({
+        data: {
+          cameranumber,
+          numberplate,
+          typevehicule,
+          createat,
+        },
+      });
+      // Return the newly created video
+      return NextResponse.json(newVideo, { status: 201 });
+    }
+    else{
+      const newVideo = await prisma.video.create({
+        data: {
+          cameranumber,
+          numberplate,
+          typevehicule,
+        },
+      });
+      // Return the newly created video
+      return NextResponse.json(newVideo, { status: 201 });
+    }
+    
   } catch (error) {
     console.error('Error creating video:', error);
 
