@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate-openapi": "node swaggerconfig.js"
+    "gen-api": "node swaggerconfig.js"
   },
   "dependencies": {
     "@prisma/client": "^5.20.0",
