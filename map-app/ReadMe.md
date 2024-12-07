@@ -177,6 +177,8 @@ The **Map Application** is a part of the **Brussels Traffic Monitoring** project
    (29, 14, 25, 100),
    (30, 25, 17, 100);
 
+   ALTER TABLE roads ADD COLUMN Useable BOOLEAN DEFAULT TRUE;
+
    \q
    ```
 
