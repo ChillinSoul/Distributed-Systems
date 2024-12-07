@@ -13,6 +13,7 @@ interface Road {
   start: number;
   end: number;
   length: number;
+  useable: boolean;
 }
 
 interface MapData {
@@ -21,6 +22,22 @@ interface MapData {
 }
 
 const Home: React.FC<{ mapData: MapData }> = ({ mapData }) => {
+  const handleRoadClick = async (road: Road) => {
+    const newUseableValue = !road.useable; // Inverse la valeur actuelle
+  
+    try {
+      // Requête POST pour mettre à jour la route
+      await fetch(
+        `http://localhost/map-app/api/update-road?id=${road.id}&useable=${newUseableValue}`,
+        {
+          method: "POST",
+        }
+      );
+    } catch (err) {
+      console.error("Error updating road:", err);
+    }
+  };
+
   return (
     <div>
       <Head>
@@ -34,7 +51,10 @@ const Home: React.FC<{ mapData: MapData }> = ({ mapData }) => {
 
       <main style={{ padding: "20px" }}>
         <h1>Map Visualization</h1>
-        <SvgMap mapData={mapData} />
+        <SvgMap
+          mapData={mapData}
+          onRoadClick={handleRoadClick}
+        />
       </main>
     </div>
   );
@@ -44,7 +64,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const res = await fetch("http://localhost:3000/api/map-data");
   const rawData = await res.json();
 
-  // Transformation des données
   const mapData: MapData = {
     intersections: rawData.intersections.map((intersection: any) => ({
       id: intersection.id,
@@ -56,6 +75,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       start: road.start_intersection,
       end: road.end_intersection,
       length: road.length,
+      useable: road.useable,
     })),
   };
 

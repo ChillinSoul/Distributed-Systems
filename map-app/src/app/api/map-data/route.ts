@@ -9,8 +9,8 @@ export async function GET() {
     await prisma.$connect();
 
     // Fetch data from the tables
-    const intersections = await prisma.intersections.findMany(); // Remplacez "intersections" par le nom exact de la table
-    const roads = await prisma.roads.findMany(); // Remplacez "roads" par le nom exact de la table
+    const intersections = await prisma.intersections.findMany();
+    const roads = await prisma.roads.findMany();
 
     // Combine the data from both tables into a single response
     const data = {
