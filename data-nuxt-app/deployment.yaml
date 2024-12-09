@@ -2,11 +2,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: data-nuxt-app
+  labels:
+    app: data-nuxt-app
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: data-nuxt-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   template:
     metadata:
       labels:
@@ -14,7 +21,7 @@ spec:
     spec:
       containers:
         - name: data-nuxt-app
-          image: data-nuxt-app-image
+          image: data-nuxt-app-image:20241209203842
           imagePullPolicy: Never
           ports:
             - containerPort: 3000
@@ -31,16 +38,10 @@ spec:
               value: "0.0.0.0"
             - name: NITRO_PORT
               value: "3000"
-          startupProbe:
-            tcpSocket:
-              port: 3000
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            failureThreshold: 30
           resources:
             requests:
-              cpu: "200m" # Requesting 0.2 cores as baseline
-              memory: "256Mi" # Requesting 256MB of memory
+              cpu: "200m"
+              memory: "256Mi"
             limits:
-              cpu: "500m" # Maximum of 0.5 cores
-              memory: "512Mi" # Maximum of 512MB of memory
+              cpu: "500m"
+              memory: "512Mi"

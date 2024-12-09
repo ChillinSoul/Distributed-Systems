@@ -16,11 +16,11 @@
       <APITest endpoint="http://data-nuxt-app-service/data-nuxt-app/api/mock" />
         <p>camera-app</p>
         <a
-        href="/camera-app/"
+        href="http://camera-app-host/"
           class="text-white bg-blue-500 px-4 py-2 rounded-md w-full"
           >camera-app
     </a>
-        <APITest endpoint="http://camera-app-service/api/cameras" />
+        <APITest endpoint="http://camera-app-host/api/cameras" />
         <p>map-app</p>
         <a
         href="/map-app/"
