@@ -23,6 +23,14 @@ import { PrismaClient } from '@prisma/client';
  *               typevehicule:
  *                   type: string
  *                   description: "The type of the vehicle recorded in the video"
+ *               createat:
+ *                   type: string
+ *                   format: date-time
+ *                   description: "The timestamp of when the video was created"
+ *             required:
+ *               - cameranumber
+ *               - numberplate
+ *               - typevehicule
  *     responses:
  *       201:
  *         description: "Video successfully created"
@@ -43,6 +51,10 @@ import { PrismaClient } from '@prisma/client';
  *                 typevehicule:
  *                   type: string
  *                   description: "The type of the vehicle recorded in the video"
+ *                 createat:
+ *                   type: string
+ *                   format: date-time
+ *                   description: "The timestamp of when the video was created"
  *       400:
  *         description: "Missing required fields"
  *       500:
