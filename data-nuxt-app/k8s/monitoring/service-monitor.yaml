@@ -1,0 +1,11 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: data-nuxt-app-monitor
+spec:
+  selector:
+    matchLabels:
+      app: data-nuxt-app
+  endpoints:
+    - port: http
+      path: /metrics
