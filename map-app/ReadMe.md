@@ -4,7 +4,12 @@ By Thibaut François & Jordan Hermans
 
 ## Introduction
 
-The **Map Application** is a part of the **Brussels Traffic Monitoring** project, focusing on analyzing traffic in Brussels for improved mobility and sustainable development. This application allows users to visualize the map, view all roads and intersections, access the quickest paths between locations, delete roads and signal that a road is not usable.
+The **Map Application** is part of the **Brussels Traffic Monitoring** project, designed to analyze traffic in Brussels for improved mobility and sustainable development. This application offers the following features:
+
+Visualize a detailed map with all roads and intersections.
+Access the shortest paths between locations.
+Mark roads as unusable (e.g., due to roadwork).
+Delete roads from the map.
 
 ## Deployment Instructions
 
@@ -202,109 +207,146 @@ The `deploy.sh` script automates the deployment process and consists of the foll
 
 ## API Access
 
-### Access to the Map Data
+### 1. Get Map Data
 
-Access map data via the API at [http://localhost/map-app/api/map-data](http://localhost/map-app/api/map-data). The datas are send on a json format with first a list of all the intersections and second a list of all the roads.
+Retrieve all roads and intersections:
 
-- **Intersections** have an id, a name and (x,y) localisation coordinates
-- **Roads** have an id, the intersection id where the road start, the intersection id were the road end, the length of the road and a boolean value that indicates if the road is useable or not.
+- **Endpoint**:
+  `http://localhost/map-app/api/map-data`
 
-```json
-{
-  "intersections": [
-    {
-      "id": 1,
-      "name": "A",
-      "x_coordinate": 250,
-      "y_coordinate": 400
-    },
-    ...
-    {
-      "id": 25,
-      "name": "Y",
-      "x_coordinate": 550,
-      "y_coordinate": 100
-    }
-  ],
-  "roads": [
-    {
-      "id": 1,
-      "start_intersection": 1,
-      "end_intersection": 2,
-      "length": 100,
-      "useable": true
-    },
-    ...
-    {
-      "id": 30,
-      "start_intersection": 25,
-      "end_intersection": 17,
-      "length": 100,
-      "useable": true
-    }
-  ]
-}
+- **Method**:
+  `GET`
 
-```
-
-You can access to the api in the terminal with :
+- **How to Use**:
+  Run the following command in your terminal to access the data:
 
 ```bash
 curl -X GET http://localhost/map-app/api/map-data
 ```
 
-## Find the road path between 2 points
+- **Response Format**:
+  The API responds with a JSON object containing two arrays:
 
-You can calculate the fastest path between 2 intersections by reaching the calculate-route API. Specify the id of the start and end intersections in the path to obtain the shortest road.
+  - `intersections`: Each intersection has an ID, a name, and coordinates (`x`,`y`).
+  - `roads`: Each road has an ID, start and end intersection IDs, the road's length, and a boolean `useable` indicating if the road is accessible.
 
-```url
-http://localhost/map-app/api/shortest-path?start=16&end=21
-```
-
-The API respond with all the intersections to pass through to go from one intersection to another. Here to go from intersection 16 to intersection 21, you have to pass through the intersections 16, 17, 13, 14, 24, 23, 22, 21.
+- **Example Response**:
 
 ```json
-[
-  {
-    "id": 16,
-    "name": "P",
-    "x_coordinate": 350,
-    "y_coordinate": 100
-  },
-  {
-    "id": 17,
-    "name": "Q",
-    "x_coordinate": 450,
-    "y_coordinate": 100
-  },
-  ...
-  {
-    "id": 21,
-    "name": "U",
-    "x_coordinate": 550,
-    "y_coordinate": 500
-  }
-]
+{
+  "intersections": [
+    { "id": 1, "name": "A", "x_coordinate": 250, "y_coordinate": 400 },
+    { "id": 2, "name": "B", "x_coordinate": 350, "y_coordinate": 400 },
+    ...
+  ],
+  "roads": [
+    { "id": 1, "start_intersection": 1, "end_intersection": 2, "length": 100, "useable": true },
+    {"id": 2, "start_intersection" : 2, "end_intersection": 3, "length": 100, "useable": false },
+    ...
+  ]
+}
+
 ```
 
-You can access to the api in the terminal with
+### 2. Find the Shortest Path
+
+This API calculates the shortest path between two intersections using Dijkstra's algorithm. The response includes a list of intersections that need to be traversed in order to go from the start to the end intersection.
+
+- **Endpoint**:
+  `http://localhost/map-app/api/shortest-path`
+
+- **Method**:
+  `GET`
+
+- **How to Use**:
+  Provide the IDs of the start and end intersections as query parameters (`start` and `end`):
+
+```bash
+curl -X GET "http://localhost/map-app/api/shortest-path?start=<start-id>&end=<end-id>"
+```
+
+Replace `<start-id>` and `<end-id>` with the actual intersection IDs.
+
+- **Parameters**:
+
+  - `start`: ID of the starting intersection.
+  - `end`: ID of the destination intersection.
+
+- **Response Format**:
+  The API returns an array of intersections, representing the shortest path.
+
+- **Example Command**:
 
 ```bash
 curl -X GET "http://localhost/map-app/api/shortest-path?start=16&end=21"
 ```
 
-### Change the useability of the road in case of roadwork
+- **Example Response**:
 
-The roads have a useable status tha indicate if the road can be used or if this road is not accessible. The "usable" attributes is a boolean. true indicates that the road can be used and false that the road is not accessible.
+```json
+[
+  { "id": 16, "name": "P", "x_coordinate": 350, "y_coordinate": 100 },
+  { "id": 17, "name": "Q", "x_coordinate": 450, "y_coordinate": 100 },
+  ...
+  { "id": 21, "name": "U", "x_coordinate": 550, "y_coordinate": 500 }
+]
+```
 
-`"useable": true`
+This response indicates that to travel from intersection 16 to 21, you need to pass through intersections 16, 17, ... and 21.
 
-You can change the usability of the road by reaching
+### 3. Update Road Usability
+
+This API allows you to mark a road as usable or not usable. It is helpful for signaling road closures due to maintenance or construction.
+
+- **Endpoint**:
+  `http://localhost/map-app/api/update-road`
+
+- **Method**:
+  `POST`
+
+- **How to Use**:
+  Provide the road ID and its new usability status (`true` or `false`) as query parameters:
+
+```bash
+curl -X POST "http://localhost/map-app/api/update-road?id=<road-id>&useable=<true|false>"
+```
+
+Replace `<road-id>` with the road's ID and `<true|false>` with the desired status:
+
+- `true`: The road is usable.
+- `false`: The road is not usable.
+
+- **Parameters**:
+
+  - `id`: The ID of the road to update.
+  - `useable`: The new status of the road (true or false).
+
+- **Response Format**:
+  The API returns a JSON object containing a confirmation message and the updated road details.
+
+- **Example Command**:
+
+```bash
+curl -X POST "http://localhost/map-app/api/update-road?id=1&useable=false"
+```
+
+- **Example Response**:
+
+```json
+{
+  "message": "Road updated successfully.",
+  "road": {
+    "id": 1,
+    "start_intersection": 1,
+    "end_intersection": 2,
+    "length": 100,
+    "useable": false
+  }
+}
+```
 
 ## Interactive Map (frontend)
 
 Users can view the map at [http://localhost/map-app](http://localhost/map-app).
 
 ## Conclusion
-
-The Map Application serves as a crucial component in the broader **Brussels Traffic Monitoring** project, utilizing modern technologies like Kubernetes and Docker for deployment. By following the provided instructions, you can deploy and run the application locally and access the map and its API.
