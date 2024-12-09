@@ -4,14 +4,7 @@ By Thibaut François & Jordan Hermans
 
 ## Introduction
 
-The **Map Application** is a part of the **Brussels Traffic Monitoring** project, focusing on analyzing traffic in Brussels for improved mobility and sustainable development. This application allows users to visualize the map, view routes, and access the quickest paths between locations.
-
-## Features
-
-- **Interactive Map**: Users can view a detailed map of Brussels at [http://localhost/map-app](http://localhost/map-app).
-- **Route Visualization**: The application computes and displays routes.
-- **Shortest Path Calculation**: Find the most efficient path between points.
-- **API Access**: Access map data via the API at [http://localhost/map-app/api](http://localhost/map-app/api).
+The **Map Application** is a part of the **Brussels Traffic Monitoring** project, focusing on analyzing traffic in Brussels for improved mobility and sustainable development. This application allows users to visualize the map, view all roads and intersections, access the quickest paths between locations, delete roads and signal that a road is not usable.
 
 ## Deployment Instructions
 
@@ -207,13 +200,58 @@ The `deploy.sh` script automates the deployment process and consists of the foll
 - **Build Docker Image**: It builds the Docker image for the application.
 - **Apply Kubernetes Configurations**: It deploys the application to Kubernetes using the specified YAML configuration files.
 
-### Cleanup Script Overview
+## API Access
 
-The `clean.sh` script is responsible for cleaning up the Kubernetes resources associated with your application. It deletes the deployments and services as defined in the configuration files.
+### Access to the Map Data
 
-# API Access
+Access map data via the API at [http://localhost/map-app/api/map-data](http://localhost/map-app/api/map-data). The datas are send on a json format with first a list of all the intersections and second a list of all the roads.
 
-## Map data
+- **Intersections** have an id, a name and (x,y) localisation coordinates
+- **Roads** have an id, the intersection id where the road start, the intersection id were the road end, the length of the road and a boolean value that indicates if the road is useable or not.
+
+```json
+{
+  "intersections": [
+    {
+      "id": 1,
+      "name": "A",
+      "x_coordinate": 250,
+      "y_coordinate": 400
+    },
+    ...
+    {
+      "id": 25,
+      "name": "Y",
+      "x_coordinate": 550,
+      "y_coordinate": 100
+    }
+  ],
+  "roads": [
+    {
+      "id": 1,
+      "start_intersection": 1,
+      "end_intersection": 2,
+      "length": 100,
+      "useable": true
+    },
+    ...
+    {
+      "id": 30,
+      "start_intersection": 25,
+      "end_intersection": 17,
+      "length": 100,
+      "useable": true
+    }
+  ]
+}
+
+```
+
+You can access to the api in the terminal with :
+
+```bash
+curl -X GET http://localhost/map-app/api/map-data
+```
 
 ## Find the road path between 2 points
 
@@ -239,36 +277,7 @@ The API respond with all the intersections to pass through to go from one inters
     "x_coordinate": 450,
     "y_coordinate": 100
   },
-  {
-    "id": 13,
-    "name": "M",
-    "x_coordinate": 450,
-    "y_coordinate": 200
-  },
-  {
-    "id": 14,
-    "name": "N",
-    "x_coordinate": 550,
-    "y_coordinate": 200
-  },
-  {
-    "id": 24,
-    "name": "X",
-    "x_coordinate": 650,
-    "y_coordinate": 200
-  },
-  {
-    "id": 23,
-    "name": "W",
-    "x_coordinate": 650,
-    "y_coordinate": 300
-  },
-  {
-    "id": 22,
-    "name": "V",
-    "x_coordinate": 650,
-    "y_coordinate": 400
-  },
+  ...
   {
     "id": 21,
     "name": "U",
@@ -277,6 +286,24 @@ The API respond with all the intersections to pass through to go from one inters
   }
 ]
 ```
+
+You can access to the api in the terminal with
+
+```bash
+curl -X GET "http://localhost/map-app/api/shortest-path?start=16&end=21"
+```
+
+### Change the useability of the road in case of roadwork
+
+The roads have a useable status tha indicate if the road can be used or if this road is not accessible. The "usable" attributes is a boolean. true indicates that the road can be used and false that the road is not accessible.
+
+`"useable": true`
+
+You can change the usability of the road by reaching
+
+## Interactive Map (frontend)
+
+Users can view the map at [http://localhost/map-app](http://localhost/map-app).
 
 ## Conclusion
 
