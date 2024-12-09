@@ -82,17 +82,22 @@ The **Map Application** is a part of the **Brussels Traffic Monitoring** project
 4. **Create the Database**;
 
    Paste the following bash command in the terminal:
+
    ```bash
    kubectl apply -f crds.yaml
    kubectl apply -f operator.yaml
    ```
+
    Wait few seconds so that the operator pod is up and running and then paste the following bash command:
+
    ```bash
    kubectl apply -f example.yaml
    kubectl apply -f client-insecure-operator.yaml
    kubectl exec -it cockroachdb-client-insecure -- ./cockroach sql --certs-dir=/cockroach/cockroach-certs --insecure --host=cockroachdb-public
    ```
+
    Then an sql terminal opens. Paste the following sql commands in it:
+
    ```sql
    CREATE DATABASE map;
    USE map;
@@ -172,8 +177,11 @@ The **Map Application** is a part of the **Brussels Traffic Monitoring** project
    (29, 14, 25, 100),
    (30, 25, 17, 100);
 
+   ALTER TABLE roads ADD COLUMN Useable BOOLEAN DEFAULT TRUE;
+
    \q
    ```
+
 5. **Start the Minikube Tunnel**:
 
    This command will expose your services:
@@ -202,6 +210,73 @@ The `deploy.sh` script automates the deployment process and consists of the foll
 ### Cleanup Script Overview
 
 The `clean.sh` script is responsible for cleaning up the Kubernetes resources associated with your application. It deletes the deployments and services as defined in the configuration files.
+
+# API Access
+
+## Map data
+
+## Find the road path between 2 points
+
+You can calculate the fastest path between 2 intersections by reaching the calculate-route API. Specify the id of the start and end intersections in the path to obtain the shortest road.
+
+```url
+http://localhost/map-app/api/shortest-path?start=16&end=21
+```
+
+The API respond with all the intersections to pass through to go from one intersection to another. Here to go from intersection 16 to intersection 21, you have to pass through the intersections 16, 17, 13, 14, 24, 23, 22, 21.
+
+```json
+[
+  {
+    "id": 16,
+    "name": "P",
+    "x_coordinate": 350,
+    "y_coordinate": 100
+  },
+  {
+    "id": 17,
+    "name": "Q",
+    "x_coordinate": 450,
+    "y_coordinate": 100
+  },
+  {
+    "id": 13,
+    "name": "M",
+    "x_coordinate": 450,
+    "y_coordinate": 200
+  },
+  {
+    "id": 14,
+    "name": "N",
+    "x_coordinate": 550,
+    "y_coordinate": 200
+  },
+  {
+    "id": 24,
+    "name": "X",
+    "x_coordinate": 650,
+    "y_coordinate": 200
+  },
+  {
+    "id": 23,
+    "name": "W",
+    "x_coordinate": 650,
+    "y_coordinate": 300
+  },
+  {
+    "id": 22,
+    "name": "V",
+    "x_coordinate": 650,
+    "y_coordinate": 400
+  },
+  {
+    "id": 21,
+    "name": "U",
+    "x_coordinate": 550,
+    "y_coordinate": 500
+  }
+]
+```
 
 ## Conclusion
 

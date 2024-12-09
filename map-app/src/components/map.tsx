@@ -12,6 +12,7 @@ interface Road {
   start: number;
   end: number;
   length: number;
+  useable: boolean;
 }
 
 interface MapData {
@@ -19,11 +20,13 @@ interface MapData {
   roads: Road[];
 }
 
-const SvgMap: React.FC<{ mapData: MapData }> = ({ mapData }) => {
-  const width = 800; // Augmenter la largeur
-  const height = 600; // Augmenter la hauteur
+const SvgMap: React.FC<{
+  mapData: MapData;
+  onRoadClick?: (road: Road) => void;
+}> = ({ mapData, onRoadClick }) => {
+  const width = 800;
+  const height = 600;
 
-  // Calculer les limites pour centrer la carte
   const margin = 20;
   const allX = mapData.intersections.map((i) => i.coordinates[0]);
   const allY = mapData.intersections.map((i) => i.coordinates[1]);
@@ -46,7 +49,11 @@ const SvgMap: React.FC<{ mapData: MapData }> = ({ mapData }) => {
         const endIntersection = mapData.intersections.find(
           (i) => i.id === road.end
         );
+
         if (startIntersection && endIntersection) {
+          // Détermine la couleur de la route
+          const roadColor = road.useable === false ? "red" : "blue";
+
           return (
             <line
               key={road.id}
@@ -54,17 +61,22 @@ const SvgMap: React.FC<{ mapData: MapData }> = ({ mapData }) => {
               y1={(startIntersection.coordinates[1] - minY) * scale + margin}
               x2={(endIntersection.coordinates[0] - minX) * scale + margin}
               y2={(endIntersection.coordinates[1] - minY) * scale + margin}
-              stroke="blue"
+              stroke={roadColor} // Utilise la couleur conditionnelle
               strokeWidth="2"
+              style={{ cursor: "pointer" }}
+              onClick={() => onRoadClick?.(road)}
             />
           );
         }
         return null;
       })}
 
+
       {/* Draw intersections */}
       {mapData.intersections.map((intersection) => (
-        <g key={intersection.id}>
+        <g
+          key={intersection.id}
+        >
           <circle
             cx={(intersection.coordinates[0] - minX) * scale + margin}
             cy={(intersection.coordinates[1] - minY) * scale + margin}

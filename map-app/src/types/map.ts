@@ -5,11 +5,11 @@ export interface Intersection {
   }
   
   export interface Road {
-    underConstruction: boolean;
     id: number;
     start: number;
     end: number;
     length: number;
+    useable: boolean;
   }
   
   export interface MapData {

@@ -8,23 +8,24 @@ datasource db {
 }
 
 model intersections {
-  id          Int    @id @default(autoincrement())
-  name        String
+  id           Int    @id @default(autoincrement())
+  name         String
   x_coordinate Int
   y_coordinate Int
 
   // Relation to roads
-  // roads_start Road[] @relation("RoadStart")
-  // roads_end   Road[] @relation("RoadEnd")
+  roads_start  roads[] @relation("RoadStart")
+  roads_end    roads[] @relation("RoadEnd")
 }
 
 model roads {
-  id                Int          @id @default(autoincrement())
+  id                 Int    @id @default(autoincrement())
   start_intersection Int
   end_intersection   Int
   length             Int
+  useable            Boolean
 
   // Foreign keys and relationships
-  // start Intersection @relation("RoadStart", fields: [start_intersection], references: [id])
-  // end   Intersection @relation("RoadEnd", fields: [end_intersection], references: [id])
+  start intersections @relation("RoadStart", fields: [start_intersection], references: [id])
+  end   intersections @relation("RoadEnd", fields: [end_intersection], references: [id])
 }
