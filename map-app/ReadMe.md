@@ -345,6 +345,53 @@ curl -X POST "http://localhost/map-app/api/update-road?id=1&useable=false"
 }
 ```
 
+### 4. Delete a Road
+
+This API allows you to delete a specific road from the database using its `id`. It is useful for cleaning up unnecessary or incorrect data from the system.
+
+- **Endpoint**:
+  `http://localhost/map-app/api/delete-road`
+
+- **Method**:
+  `DELETE`
+
+- **How to Use**:
+  Provide the ID of the road to delete as a query parameter (`id`):
+
+```bash
+curl -X DELETE "http://localhost/map-app/api/delete-road?id=<road-id>"
+```
+
+Replace `<road-id>` with the ID of the road you want to delete.
+
+- **Parameters**:
+
+  - `id` (required): The ID of the road to delete.
+
+- **Response Format**:
+  On successful deletion, the API returns the details of the deleted road.
+
+- **Example Command**:
+
+```bash
+curl -X DELETE "http://localhost/map-app/api/delete-road?id=1"
+```
+
+- **Example Response (Success)**:
+
+```json
+{
+  "message": "Road deleted successfully.",
+  "road": {
+    "id": 1,
+    "start_intersection": 1,
+    "end_intersection": 2,
+    "length": 100,
+    "useable": true
+  }
+}
+```
+
 ## Interactive Map (frontend)
 
 Users can view the map at [http://localhost/map-app](http://localhost/map-app).
