@@ -215,6 +215,17 @@ createat        DateTime
 
 =============================================================
 
+The api to fetch all the videos that are link to a precise camera
+
+```
+#http://camera-app-service/api/videos/[cameranumber]
+#example
+
+http://camera-app-service/api/videos/C001
+```
+
+=============================================================
+
 The API to create a new video
 
 ```
