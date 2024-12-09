@@ -66,10 +66,10 @@ kubectl exec -it cockroachdb-client-insecure -- ./cockroach sql --insecure --hos
 CREATE DATABASE cameradata;
 USE cameradata;
 CREATE TABLE camera (
-    id INT PRIMARY KEY DEFAULT unique_rowid(),
-    available VARCHAR(255),
-    cameraname VARCHAR(255),
-    cameranumber VARCHAR(255),
+    id INT PRIMARY KEY, 
+    available VARCHAR(255), 
+    cameraname VARCHAR(255), 
+    cameranumber VARCHAR(255) UNIQUE, 
     position INTEGER[]
 );
 INSERT INTO camera (available, cameraname, cameranumber, position) 
@@ -78,7 +78,7 @@ VALUES ('true', 'CAM1', 'C001', ARRAY[10, 30]),
        ('true', 'CAM3', 'C003', ARRAY[2, 5]);
 CREATE TABLE video (
     id INT PRIMARY KEY DEFAULT unique_rowid(),
-    cameranumber VARCHAR(255),
+    cameranumber VARCHAR(255) UNIQUE, 
     numberplate VARCHAR(255),
     typevehicule VARCHAR(255),
     createat TIMESTAMP DEFAULT CURRENT_TIMESTAMP

@@ -107,7 +107,7 @@ export default function CreateVideoPage() {
       <form onSubmit={handleSubmit}>
         <div style={styles.formGroup}>
           <label style={styles.label} htmlFor="camID">
-            Camera ID
+            Camera Number
           </label>
           <input
             style={styles.input}

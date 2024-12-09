@@ -21,16 +21,8 @@ import { PrismaClient } from '@prisma/client';
  *                 type: string
  *                 description: "The number plate of the vehicle captured in the video."
  *               typevehicule:
- *                   type: string
- *                   description: "The type of the vehicle recorded in the video"
- *               createat:
- *                   type: string
- *                   format: date-time
- *                   description: "The timestamp of when the video was created"
- *             required:
- *               - cameranumber
- *               - numberplate
- *               - typevehicule
+ *                 type: string
+ *                 description: "The type of the vehicle recorded in the video"
  *     responses:
  *       201:
  *         description: "Video successfully created"
@@ -51,10 +43,6 @@ import { PrismaClient } from '@prisma/client';
  *                 typevehicule:
  *                   type: string
  *                   description: "The type of the vehicle recorded in the video"
- *                 createat:
- *                   type: string
- *                   format: date-time
- *                   description: "The timestamp of when the video was created"
  *       400:
  *         description: "Missing required fields"
  *       500:
@@ -64,7 +52,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 interface NewVideo {
-  cameranumber: string; 
+  cameranumber: string;
   numberplate: string;
   typevehicule: string;
   createat?: Date;
@@ -74,7 +62,7 @@ export async function POST(req: Request) {
   try {
     const data: NewVideo = await req.json();
 
-    const { cameranumber, numberplate, typevehicule, createat} = data;
+    const { cameranumber, numberplate, typevehicule, createat } = data;
 
     // Validate the input
     if (!cameranumber || !numberplate) {
@@ -84,31 +72,37 @@ export async function POST(req: Request) {
       );
     }
 
+    // Check if the camera is available
+    const camera = await prisma.camera.findUnique({
+      where: { cameranumber },
+    });
+
+    if (!camera) {
+      return NextResponse.json(
+        { error: `Camera with cameranumber '${cameranumber}' does not exist.` },
+        { status: 400 }
+      );
+    }
+
+    if (camera.available!="true") {
+      return NextResponse.json(
+        { error: `Camera with cameranumber '${cameranumber}' is not available.` },
+        { status: 400 }
+      );
+    }
+
     // Create a new video in the database
-    if(createat){
-      const newVideo = await prisma.video.create({
-        data: {
-          cameranumber,
-          numberplate,
-          typevehicule,
-          createat,
-        },
-      });
-      // Return the newly created video
-      return NextResponse.json(newVideo, { status: 201 });
-    }
-    else{
-      const newVideo = await prisma.video.create({
-        data: {
-          cameranumber,
-          numberplate,
-          typevehicule,
-        },
-      });
-      // Return the newly created video
-      return NextResponse.json(newVideo, { status: 201 });
-    }
-    
+    const newVideo = await prisma.video.create({
+      data: {
+        cameranumber,
+        numberplate,
+        typevehicule,
+        createat: createat || undefined, // Use provided date or default to now
+      },
+    });
+
+    // Return the newly created video
+    return NextResponse.json(newVideo, { status: 201 });
   } catch (error) {
     console.error('Error creating video:', error);
 

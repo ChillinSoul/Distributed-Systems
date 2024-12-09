@@ -11,13 +11,13 @@ model camera {
   id           Int      @id @default(sequence()) // Primary key
   available    String   // Equivalent to varchar(255)
   cameraname   String   // Equivalent to varchar(255)
-  cameranumber String   // Equivalent to varchar(255)
+  cameranumber String   @unique// Equivalent to varchar(255)
   position     Int[]    // Equivalent to INTEGER[]
 }
 
 model video {
   id              Int   @id @default(sequence())
-  cameranumber    String    
+  cameranumber    String     @unique
   numberplate     String
   typevehicule    String
   createat        DateTime @default(now())
