@@ -16,6 +16,23 @@ export async function DELETE(req: Request) {
       );
     }
 
+    // Fetch the camera to get the associated cameranumber
+    const camera = await prisma.camera.findUnique({
+      where: { id },
+    });
+
+    if (!camera) {
+      return NextResponse.json(
+        { error: 'Camera not found.' },
+        { status: 404 }
+      );
+    }
+
+    // Delete all videos linked to the camera
+    await prisma.video.deleteMany({
+      where: { cameranumber: camera.cameranumber },
+    });
+
     // Delete the camera from the database
     const deletedCamera = await prisma.camera.delete({
       where: { id },
@@ -24,7 +41,7 @@ export async function DELETE(req: Request) {
     // Return the deleted camera details
     return NextResponse.json(deletedCamera, { status: 200 });
   } catch (error) {
-    console.error('Error deleting camera:', error);
+    console.error('Error deleting camera and associated videos:', error);
 
     // Handle cases where the camera is not found
     if (error instanceof Error && error.message.includes('Record to delete does not exist')) {
@@ -36,7 +53,7 @@ export async function DELETE(req: Request) {
 
     // Return error response
     return NextResponse.json(
-      { error: 'Unable to delete camera.' },
+      { error: 'Unable to delete camera and associated videos.' },
       { status: 500 }
     );
   } finally {
