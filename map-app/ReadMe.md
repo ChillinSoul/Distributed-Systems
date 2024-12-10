@@ -178,6 +178,8 @@ The **Map Application** is part of the **Brussels Traffic Monitoring** project, 
 
    ALTER TABLE roads ADD COLUMN Useable BOOLEAN DEFAULT TRUE;
    ALTER TABLE roads ALTER COLUMN id SET DEFAULT unique_rowid();
+   ALTER TABLE roads ADD COLUMN one_way BOOLEAN DEFAULT false;
+   ALTER TABLE roads ADD COLUMN direction VARCHAR(10) DEFAULT NULL;
 
    \q
    ```
@@ -506,6 +508,135 @@ curl -X POST "http://localhost/map-app/api/new-road?start_intersection=1&end_int
 ---
 
 This API is useful for dynamically adding new roads to the database. Ensure that the intersection IDs provided are valid and that the length is specified.
+
+### 6. Mark a Road as One-Way
+
+This API allows you to mark an existing road as a one-way street and specify its direction.
+
+- **Endpoint**:  
+  `http://localhost/map-app/api/one-way`
+
+- **Method**:  
+  `POST`
+
+- **How to Use**:  
+  Provide the required parameters as query parameters in the URL:
+
+```bash
+curl -X POST "http://localhost/map-app/api/one-way?id=<road-id>&one_way=<true|false>&direction=<start_to_end|end_to_start>"
+```
+
+Replace the following placeholders:
+
+- `<road-id>`: The ID of the road to update.
+- `<true|false>`: Whether the road is a one-way street (`true` or `false`).
+- `<start_to_end|end_to_start>`: The direction of the one-way street, required if `one_way=true`.
+
+---
+
+- **Parameters**:
+
+  | Parameter   | Type      | Required | Description                                                                                   |
+  | ----------- | --------- | -------- | --------------------------------------------------------------------------------------------- |
+  | `id`        | `int`     | Yes      | ID of the road to update.                                                                     |
+  | `one_way`   | `boolean` | Yes      | Set to `true` to mark the road as one-way, or `false` to disable one-way.                     |
+  | `direction` | `string`  | Yes\*    | Direction of the one-way road (`start_to_end` or `end_to_start`). Required if `one_way=true`. |
+
+---
+
+- **Response Format**:  
+  On success, the API returns the updated road details.
+
+- **Example Command**:
+
+Mark a road as one-way from start to end:
+
+```bash
+curl -X POST "http://localhost/map-app/api/one-way?id=1&one_way=true&direction=start_to_end"
+```
+
+Disable one-way for a road:
+
+```bash
+curl -X POST "http://localhost/map-app/api/one-way?id=1&one_way=false"
+```
+
+---
+
+- **Example Response (Success)**:
+
+```json
+{
+  "message": "Road updated successfully.",
+  "road": {
+    "id": 1,
+    "start_intersection": 1,
+    "end_intersection": 2,
+    "length": 100,
+    "useable": true,
+    "one_way": true,
+    "direction": "start_to_end"
+  }
+}
+```
+
+---
+
+- **Error Responses**:
+
+  - **Missing or Invalid Parameters**: If `id`, `one_way`, or `direction` (when required) is missing or invalid:
+    `{ "error": "For one-way roads, a valid direction ('start_to_end' or 'end_to_start') is required." }`
+
+  - **Road Not Found**: If the specified road ID does not exist:
+    `{ "error": "Road with ID <road-id> does not exist." }`
+
+  - **Server Error**: If an unexpected issue occurs on the server:
+    `{ "error": "Failed to update road." }`
+
+---
+
+This API allows you to manage road direction dynamically, ensuring accurate traffic data representation. Ensure that the provided `road-id` exists in the database and that the `direction` parameter is used only for one-way streets.
+
+## Viewing Logs
+
+Logs are essential for debugging and monitoring your application in Kubernetes. Here's how to view the logs of your pods and APIs:
+
+### 1. View logs of a specific pod
+
+To see the logs of a specific pod in Kubernetes:
+
+1. **List all running pods**:
+
+   ```bash
+   kubectl get pods
+   ```
+
+   Example output:
+
+   ```
+   NAME                                          READY   STATUS    RESTARTS   AGE
+   map-app-deployment-579b9b645d-m6bd7           1/1     Running   0          10m
+   camera-app-54cff867-xpxcm                     1/1     Running   2          2d
+   ```
+
+2. **Get logs for a specific pod**:
+   Replace `<pod-name>` with the name of your pod (e.g., `map-app-deployment-579b9b645d-m6bd7`):
+
+   ```bash
+   kubectl logs <pod-name>
+   ```
+
+   Example:
+
+   ```bash
+   kubectl logs map-app-deployment-579b9b645d-m6bd7
+   ```
+
+3. **Follow live logs**:
+   Use the `-f` flag to follow the logs in real-time:
+   ```bash
+   kubectl logs -f <pod-name>
+   ```
 
 ## Interactive Map (frontend)
 
