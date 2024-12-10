@@ -25,11 +25,14 @@ export default defineEventHandler(async (event) => {
           );
         }
 
-        // Handle regular data fetch - get both intersections and roads
+        await mapService.fetchAndStoreMapData();
         const [intersections, roads] = await Promise.all([
           mapService.findAllIntersections(),
           mapService.findAllRoads()
-        ]);
+        ]) || {
+          intersections: [],
+          roads: []
+        };
 
         return {
           intersections,
