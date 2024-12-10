@@ -3,7 +3,7 @@ cd data-nuxt-app
 cd ../nginx-home
 ./deploy.sh
 cd ../camera-app
-./deploy.sh
+./deploy_wsl.sh
 cd ../map-app
 ./deploy.sh
 # cd ../getting-started-app
