@@ -60,7 +60,7 @@ export default defineEventHandler(async (event) => {
     console.error('Error executing formula:', error);
     throw createError({
       statusCode: 500,
-      message: `Error executing formula: ${error.message}`
+      message: `Error executing formula: ${(error as Error).message}`
     });
   }
 });

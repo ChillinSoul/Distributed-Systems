@@ -17,8 +17,8 @@ async function fetchMapData() {
   loading.value = true;
   try {
     const { data: mapData } = await useFetch('/api/external-map');
-    intersections.value = mapData.value.intersections || [];
-    roads.value = mapData.value.roads || [];
+    intersections.value = mapData.intersections;
+    roads.value = mapData.roads;
   } catch (err) {
     error.value = err.message;
   } finally {

@@ -11,12 +11,8 @@ export default defineEventHandler(async () => {
     // Fetch latest data from all shards
     const [anpr, map] = await Promise.all([
       anprService.findAll({
-        take: 100,
-        orderBy: { createdAt: 'desc' }
       }),
       mapService.findAll({
-        take: 100,
-        orderBy: { createdAt: 'desc' }
       })
     ])
 

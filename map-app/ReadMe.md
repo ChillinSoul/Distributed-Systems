@@ -2,15 +2,21 @@
 
 By Thibaut François & Jordan Hermans
 
+---
+
 ## Introduction
 
 The **Map Application** is part of the **Brussels Traffic Monitoring** project, designed to analyze traffic in Brussels for improved mobility and sustainable development. This application offers the following features:
 
 - Visualize a detailed map with all roads and intersections.
-- Access the shortest paths between locations using advanced algorithms.
-- Add new roads dynamically to the map.
+- Access the shortest paths between locations.
+- Dynamically add new roads to the map.
 - Mark roads as unusable (e.g., due to roadwork).
-- Delete roads from the map when they are no longer needed.
+- Delete roads from the map.
+- Manage road directionality by marking roads as one-way and specifying their direction.
+- Add new roads.
+
+---
 
 ## Deployment Instructions
 
@@ -213,7 +219,7 @@ The `deploy.sh` script automates the deployment process and consists of the foll
 
 ### 1. Get Map Data
 
-Retrieve all roads and intersections:
+Retrieve all roads and intersections, including their details such as usability, one-way status, and direction.
 
 - **Endpoint**:
   `http://localhost/map-app/api/map-data`
@@ -231,8 +237,23 @@ curl -X GET http://localhost/map-app/api/map-data
 - **Response Format**:
   The API responds with a JSON object containing two arrays:
 
-  - `intersections`: Each intersection has an ID, a name, and coordinates (`x`,`y`).
-  - `roads`: Each road has an ID, start and end intersection IDs, the road's length, and a boolean `useable` indicating if the road is accessible.
+  - **`intersections`**: Each intersection includes:
+
+    - `id`: Unique identifier of the intersection.
+    - `name`: Name of the intersection.
+    - `x_coordinate`: X-coordinate of the intersection on the map.
+    - `y_coordinate`: Y-coordinate of the intersection on the map.
+
+  - **`roads`**: Each road includes:
+    - `id`: Unique identifier of the road.
+    - `start_intersection`: ID of the intersection where the road starts.
+    - `end_intersection`: ID of the intersection where the road ends.
+    - `length`: Length of the road.
+    - `useable`: Boolean indicating whether the road is accessible.
+    - `one_way`: Boolean indicating whether the road is one-way.
+    - `direction`: Direction of the one-way road (`start_to_end` or `end_to_start`), or `null` if not one-way.
+
+---
 
 - **Example Response**:
 
@@ -241,21 +262,27 @@ curl -X GET http://localhost/map-app/api/map-data
   "intersections": [
     { "id": 1, "name": "A", "x_coordinate": 250, "y_coordinate": 400 },
     { "id": 2, "name": "B", "x_coordinate": 350, "y_coordinate": 400 },
+    { "id": 3, "name": "C", "x_coordinate": 450, "y_coordinate": 400 },
     ...
   ],
   "roads": [
-    { "id": 1, "start_intersection": 1, "end_intersection": 2, "length": 100, "useable": true },
-    {"id": 2, "start_intersection" : 2, "end_intersection": 3, "length": 100, "useable": false },
+    { "id": 1, "start_intersection": 1, "end_intersection": 2, "length": 100, "useable": true, "one_way": false, "direction": null },
+    { "id": 2, "start_intersection": 2, "end_intersection": 3, "length": 100, "useable": false, "one_way": false, "direction": null },
+    { "id": 3, "start_intersection": 1, "end_intersection": 6, "length": 100, "useable": true, "one_way": true, "direction": "start_to_end" },
     ...
   ]
 }
 
 ```
 
+---
+
 - **Errors**:
   - **500 Internal Server Error**:  
     If there is an issue fetching the data from the database:  
     `{ "error": "Error fetching data." }`
+
+This API provides a comprehensive overview of the map's intersections and roads, including details such as one-way restrictions and road usability.
 
 ### 2. Find the Shortest Path
 
