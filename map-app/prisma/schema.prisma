@@ -23,7 +23,7 @@ model roads {
   start_intersection Int
   end_intersection   Int
   length             Int
-  useable            Boolean
+  useable            Boolean @default(true)
 
   // Foreign keys and relationships
   start intersections @relation("RoadStart", fields: [start_intersection], references: [id])

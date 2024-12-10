@@ -176,6 +176,7 @@ Delete roads from the map.
    (30, 25, 17, 100);
 
    ALTER TABLE roads ADD COLUMN Useable BOOLEAN DEFAULT TRUE;
+   ALTER TABLE roads ALTER COLUMN id SET DEFAULT unique_rowid();
 
    \q
    ```
@@ -248,6 +249,11 @@ curl -X GET http://localhost/map-app/api/map-data
 
 ```
 
+- **Errors**:
+  - **500 Internal Server Error**:  
+    If there is an issue fetching the data from the database:  
+    `{ "error": "Error fetching data." }`
+
 ### 2. Find the Shortest Path
 
 This API calculates the shortest path between two intersections using Dijkstra's algorithm. The response includes a list of intersections that need to be traversed in order to go from the start to the end intersection.
@@ -293,6 +299,14 @@ curl -X GET "http://localhost/map-app/api/shortest-path?start=16&end=21"
 ```
 
 This response indicates that to travel from intersection 16 to 21, you need to pass through intersections 16, 17, ... and 21.
+
+- **Errors**:
+  - **400 Bad Request**:  
+    If `start` or `end` intersection IDs are missing or invalid:  
+    `{ "error": "Start and End intersection IDs are required and must be valid numbers." }`
+  - **500 Internal Server Error**:  
+    If the server encounters an unexpected issue (e.g., calculation error or database issue):  
+    `{ "error": "Error calculating route." }`
 
 ### 3. Update Road Usability
 
@@ -345,6 +359,14 @@ curl -X POST "http://localhost/map-app/api/update-road?id=1&useable=false"
 }
 ```
 
+- **Errors**:
+  - **400 Bad Request**:  
+    If the `id` of the road is missing or invalid:  
+    `{ "error": "A valid road ID is required." }`
+  - **500 Internal Server Error**:  
+    If the road cannot be updated due to an unexpected issue:  
+    `{ "error": "Failed to update road." }`
+
 ### 4. Delete a Road
 
 This API allows you to delete a specific road from the database using its `id`. It is useful for cleaning up unnecessary or incorrect data from the system.
@@ -391,6 +413,98 @@ curl -X DELETE "http://localhost/map-app/api/delete-road?id=1"
   }
 }
 ```
+
+- **Errors**:
+  - **400 Bad Request**:  
+    If the `id` of the road is missing or invalid:  
+    `{ "error": "A valid road ID is required." }`
+  - **500 Internal Server Error**:  
+    If the road cannot be deleted due to an unexpected issue:  
+    `{ "error": "Failed to delete road.", "details": "<error-message>" }`
+
+### 5. Create a New Road
+
+This API allows you to create a new road by specifying the start and end intersections, the road's length, and its usability status.
+
+- **Endpoint**:  
+  `http://localhost/map-app/api/new-road`
+
+- **Method**:  
+  `POST`
+
+- **How to Use**:  
+  Provide the required parameters as query parameters in the URL:
+
+```bash
+curl -X POST "http://localhost/map-app/api/new-road?start_intersection=<start-id>&end_intersection=<end-id>&length=<length>&useable=<true|false>"
+```
+
+Replace the following placeholders:
+
+- `<start-id>`: The ID of the intersection where the road starts.
+- `<end-id>`: The ID of the intersection where the road ends.
+- `<length>`: The length of the road in arbitrary units (e.g., meters).
+- `<true|false>`: Whether the road is usable or not (optional, default is `true`).
+
+- **Parameters**:
+
+  | Parameter            | Type   | Required | Description                                          |
+  | -------------------- | ------ | -------- | ---------------------------------------------------- |
+  | `start_intersection` | `int`  | Yes      | ID of the starting intersection of the road.         |
+  | `end_intersection`   | `int`  | Yes      | ID of the ending intersection of the road.           |
+  | `length`             | `int`  | Yes      | Length of the road.                                  |
+  | `useable`            | `bool` | No       | Specifies if the road is usable. Defaults to `true`. |
+
+- **Validation**:
+  - `start_intersection` and `end_intersection` must be valid and different.
+  - The specified intersections must exist in the database.
+  - `length` must be a valid positive number.
+
+---
+
+- **Response Format**:  
+  On success, the API returns the details of the newly created road.
+
+- **Example Command**:
+
+```bash
+curl -X POST "http://localhost/map-app/api/new-road?start_intersection=1&end_intersection=2&length=100&useable=true"
+```
+
+- **Example Response**:
+
+```json
+{
+  "message": "Road created successfully.",
+  "road": {
+    "id": 31,
+    "start_intersection": 1,
+    "end_intersection": 2,
+    "length": 100,
+    "useable": true
+  }
+}
+```
+
+---
+
+- **Error Responses**:
+
+  - **Invalid Data**: If required parameters are missing or invalid, the API returns:  
+    `{ "error": "Valid start_intersection, end_intersection, and length are required." }`
+
+  - **Same Intersections**: If `start_intersection` and `end_intersection` are identical:  
+    `{ "error": "Start and end intersections must be different." }`
+
+  - **Non-Existent Intersections**: If one or both intersections do not exist in the database:  
+    `{ "error": "Start or end intersection does not exist." }`
+
+  - **Server Error**: If an unexpected issue occurs on the server:  
+    `{ "error": "Failed to create road." }`
+
+---
+
+This API is useful for dynamically adding new roads to the database. Ensure that the intersection IDs provided are valid and that the length is specified.
 
 ## Interactive Map (frontend)
 
