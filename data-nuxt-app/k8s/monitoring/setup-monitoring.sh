@@ -11,15 +11,79 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
+# Function to detect system architecture and OS
+detect_system() {
+    # Get the operating system type
+    local os=$(uname -s | tr '[:upper:]' '[:lower:]')
+    
+    # Get the CPU architecture
+    local arch=$(uname -m)
+    
+    # Convert architecture names to match k9s naming convention
+    case "${arch}" in
+        x86_64)
+            arch="amd64"
+            ;;
+        aarch64)
+            arch="arm64"
+            ;;
+        armv7l)
+            arch="arm"
+            ;;
+    esac
+    
+    # Convert OS names to match k9s naming convention
+    case "${os}" in
+        linux)
+            os="Linux"
+            ;;
+        darwin)
+            os="Darwin"
+            ;;
+        mingw* | cygwin* | msys*)
+            os="Windows"
+            ;;
+    esac
+    
+    echo "${os}_${arch}"
+}
+
 # Install k9s if not already installed
 if ! command_exists k9s; then
     echo "Installing k9s..."
-    wget https://github.com/derailed/k9s/releases/download/v0.27.4/k9s_Linux_amd64.tar.gz
-    tar -xf k9s_Linux_amd64.tar.gz
-    sudo mv k9s /usr/local/bin
-    rm k9s_Linux_amd64.tar.gz
-    echo "k9s installed successfully!"
+    
+    # Detect system type and architecture
+    SYSTEM_INFO=$(detect_system)
+    echo "Detected system: ${SYSTEM_INFO}"
+    
+    # Set the download URL based on system info
+    K9S_VERSION="v0.27.4"
+    DOWNLOAD_URL="https://github.com/derailed/k9s/releases/download/${K9S_VERSION}/k9s_${SYSTEM_INFO}.tar.gz"
+    
+    echo "Downloading k9s from: ${DOWNLOAD_URL}"
+    
+    # Download and install k9s
+    if wget "${DOWNLOAD_URL}"; then
+        tar -xf "k9s_${SYSTEM_INFO}.tar.gz"
+        sudo mv k9s /usr/local/bin
+        rm "k9s_${SYSTEM_INFO}.tar.gz"
+        echo "k9s installed successfully!"
+    else
+        echo "Failed to download k9s. Please check the system detection or try manual installation."
+        exit 1
+    fi
 fi
+
+# Rest of your original script remains the same...
+EOF
+
+# Enable metrics server if not already enabled
+echo "Ensuring metrics-server is enabled..."
+minikube addons enable metrics-server
+
+# Wait for metrics-server to be ready
+echo "Waiting for metrics-server to be ready..."
+minikube kubectl -- -n kube-system rollout status deployment metrics-server
 
 # Create HPA configuration
 echo "Creating HPA configuration..."
@@ -44,20 +108,12 @@ spec:
         averageUtilization: 50
   behavior:
     scaleUp:
-      stabilizationWindowSeconds: 30
+      stabilizationWindowSeconds: 10
     scaleDown:
-      stabilizationWindowSeconds: 300
+      stabilizationWindowSeconds: 10
 EOF
 
-# Enable metrics server if not already enabled
-echo "Ensuring metrics-server is enabled..."
-minikube addons enable metrics-server
-
-# Wait for metrics-server to be ready
-echo "Waiting for metrics-server to be ready..."
-minikube kubectl -- -n kube-system rollout status deployment metrics-server
-
-# Verify setup
+# Display usage instructions
 echo -e "\n=== Monitoring Setup Complete ===\n"
 echo "Here's how to use your monitoring tools:"
 echo ""
