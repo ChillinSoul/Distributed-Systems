@@ -244,7 +244,7 @@ Error (403): Returns "You're not logged in
 
 The application allows users to create, view, update, and delete mathematical formulas.
 
-# Create Formula
+## Create Formula
 
 Endpoint: POST /api/formula
 Description: Adds a new formula to the database for the authenticated user.
@@ -273,7 +273,7 @@ Description: Adds a new formula to the database for the authenticated user.
 
 Error (403): Returns "You must log in to your account to add formulas."
 
-# Get Formula by ID
+## Get Formula by ID
 
 Endpoint: GET /api/formula/{id}
 Description: Retrieves a formula by its ID.
@@ -294,7 +294,7 @@ Description: Retrieves a formula by its ID.
 
 Error: Returns a 404 error if the formula does not exist.
 
-# Update Formula
+## Update Formula
 
 Endpoint: PUT /api/formula/{id}
 Description: Updates an existing formula by its ID.
@@ -323,7 +323,7 @@ Description: Updates an existing formula by its ID.
 
 Error: Returns a 404 error if the formula does not exist.
 
-# Delete Formula
+## Delete Formula
 
 Endpoint: DELETE /api/formula/{id}
 Description: Deletes a formula by its ID.
