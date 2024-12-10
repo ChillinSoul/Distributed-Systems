@@ -94,4 +94,9 @@ else
   exit 1
 fi
 
+# Step 9: Setup Monitoring
+echo "Setting up monitoring..."
+chmod +x k8s/monitoring/setup-monitoring.sh
+./k8s/monitoring/setup-monitoring.sh
+
 echo "Deployment process finished successfully!"
