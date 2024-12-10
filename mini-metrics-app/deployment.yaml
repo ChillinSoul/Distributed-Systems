@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mini-metrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mini-metrics
+      tier: frontend
+      track: stable
+  template:
+    metadata:
+      labels:
+        app: mini-metrics
+        tier: frontend
+        track: stable
+    spec:
+      containers:
+        - name: mini-metrics
+          image: mini-metrics-image
+          imagePullPolicy: Never
+          resources:
+            # requests:
+            #   memory: "64Mi"
+            #   cpu: "250m"
+            limits:
+              memory: "64Mi"
+              cpu: "250m"
+          ports:
+            - containerPort: 3000
+          env:
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: mini-metrics-backend-url
+                key: backend-url
