@@ -5,24 +5,27 @@ export async function POST(request: Request) {
   const prisma = new PrismaClient();
 
   try {
-    // Extraire les paramètres depuis l'URL
+    // Extract parameters from the request URL
     const { searchParams } = new URL(request.url);
 
     const startIntersection = parseInt(searchParams.get('start_intersection') || '', 10);
     const endIntersection = parseInt(searchParams.get('end_intersection') || '', 10);
     const length = parseInt(searchParams.get('length') || '', 10);
     const useable = searchParams.get('useable') === 'true';
+    const oneWay = searchParams.get('one_way') === 'true';
+    const direction = searchParams.get('direction') || null;
 
-    // Log des données d'entrée pour debug
-    console.log("Données reçues : ")
-    console.log({
+    // Log incoming data for debugging
+    console.log('Received Data:', {
       start_intersection: startIntersection,
       end_intersection: endIntersection,
       length,
       useable,
+      one_way: oneWay,
+      direction,
     });
 
-    // Validation des données
+    // Validation of required parameters
     if (isNaN(startIntersection) || isNaN(endIntersection) || isNaN(length)) {
       return NextResponse.json(
         { error: 'Valid start_intersection, end_intersection, and length are required.' },
@@ -37,7 +40,14 @@ export async function POST(request: Request) {
       );
     }
 
-    // Vérification que les intersections existent
+    if (oneWay && (!direction || (direction !== 'start_to_end' && direction !== 'end_to_start'))) {
+      return NextResponse.json(
+        { error: 'For one-way roads, a valid direction ("start_to_end" or "end_to_start") is required.' },
+        { status: 400 }
+      );
+    }
+
+    // Check if intersections exist
     const startExists = await prisma.intersections.findUnique({
       where: { id: startIntersection },
     });
@@ -52,17 +62,19 @@ export async function POST(request: Request) {
       );
     }
 
-    // Créer une nouvelle route
+    // Create the new road
     const newRoad = await prisma.roads.create({
       data: {
         start_intersection: startIntersection,
         end_intersection: endIntersection,
         length,
-        useable, // Par défaut `true` si non spécifié
+        useable, // Default is true if not specified
+        one_way: oneWay, // Default is false if not specified
+        direction, // Null for two-way roads
       },
     });
 
-    // Retourner une réponse de succès
+    // Return success response
     return NextResponse.json({
       message: 'Road created successfully.',
       road: newRoad,

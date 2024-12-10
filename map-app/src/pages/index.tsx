@@ -14,6 +14,8 @@ interface Road {
   end: number;
   length: number;
   useable: boolean;
+  oneWay: boolean;
+  direction: string | null;
 }
 
 interface MapData {
@@ -24,7 +26,7 @@ interface MapData {
 const Home: React.FC<{ mapData: MapData }> = ({ mapData }) => {
   const handleRoadClick = async (road: Road) => {
     const newUseableValue = !road.useable; // Inverse la valeur actuelle
-  
+
     try {
       // Requête POST pour mettre à jour la route
       await fetch(
@@ -51,10 +53,7 @@ const Home: React.FC<{ mapData: MapData }> = ({ mapData }) => {
 
       <main style={{ padding: "20px" }}>
         <h1>Map Visualization</h1>
-        <SvgMap
-          mapData={mapData}
-          onRoadClick={handleRoadClick}
-        />
+        <SvgMap mapData={mapData} onRoadClick={handleRoadClick} />
       </main>
     </div>
   );
@@ -76,6 +75,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
       end: road.end_intersection,
       length: road.length,
       useable: road.useable,
+      oneWay: road.one_way,
+      direction: road.direction,
     })),
   };
 

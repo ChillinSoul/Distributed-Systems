@@ -68,7 +68,7 @@ onMounted(fetchFormulas);
 </script>
 
 <template>
-  <div class="container mx-auto p-6">
+  <div class="container mx-auto p-6 pb-20">
     <h2 class="text-3xl">Traffic Data Formulas</h2>
 
         <!-- Info Button -->
