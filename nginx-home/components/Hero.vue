@@ -27,7 +27,7 @@
           class="text-white bg-blue-500 px-4 py-2 rounded-md w-full"
           >map-app
   </a>
-        <APITest endpoint="http://map-app-service/api"/>
+        <APITest endpoint="http://map-app-service/api/map-data"/>
         <p>bb-demo</p>
         <a
           href="/bb-demo/"
