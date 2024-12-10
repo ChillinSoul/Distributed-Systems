@@ -1,5 +1,8 @@
 # Step 1: Base image - Use the official Node.js image
-FROM node:18-alpine AS base
+FROM node:23-alpine AS base
+
+# Add specific repository for OpenSSL 1.1 if necessary
+RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/v3.15/main libssl1.1
 
 # Step 2: Set the working directory inside the container
 WORKDIR /app

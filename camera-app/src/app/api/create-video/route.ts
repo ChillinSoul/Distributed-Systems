@@ -73,7 +73,7 @@ export async function POST(req: Request) {
     }
 
     // Check if the camera is available
-    const camera = await prisma.camera.findUnique({
+    const camera = await prisma.camera.findFirst({
       where: { cameranumber },
     });
 

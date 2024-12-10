@@ -1,5 +1,22 @@
 #!/bin/bash -e
 
+# Unit test for the deployment script, if failed, exit
+
+# ask for the user consent to run the tests
+
+echo "Do you want to run the unit tests before deploying the application? (y/n)"
+read -r run_tests
+
+if [ "$run_tests" == "y" ]; then
+  if ! npm run test; then
+    echo "Unit tests failed. Exiting..."
+    exit 1
+  else
+    echo "Unit tests passed."
+  fi
+fi
+
+
 # Variables
 IMAGE_NAME="data-nuxt-app-image"
 NAMESPACE="default" # Update if using a different namespace
