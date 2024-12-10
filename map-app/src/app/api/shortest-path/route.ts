@@ -20,16 +20,30 @@ export async function GET(request: Request) {
     const intersections = await prisma.intersections.findMany();
     const roads = await prisma.roads.findMany();
 
-    // Build graph representation
+    // Build graph representation considering road usability and directionality
     const graph: { [key: number]: { [key: number]: number } } = {};
     roads.forEach((road) => {
-      if (!graph[road.start_intersection]) graph[road.start_intersection] = {};
-      if (!graph[road.end_intersection]) graph[road.end_intersection] = {};
-      graph[road.start_intersection][road.end_intersection] = road.length;
-      graph[road.end_intersection][road.start_intersection] = road.length; // Assuming undirected roads
+      if (road.useable) {
+        if (road.one_way) {
+          // Add road in the specified direction only
+          if (road.direction === 'start_to_end') {
+            if (!graph[road.start_intersection]) graph[road.start_intersection] = {};
+            graph[road.start_intersection][road.end_intersection] = road.length;
+          } else if (road.direction === 'end_to_start') {
+            if (!graph[road.end_intersection]) graph[road.end_intersection] = {};
+            graph[road.end_intersection][road.start_intersection] = road.length;
+          }
+        } else {
+          // Add road in both directions for two-way roads
+          if (!graph[road.start_intersection]) graph[road.start_intersection] = {};
+          if (!graph[road.end_intersection]) graph[road.end_intersection] = {};
+          graph[road.start_intersection][road.end_intersection] = road.length;
+          graph[road.end_intersection][road.start_intersection] = road.length;
+        }
+      }
     });
 
-    // Dijkstra's algorithm
+    // Dijkstra's algorithm to find the shortest path
     const shortestPath = dijkstra(graph, startId, endId);
 
     // Find intersections in the path
@@ -40,7 +54,7 @@ export async function GET(request: Request) {
     return NextResponse.json(pathIntersections);
   } catch (error) {
     console.error('Error calculating route:', error);
-    return NextResponse.json({ error: error }, { status: 500 });
+    return NextResponse.json({ error: 'Error calculating route.' }, { status: 500 });
   } finally {
     await prisma.$disconnect();
   }
