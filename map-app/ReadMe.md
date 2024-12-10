@@ -6,10 +6,11 @@ By Thibaut François & Jordan Hermans
 
 The **Map Application** is part of the **Brussels Traffic Monitoring** project, designed to analyze traffic in Brussels for improved mobility and sustainable development. This application offers the following features:
 
-Visualize a detailed map with all roads and intersections.
-Access the shortest paths between locations.
-Mark roads as unusable (e.g., due to roadwork).
-Delete roads from the map.
+- Visualize a detailed map with all roads and intersections.
+- Access the shortest paths between locations using advanced algorithms.
+- Add new roads dynamically to the map.
+- Mark roads as unusable (e.g., due to roadwork).
+- Delete roads from the map when they are no longer needed.
 
 ## Deployment Instructions
 
