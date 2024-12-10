@@ -19,12 +19,13 @@ interface ExternalRoad {
 }
 
 export class ExternalMapService extends BaseShardService {
-  private apiBaseUrl = 'http://localhost/map-app/api';
+  private apiBaseUrl = 'http://map-app-service/api';
 
   async fetchAndStoreMapData() {
     try {
       // Fetch data from external API
       const response = await fetch(`${this.apiBaseUrl}/map-data`);
+      console.log('response:', response);
       if (!response.ok) {
         throw new Error('Failed to fetch map data');
       }
