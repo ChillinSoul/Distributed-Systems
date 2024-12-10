@@ -119,8 +119,34 @@ export class ExternalMapService extends BaseShardService {
       }
     }
   }
+  async deleteIntersection(data: Omit<Intersection, 'shardKey'>) {
+    const shardKey = this.shardRouter.generateShardKey(data.name);
+    const shard = this.shardRouter.getShardForKey(shardKey);
+    let connection;
 
-  async createRoad(data: Omit<ExternalRoad, 'shardKey'>) {
+    try {
+      connection = await this.createDatabaseConnection(shard);
+      
+      const [result] = await connection.execute<ResultSetHeader>(
+        'INSERT INTO Intersection (name, x_coordinate, y_coordinate, shardKey) VALUES (?, ?, ?, ?) ' +
+        'ON DUPLICATE KEY UPDATE x_coordinate=VALUES(x_coordinate), y_coordinate=VALUES(y_coordinate)',
+        [data.name, data.x_coordinate, data.y_coordinate, shardKey]
+      );
+
+      const { id, ...rest } = data;
+      return {
+        id: result.insertId || id,
+        ...rest,
+        shardKey: shardKey.toString(),
+      };
+    } finally {
+      if (connection) {
+        await connection.end().catch(console.error);
+      }
+    }
+  }
+
+  async deleteRoad(data: Omit<ExternalRoad, 'shardKey'>) {
     const shardKey = this.shardRouter.generateShardKey(`${data.start_intersection}-${data.end_intersection}`);
     const shard = this.shardRouter.getShardForKey(shardKey);
     let connection;
