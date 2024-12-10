@@ -189,6 +189,14 @@ To remove all deployments, use:
 ./clean.sh
 ```
 
+---
+
+## Map (frontend)
+
+Users can view the map at [http://localhost/map-app](http://localhost/map-app).
+
+---
+
 ## Deployment Script Overview
 
 The `deploy.sh` script automates the deployment process and consists of the following steps:
@@ -740,12 +748,6 @@ if (cache["1-18"]) {
 ```
 
 This implementation enhances efficiency for repeated queries by serving results directly from memory.
-
----
-
-## Map (frontend)
-
-Users can view the map at [http://localhost/map-app](http://localhost/map-app).
 
 ---
 
