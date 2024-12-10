@@ -8,24 +8,45 @@ datasource db {
 }
 
 model Formula {
-  id        Int      @id @default(autoincrement())
-  authorId  Int
-  author    User @relation(fields: [authorId], references: [id])
+  id       Int  @id @default(autoincrement())
+  authorId Int
+  author   User @relation(fields: [authorId], references: [id])
 
   formula   String
   createdAt DateTime @default(now())
+
+  beginAt String?
+  endAt   String?
+  period  String?
+
+  results Result[]
 }
 
-model Hour {
-  id        Int      @id @default(autoincrement())
-  hour      String
+model Result {
+  id        Int     @id @default(autoincrement())
+  formulaId Int
+  formula   Formula @relation(fields: [formulaId], references: [id])
+
+  result Json
+  type   ResultType
+
   createdAt DateTime @default(now())
+}
+
+enum ResultType {
+  number
+  numberList
+  string
+  stringList
+  object
+  objectList
 }
 
 model User {
   id        Int      @id @default(autoincrement())
   name      String
-  email     String   @unique(map: "User_email_key")
+  email     String   @unique
+  password  String
   createdAt DateTime @default(now())
 
   formulas Formula[]
