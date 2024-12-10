@@ -24,8 +24,6 @@ export default defineEventHandler(async (event) => {
             parseInt(end as string)
           );
         }
-
-        await mapService.fetchAndStoreMapData();
         const [intersections, roads] = await Promise.all([
           mapService.findAllIntersections(),
           mapService.findAllRoads()
