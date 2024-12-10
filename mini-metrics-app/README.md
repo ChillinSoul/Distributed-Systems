@@ -76,10 +76,16 @@ Link Mysql and prisma using Python: https://prisma-client-py.readthedocs.io/en/s
    Use Postman to test the API routes by sending a POST request to localhost:3000/api/formula to populate the database with dummy data, including a formula value and its creation date and time.
 
 5. Set Up MySQL Credentials in Kubernetes by creating a mysql_credentials.yaml file. Apply it to the cluster during installation using the following command:
+
+```bash
    helm install mycluster mysql-operator/mysql-innodbcluster --set tls.useSelfSigned=true --values mysql_credentials.yaml
+```
 
 6. Verify Credentials by running the following command:
-   helm get manifest mycluster
+
+```bash
+helm get manifest mycluster
+```
 
 7. Create a new user named Api in the MySQL cluster mycluster, and grant this user the necessary privileges to access and manipulate the database.
 
@@ -93,14 +99,20 @@ Link Mysql and prisma using Python: https://prisma-client-py.readthedocs.io/en/s
 - The database schema and tables
 
 10. Build an image of your app
+
+```bash
     `& minikube -p minikube docker-env --shell powershell | Invoke-Expression`
     `docker build -t mini-metrics-image .`
+```
 
 11. Perform Prisma migration
 
 - Add a db schema on kubernetes cluster with the same name that is used on local tests
 - Modify your environment variable to point your kubernetes mysql cluster
-- `prisma migrate deploy`
+
+```bash
+`prisma migrate deploy`
+```
 
 12. Run the image of your app
 
@@ -113,12 +125,24 @@ Link Mysql and prisma using Python: https://prisma-client-py.readthedocs.io/en/s
 ## Setup and Installation
 
 1. Clone the repository:
+
+```bash
    git clone https://github.com/your-repo/mini-metrics-frontend.git
    cd mini-metrics-frontend
+```
+
 2. Install dependencies:
+
+```bash
    npm install
+```
+
 3. Run the development server:
+
+```bash
    npm run dev
+```
+
 4. Visit the application: Open your browser and navigate to http://localhost:3000.
 
 ## Key Components
@@ -150,10 +174,10 @@ Link Mysql and prisma using Python: https://prisma-client-py.readthedocs.io/en/s
 
 ## Dependencies
 
-react-hook-form: For form validation and handling.
-zod: Schema validation for forms.
-chart.js: For rendering dynamic graphs.
-react-chartjs-2: React wrapper for Chart.js.
+- react-hook-form: For form validation and handling.
+- zod: Schema validation for forms.
+- chart.js: For rendering dynamic graphs.
+- react-chartjs-2: React wrapper for Chart.js.
 
 ## API Endpoints
 
@@ -167,20 +191,27 @@ Endpoint: POST /api/signup
 Description: Registers a new user with a hashed password.
 
 - Request Body:
+
+```bash
   {
   "username": "string",
   "email": "string",
   "password": "string"
   }
+```
 
 - Response:
+
+```bash
   Success (200):
   {
   "id": "number",
   "name": "string",
   "email": "string"
   }
-  Error (400): Returns validation errors if input is invalid.
+```
+
+Error (400): Returns validation errors if input is invalid.
 
 #### Login
 
@@ -188,10 +219,13 @@ Endpoint: POST /api/login
 Description: Logs in a user by verifying their email and password.
 
 - Request Body:
+
+```bash
   {
   "email": "string",
   "password": "string"
   }
+```
 
 - Response:
   Success (200): Returns user details and starts a session.
@@ -216,10 +250,16 @@ Endpoint: POST /api/formula
 Description: Adds a new formula to the database for the authenticated user.
 
 - Request Body:
+
+```bash
   {
   "formula": "string"
   }
+```
+
 - Response:
+
+```bash
   Success (200):
   {
   "message": "Formula successfully created!",
@@ -229,7 +269,9 @@ Description: Adds a new formula to the database for the authenticated user.
   "authorId": "number"
   }
   }
-  Error (403): Returns "You must log in to your account to add formulas."
+```
+
+Error (403): Returns "You must log in to your account to add formulas."
 
 # Get Formula by ID
 
@@ -237,6 +279,8 @@ Endpoint: GET /api/formula/{id}
 Description: Retrieves a formula by its ID.
 
 - Response:
+
+```bash
   Success (200):
   {
   "message": "Formula found!",
@@ -246,7 +290,9 @@ Description: Retrieves a formula by its ID.
   "authorId": "number"
   }
   }
-  Error: Returns a 404 error if the formula does not exist.
+```
+
+Error: Returns a 404 error if the formula does not exist.
 
 # Update Formula
 
@@ -254,10 +300,16 @@ Endpoint: PUT /api/formula/{id}
 Description: Updates an existing formula by its ID.
 
 - Request Body:
+
+```bash
   {
   "formula": "string"
   }
+```
+
 - Response:
+
+```bash
   Success (200):
   {
   "message": "Formula successfully modified!",
@@ -267,7 +319,9 @@ Description: Updates an existing formula by its ID.
   "authorId": "number"
   }
   }
-  Error: Returns a 404 error if the formula does not exist.
+```
+
+Error: Returns a 404 error if the formula does not exist.
 
 # Delete Formula
 
@@ -275,6 +329,8 @@ Endpoint: DELETE /api/formula/{id}
 Description: Deletes a formula by its ID.
 
 - Response:
+
+```bash
   Success (200):
   {
   "message": "Formula erased!",
@@ -284,7 +340,9 @@ Description: Deletes a formula by its ID.
   "authorId": "number"
   }
   }
-  Error: Returns a 404 error if the formula does not exist.
+```
+
+Error: Returns a 404 error if the formula does not exist.
 
 ## Validation Rules
 
