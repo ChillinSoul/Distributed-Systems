@@ -13,6 +13,8 @@ interface Road {
   end: number;
   length: number;
   useable: boolean;
+  oneWay: boolean;
+  direction: string | null;
 }
 
 interface MapData {
@@ -51,50 +53,149 @@ const SvgMap: React.FC<{
         );
 
         if (startIntersection && endIntersection) {
-          // Détermine la couleur de la route
-          const roadColor = road.useable === false ? "red" : "blue";
+          const x1 = (startIntersection.coordinates[0] - minX) * scale + margin;
+          const y1 = (startIntersection.coordinates[1] - minY) * scale + margin;
+          const x2 = (endIntersection.coordinates[0] - minX) * scale + margin;
+          const y2 = (endIntersection.coordinates[1] - minY) * scale + margin;
 
           return (
-            <line
-              key={road.id}
-              x1={(startIntersection.coordinates[0] - minX) * scale + margin}
-              y1={(startIntersection.coordinates[1] - minY) * scale + margin}
-              x2={(endIntersection.coordinates[0] - minX) * scale + margin}
-              y2={(endIntersection.coordinates[1] - minY) * scale + margin}
-              stroke={roadColor} // Utilise la couleur conditionnelle
-              strokeWidth="2"
-              style={{ cursor: "pointer" }}
-              onClick={() => onRoadClick?.(road)}
-            />
+            <g key={road.id}>
+              {/* Draw the road */}
+              <line
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+                stroke="#555555"
+                strokeWidth="8"
+                style={{ cursor: "pointer" }}
+                onClick={() => onRoadClick?.(road)}
+              />
+              <line
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+                stroke="white"
+                strokeDasharray="5, 5"
+                strokeWidth="2"
+              />
+
+              {/* Add construction symbol if road is not usable */}
+              {!road.useable && (
+                <text
+                  x={(x1 + x2) / 2}
+                  y={(y1 + y2) / 2}
+                  fontSize="32"
+                  fill="orange"
+                  textAnchor="middle"
+                >
+                  🚧
+                </text>
+              )}
+
+              {/* Add arrows for one-way roads */}
+              {road.oneWay && road.direction && (
+                <g>
+                  {generateRepeatedArrows(
+                    x1,
+                    y1,
+                    x2,
+                    y2,
+                    road.direction,
+                    25
+                  ).map((arrow, index) => (
+                    <polygon key={index} points={arrow} fill="white" />
+                  ))}
+                </g>
+              )}
+            </g>
           );
         }
         return null;
       })}
 
-
       {/* Draw intersections */}
-      {mapData.intersections.map((intersection) => (
-        <g
-          key={intersection.id}
-        >
-          <circle
-            cx={(intersection.coordinates[0] - minX) * scale + margin}
-            cy={(intersection.coordinates[1] - minY) * scale + margin}
-            r="5"
-            fill="red"
-          />
-          <text
-            x={(intersection.coordinates[0] - minX) * scale + margin + 10}
-            y={(intersection.coordinates[1] - minY) * scale + margin}
-            fontSize="12"
-            fill="black"
-          >
-            {intersection.id}
-          </text>
-        </g>
-      ))}
+      {mapData.intersections.map((intersection) => {
+        const cx = (intersection.coordinates[0] - minX) * scale + margin;
+        const cy = (intersection.coordinates[1] - minY) * scale + margin;
+
+        return (
+          <g key={intersection.id}>
+            {/* Intersection circle */}
+            <circle
+              cx={cx}
+              cy={cy}
+              r="12"
+              fill="#d3d3d3"
+              stroke="black"
+              strokeWidth="2"
+            />
+            {/* Intersection ID */}
+            <text
+              x={cx}
+              y={cy + 4} // Center vertically inside the circle
+              fontSize="10"
+              fill="black"
+              fontWeight="bold"
+              textAnchor="middle"
+            >
+              {intersection.id}
+            </text>
+          </g>
+        );
+      })}
     </svg>
   );
 };
+
+/**
+ * Generate repeated arrows along the road to indicate one-way direction
+ */
+function generateRepeatedArrows(
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  direction: string,
+  spacing: number
+): string[] {
+  const arrowLength = 10;
+  const arrowWidth = 5;
+
+  // Calculate the direction vector
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const length = Math.sqrt(dx * dx + dy * dy);
+
+  // Normalize the direction vector
+  const unitX = dx / length;
+  const unitY = dy / length;
+
+  // Determine number of arrows
+  const numArrows = Math.floor(length / spacing);
+
+  // Generate arrows
+  const arrows: string[] = [];
+  for (let i = 1; i <= numArrows; i++) {
+    const baseX = x1 + i * spacing * unitX;
+    const baseY = y1 + i * spacing * unitY;
+
+    const tipX = baseX + unitX * arrowLength;
+    const tipY = baseY + unitY * arrowLength;
+
+    const corner1X = baseX + unitY * arrowWidth;
+    const corner1Y = baseY - unitX * arrowWidth;
+
+    const corner2X = baseX - unitY * arrowWidth;
+    const corner2Y = baseY + unitX * arrowWidth;
+
+    arrows.push(
+      `${tipX},${tipY} ${corner1X},${corner1Y} ${corner2X},${corner2Y}`
+    );
+  }
+
+  return arrows;
+}
 
 export default SvgMap;
