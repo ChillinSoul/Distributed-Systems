@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: data-nuxt-app
-          image: data-nuxt-app-image:20241209203842
+          image: data-nuxt-app-image:20241210095102
           imagePullPolicy: Never
           ports:
             - containerPort: 3000

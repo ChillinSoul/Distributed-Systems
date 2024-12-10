@@ -27,7 +27,7 @@ data:
       minKey = VALUES(minKey),
       maxKey = VALUES(maxKey);
 
-    -- Create ANPRData table
+    -- Create ANPRData table (existing)
     CREATE TABLE IF NOT EXISTS ANPRData (
       id INT AUTO_INCREMENT PRIMARY KEY,
       licensePlate VARCHAR(20) NOT NULL,
@@ -39,7 +39,7 @@ data:
       shardKey BIGINT
     );
 
-    -- Create MapData table
+    -- Create MapData table (existing)
     CREATE TABLE IF NOT EXISTS MapData (
       id INT AUTO_INCREMENT PRIMARY KEY,
       roadId VARCHAR(50) NOT NULL,
@@ -53,7 +53,7 @@ data:
       shardKey BIGINT
     );
 
-    -- Create Formula table
+    -- Create Formula table (existing)
     CREATE TABLE IF NOT EXISTS Formula (
       id INT AUTO_INCREMENT PRIMARY KEY,
       shardKey BIGINT NOT NULL,
@@ -62,8 +62,50 @@ data:
       updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
 
-    -- Add indexes for performance optimization
-    CREATE INDEX idx_shardKey ON ANPRData(shardKey);
-    CREATE INDEX idx_createdAt ON ANPRData(createdAt);
-    CREATE INDEX idx_vehicleDensity ON MapData(vehicleDensity);
-    CREATE INDEX idx_congestionLevel ON MapData(congestionLevel);
+    -- Create VideoRecord table (new - for camera service)
+    CREATE TABLE IF NOT EXISTS VideoRecord (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      cameranumber VARCHAR(191) NOT NULL,
+      numberplate VARCHAR(191) NOT NULL,
+      typevehicule VARCHAR(191) NOT NULL,
+      createat TIMESTAMP NOT NULL,
+      shardKey BIGINT,
+      createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      INDEX idx_numberplate (numberplate),
+      INDEX idx_cameranumber (cameranumber),
+      INDEX idx_createat (createat),
+      INDEX idx_shardKey (shardKey)
+    );
+
+    -- Create Intersection table (new - for external map service)
+    CREATE TABLE IF NOT EXISTS Intersection (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(191) NOT NULL,
+      x_coordinate INT NOT NULL,
+      y_coordinate INT NOT NULL,
+      shardKey BIGINT,
+      createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      INDEX idx_name (name),
+      INDEX idx_shardKey (shardKey)
+    );
+
+    -- Create ExternalRoad table (new - for external map service)
+    CREATE TABLE IF NOT EXISTS ExternalRoad (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      start_intersection INT NOT NULL,
+      end_intersection INT NOT NULL,
+      length INT NOT NULL,
+      useable BOOLEAN NOT NULL DEFAULT true,
+      shardKey BIGINT,
+      createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      INDEX idx_intersections (start_intersection, end_intersection),
+      INDEX idx_shardKey (shardKey),
+      FOREIGN KEY (start_intersection) REFERENCES Intersection(id),
+      FOREIGN KEY (end_intersection) REFERENCES Intersection(id)
+    );
+
+    -- Add indexes for existing tables (preserved from original)
+    CREATE INDEX IF NOT EXISTS idx_shardKey ON ANPRData(shardKey);
+    CREATE INDEX IF NOT EXISTS idx_createdAt ON ANPRData(createdAt);
+    CREATE INDEX IF NOT EXISTS idx_vehicleDensity ON MapData(vehicleDensity);
+    CREATE INDEX IF NOT EXISTS idx_congestionLevel ON MapData(congestionLevel);

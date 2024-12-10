@@ -1,6 +1,8 @@
 import { ANPRService } from './ANPRService'
 import { MapDataService } from './MapDataService'
 import { FormulaService } from './FormulaService'
+import { CameraService } from './CameraService';
+import { ExternalMapService } from './ExternalMapService';
 import { BaseShardService } from './base/BaseShardService'
 
 export class ServiceFactory {
@@ -41,5 +43,23 @@ export class ServiceFactory {
       this.services.set('formula', service)
     }
     return this.services.get('formula') as FormulaService
+  }
+
+  async getCameraService(): Promise<CameraService> {
+    if (!this.services.has('camera')) {
+      const service = new CameraService();
+      await service.initialize();
+      this.services.set('camera', service);
+    }
+    return this.services.get('camera') as CameraService;
+  }
+
+  async getExternalMapService(): Promise<ExternalMapService> {
+    if (!this.services.has('externalMap')) {
+      const service = new ExternalMapService();
+      await service.initialize();
+      this.services.set('externalMap', service);
+    }
+    return this.services.get('externalMap') as ExternalMapService;
   }
 }

@@ -2,9 +2,7 @@
 
 **MannekenData** is a Nuxt-based platform engineered for Kubernetes, designed to provide real-time traffic analysis in Brussels. The platform aims to enhance urban mobility by leveraging scalable data processing solutions.
 
-This guide will help you deploy the `nuxt-app` (located under `/nuxt-app`) and optionally additional services from GitHub. You'll also set up an Ingress controller with a load balancer to link everything to `localhost`, accessing the services via `<Ingress IP>:<port>/nuxt-app`, `<Ingress IP>:<port>/service-a`, etc.
-
----
+This guide will help you deploy the `data-nuxt-app` and optionally additional services from GitHub. You'll also set up an Ingress controller with a load balancer to link everything to `localhost`, accessing the services via `<Ingress IP>:<port>/data-nuxt-app`, `<Ingress IP>:<port>/service-a`, etc.
 
 ## Prerequisites
 
@@ -15,348 +13,264 @@ This guide will help you deploy the `nuxt-app` (located under `/nuxt-app`) and o
 - **Ingress Controller**: NGINX Ingress Controller enabled in Minikube.
 - **Available Ports**: Ensure port `3000` and the Ingress controller's port are available.
 - **Git**: Installed for cloning repositories.
+- **Node.js**: Version 22.9.0 or later for application development.
 - **Optional**: Additional services to deploy from GitHub.
-
----
 
 ## Getting Started
 
-### 0. Easy start mac os 
+### Starting Minikube with Optimal Configuration
 
-If you do this, IGNORE the rest
+Before deploying the application, we need to start Minikube with specific parameters that ensure optimal performance for our traffic analysis platform. Here's the recommended configuration:
 
 ```bash
-chmod +x deploy.sh clean.sh /nuxt-app/deploy.sh /nuxt-app/clean.sh /nginx-home/deploy.sh /nginx-home/clean.sh 
+minikube start --cpus=8 --memory=5000 --addons=metrics-server --extra-config=kubelet.housekeeping-interval=10s --force
 ```
 
-to start
+Let's understand what each parameter does:
+
+- `--cpus=8`: Allocates 8 CPU cores to the Minikube cluster. This higher CPU allocation is necessary for running our sharded database architecture and handling real-time traffic data processing efficiently.
+
+- `--memory=5000`: Assigns 5GB of memory to the cluster. This generous memory allocation ensures smooth operation of our MySQL shards, the Nuxt application, and monitoring tools without resource constraints.
+
+- `--addons=metrics-server`: Automatically enables the metrics server addon during startup. The metrics server is crucial for our monitoring setup as it collects resource utilization data used by the Horizontal Pod Autoscaler (HPA).
+
+- `--extra-config=kubelet.housekeeping-interval=10s`: Configures the kubelet to perform housekeeping operations every 10 seconds instead of the default interval. This more frequent checking helps our HPA respond more quickly to load changes.
+
+- `--force`: Forces a new cluster creation, ensuring a clean start without any residual configurations from previous deployments.
+
+After running this command, verify that Minikube is running correctly:
+
+```bash
+minikube status
+```
+
+You should see output indicating that the cluster is running, and all components are properly configured:
+
+```
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+```
+
+### Easy Start for macOS Users
+
+If you choose this method, you can ignore the manual deployment steps that follow.
+
+```bash
+chmod +x deploy.sh clean.sh
+```
+
+To start the application:
 
 ```bash
 ./deploy.sh
 ```
 
-to acces the app through localhost
-```bash 
+This will also set up monitoring tools and HPA configuration automatically through the setup-monitoring script.
+
+To access the app through localhost:
+
+```bash
 minikube tunnel
 ```
 
-to cleanup
+To cleanup when finished:
 
 ```bash
 ./clean.sh
 ```
 
-### 0.1 Easy start using WSL
+### Easy Start for WSL Users
 
-If you do this, IGNORE the rest
+If you choose this method, you can ignore the manual deployment steps that follow.
 
-Run Power Shell as Administrator and run the following commands in PowerShell:
+1. Run PowerShell as Administrator and start WSL:
 
 ```PowerShell
 wsl
 ```
 
-head to nuxt-app directory:
+2. Navigate to the project directory:
 
 ```bash
-cd nuxt-app
-```
-
-```bash
+cd data-nuxt-app
 chmod +x deploy_wsl.sh clean_wsl.sh
 ```
 
-install dos2unix and run it on the bash scripts:
+3. Install and run dos2unix:
 
 ```bash
 sudo apt-get install dos2unix
-dos2unix ./deploy_wsl.sh ./cleanup_wsl.sh
+dos2unix ./deploy_wsl.sh ./clean_wsl.sh
 ```
 
-Create the alias for kubectl:
+4. Create kubectl alias:
 
 ```bash
 alias kubectl="minikube kubectl --"
 ```
 
-to start
+5. Deploy and run:
 
 ```bash
 bash ./deploy_wsl.sh
-```
-
-to acces the app through localhost
-```bash 
 minikube tunnel
 ```
 
-to cleanup
+The WSL deployment will also set up monitoring tools and HPA automatically.
+
+## Architecture Overview
+
+MannekenData uses a sharded MySQL database architecture for horizontal scaling:
+
+- Each shard handles a specific range of data based on shard keys
+- Direct MySQL connections are used for optimal performance
+- Automatic shard routing based on data distribution
+- Built-in support for multi-shard queries
+
+The application is structured into several key components:
+
+- **Frontend**: Built with Nuxt.js 3 and Tailwind CSS
+- **Backend**: Node.js with direct MySQL connections
+- **Database**: Sharded MySQL deployment on Kubernetes
+- **Services**: Modular service architecture for ANPR and traffic data processing
+
+## Monitoring and Management
+
+MannekenData includes comprehensive monitoring capabilities through multiple tools to ensure optimal performance and scaling.
+
+### Horizontal Pod Autoscaling (HPA)
+
+The application uses Kubernetes HPA to automatically scale based on resource utilization:
+
+- Minimum replicas: 1
+- Maximum replicas: 5
+- Target CPU utilization: 50%
+- Scale-up stabilization window: 30 seconds
+- Scale-down stabilization window: 300 seconds
+
+You can monitor the HPA status:
 
 ```bash
-bash ./clean_wsl.sh
+kubectl get hpa data-nuxt-app-hpa
+# To watch HPA decisions in real-time
+kubectl get hpa data-nuxt-app-hpa -w
 ```
 
-### 1. Start Minikube and Enable Ingress Addon
+### K9s Terminal UI
 
-If you're using Minikube, start it with the necessary resources and enable the Ingress addon.
+K9s provides a terminal-based UI for monitoring and managing Kubernetes clusters:
+
+1. Access the K9s dashboard:
 
 ```bash
-# Start Minikube with enough resources
-minikube start --memory=4096 --cpus=2
-
-# Enable the Ingress addon
-minikube addons enable ingress
+k9s
 ```
 
----
+2. Common K9s commands:
 
-### 2. Build the Docker Image for Nuxt App
+- Press '0' to see all resources
+- Type 'hpa' and Enter to view autoscalers
+- Type 'pod' and Enter to see pods
+- Press '?' for help menu
+- Use ':namespace' to switch namespaces
+- Press 'ctrl+d' to delete resources
 
-Navigate into the `nuxt-app` directory:
+### Metrics Server
+
+The metrics server provides resource utilization data:
 
 ```bash
-cd nuxt-app
+# Enable metrics server
+minikube addons enable metrics-server
+
+# View node metrics
+kubectl top nodes
+
+# View pod metrics
+kubectl top pods
 ```
 
-Build the app
+### Load Testing
+
+To test the HPA scaling capabilities:
 
 ```bash
-npm run build
+kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://data-nuxt-app-service/data-nuxt-app/data-view; done"
 ```
 
-Ensure Kubernetes is up and running. Then, build the Docker image for the Nuxt app:
+### Managing Database Shards
+
+You can view shard status and distribution:
 
 ```bash
-# Build the Docker image inside Minikube's Docker environment
-eval $(minikube docker-env)
-docker build -t nuxt-app-image .
+# Check shard status
+kubectl get statefulset mysql-shard
+
+# View shard logs
+kubectl logs -l app=mysql-shard
 ```
 
-> **Note:** By running `eval $(minikube docker-env)`, you're pointing your Docker CLI to use Minikube's Docker daemon. This avoids the need to push the image to a container registry.
+## Accessing the Application
 
----
+After deployment, access the following endpoints:
 
-### 3. (Optional) Clone and Build Additional Services
+- Main Application: `http://localhost/data-nuxt-app`
+- Traffic Data View: `http://localhost/data-nuxt-app/traffic-data`
+- Formula Interface: `http://localhost/data-nuxt-app/formulas`
+- API Documentation: `http://localhost/data-nuxt-app/api-docs`
 
-If you have additional services on GitHub that you want to deploy, follow these steps:
+## Troubleshooting
 
-#### Clone the Repositories
+### Common Issues and Solutions
 
-```bash
-# Replace 'yourusername' and 'service-name' with your GitHub username and repository name
-
-# Example for Service A
-git clone https://github.com/yourusername/service-a.git
-cd service-a
-
-# Build the Docker image for Service A inside Minikube's Docker environment
-docker build -t service-a-image .
-
-# Navigate back to the root directory
-cd ../
-
-# Repeat for additional services
-# Example for Service B
-git clone https://github.com/yourusername/service-b.git
-cd service-b
-docker build -t service-b-image .
-cd ../
-```
-
----
-
-### 4. Deploy Applications to Kubernetes
-
-#### Deploy Nuxt App
-
-Apply the Kubernetes configuration for the Nuxt app:
-
-```bash
-kubectl apply -f ./deployment.yaml
-kubectl apply -f ./service.yaml
-```
-
-#### Deploy Additional Services
-
-For each additional service, apply their Kubernetes configurations:
-
-```bash
-# Deploy Service A
-kubectl apply -f ./service-a/deployment.yaml
-kubectl apply -f ./service-a/service.yaml
-
-# Deploy Service B
-kubectl apply -f ./service-b/deployment.yaml
-kubectl apply -f ./service-b/service.yaml
-```
-
----
-
-### 5. Configure Ingress Resource
-
-Create an Ingress resource to route traffic to your services based on URL paths.
-
-#### Create the Ingress Configuration (`ingress.yaml`)
-
-In your project root directory, create a file named `ingress.yaml` with the following content:
-
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: services-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-spec:
-  ingressClassName: nginx
-  rules:
-    - http:
-        paths:
-          - path: /nuxt-app
-            pathType: Prefix
-            backend:
-              service:
-                name: nuxt-app-service
-                port:
-                  number: 80
-          - path: /service-a
-            pathType: Prefix
-            backend:
-              service:
-                name: service-a-service
-                port:
-                  number: 80
-          # Add more services as needed
-```
-
-> **Note:** The annotation `nginx.ingress.kubernetes.io/rewrite-target: /$1` ensures that the path is correctly rewritten when forwarding requests to the backend services.
-
-#### Apply the Ingress Configuration
-
-```bash
-kubectl apply -f ./ingress.yaml
-```
-
----
-
-### 6. Verify Deployment
-
-Check if the deployments are successful by listing the pods:
+1. If pods are not starting, check their status:
 
 ```bash
 kubectl get pods
+kubectl describe pod <pod-name>
 ```
 
-Ensure all your services are running and the pods are in the `Running` state.
-
----
-
-### 7. Access the Services
-
-To access the services, you need to obtain the IP address of the Ingress controller.
-
-#### Get the Ingress IP
-
-Since we're using Minikube, you can use the following command to get the Ingress controller's IP:
+2. For database connectivity issues:
 
 ```bash
-minikube ip
+# Check shard status
+kubectl get statefulset mysql-shard
+# View database logs
+kubectl logs -l app=mysql-shard
 ```
 
-#### Run `minikube tunnel` (Important Step)
-
-To expose the Ingress controller on your local network interface, run:
+3. If services are not accessible:
 
 ```bash
-minikube tunnel
-```
-
-This command needs to run in a separate terminal window and may require administrative privileges.
-
-> **Note:** `minikube tunnel` creates a network route to make LoadBalancer and Ingress resources accessible on `localhost` or the Minikube IP.
-
-#### Access the Services in Your Web Browser
-
-- **Nuxt App**: `http://localhost/nuxt-app` or `http://<Minikube IP>/nuxt-app`
-- **Service A**: `http://localhost/service-a` or `http://<Minikube IP>/service-a`
-- **Service B**: `http://localhost/service-b` or `http://<Minikube IP>/service-b`
-
-**Example:**
-
-If the Minikube IP is `192.168.49.2`:
-
-- Nuxt App: [http://192.168.49.2/nuxt-app](http://192.168.49.2/nuxt-app)
-- Or via localhost: [http://localhost/nuxt-app](http://localhost/nuxt-app)
-
----
-
-### 8. Troubleshooting
-
-If you're still unable to access the services, consider the following steps:
-
-#### Check Ingress Controller Pods
-
-Ensure the Ingress controller pods are running:
-
-```bash
-kubectl get pods -n ingress-nginx
-```
-
-#### Check Ingress Resource
-
-Describe the Ingress to check for any errors:
-
-```bash
+# Check ingress status
+kubectl get ingress
 kubectl describe ingress services-ingress
 ```
 
-#### Verify Service Endpoints
-
-Ensure the services have endpoints:
+4. For networking issues:
 
 ```bash
+# Verify service endpoints
 kubectl get endpoints
+# Check ingress controller
+kubectl get pods -n ingress-nginx
 ```
 
-#### Port Forwarding (Alternative Method)
-
-If `minikube tunnel` is not an option, you can port-forward the Ingress controller service:
+5. If metrics are not appearing:
 
 ```bash
-kubectl port-forward --namespace ingress-nginx service/ingress-nginx-controller 8080:80
+kubectl -n kube-system rollout restart deployment metrics-server
 ```
 
-Then access your services via:
+## Contributors
 
-- **Nuxt App**: [http://localhost:8080/nuxt-app](http://localhost:8080/nuxt-app)
+- Axel Bergiers
+- Basil Mannaerts
 
----
+## License
 
-### 9. Clean Up
-
-To remove the deployed applications and resources, run the following commands:
-
-#### Delete Nuxt App Resources
-
-```bash
-kubectl delete -f ./deployment.yaml
-kubectl delete -f ./service.yaml
-```
-
-#### Delete Additional Services Resources
-
-```bash
-# Delete Service A
-kubectl delete -f ./service-a/deployment.yaml
-kubectl delete -f ./service-a/service.yaml
-
-# Delete Service B
-kubectl delete -f ./service-b/deployment.yaml
-kubectl delete -f ./service-b/service.yaml
-```
-
-#### Delete Ingress Resource
-
-```bash
-kubectl delete -f ./ingress.yaml
-```
+MIT License - See LICENSE file for details
