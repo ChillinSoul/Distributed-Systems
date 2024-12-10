@@ -664,7 +664,40 @@ To see the logs of a specific pod in Kubernetes:
    kubectl logs -f <pod-name>
    ```
 
-## Interactive Map (frontend)
+## Deploying Changes Without Downtime
+
+To update the application while keeping the service available, you can deploy changes seamlessly using the following steps. Kubernetes ensures zero downtime by rolling out updates incrementally.
+
+### Steps to Deploy Changes
+
+1. **Build a New Docker Image**  
+   Build a new Docker image with the updated application code. Use a unique version tag (`<version name>` in this example) to differentiate the new image from previous versions.
+
+   ```bash
+   docker build -t map-app:<version name> .
+   ```
+
+2. **Load the New Image into Minikube**  
+   Minikube doesn't pull images from Docker Hub by default. You need to load the newly built image into Minikube.
+
+   ```bash
+   minikube image load map-app:<version name>
+   ```
+
+3. **Update the Kubernetes Deployment**  
+   Update the Kubernetes deployment to use the new Docker image. Kubernetes will handle the rollout process by replacing the old pods with the new ones one by one.
+
+   ```bash
+   kubectl set image deployments/map-app-deployment map-app=map-app:<version name>
+   ```
+
+### How It Works
+
+- **Rolling Updates**: Kubernetes performs a rolling update by incrementally terminating old pods and starting new ones with the updated image.
+- **Zero Downtime**: The service remains available as Kubernetes ensures there are always pods serving requests during the update.
+- **Version Control**: By tagging images (`<version name>`, `v1.0.1`, etc.), you can track versions and roll back to a previous image if needed.
+
+## Map (frontend)
 
 Users can view the map at [http://localhost/map-app](http://localhost/map-app).
 
