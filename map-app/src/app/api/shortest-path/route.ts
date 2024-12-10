@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
+const cache: { [key: string]: number[] } = {};
+
 export async function GET(request: Request) {
   const prisma = new PrismaClient();
 
@@ -16,6 +18,12 @@ export async function GET(request: Request) {
       );
     }
 
+    const cacheKey = `${startId}-${endId}`;
+    if (cache[cacheKey]) {
+      console.log('Cache hit for path:', cacheKey);
+      return NextResponse.json(cache[cacheKey]);
+    }
+
     // Fetch all roads and intersections from the database
     const intersections = await prisma.intersections.findMany();
     const roads = await prisma.roads.findMany();
@@ -25,7 +33,6 @@ export async function GET(request: Request) {
     roads.forEach((road) => {
       if (road.useable) {
         if (road.one_way) {
-          // Add road in the specified direction only
           if (road.direction === 'start_to_end') {
             if (!graph[road.start_intersection]) graph[road.start_intersection] = {};
             graph[road.start_intersection][road.end_intersection] = road.length;
@@ -34,7 +41,6 @@ export async function GET(request: Request) {
             graph[road.end_intersection][road.start_intersection] = road.length;
           }
         } else {
-          // Add road in both directions for two-way roads
           if (!graph[road.start_intersection]) graph[road.start_intersection] = {};
           if (!graph[road.end_intersection]) graph[road.end_intersection] = {};
           graph[road.start_intersection][road.end_intersection] = road.length;
@@ -45,6 +51,9 @@ export async function GET(request: Request) {
 
     // Dijkstra's algorithm to find the shortest path
     const shortestPath = dijkstra(graph, startId, endId);
+
+    // Cache the result
+    cache[cacheKey] = shortestPath;
 
     // Find intersections in the path
     const pathIntersections = shortestPath.map((id) =>
