@@ -4,6 +4,8 @@ By Thibaut François & Jordan Hermans
 
 ---
 
+![alt text](/map-app/assets/mapPreview.png)
+
 ## Introduction
 
 The **Map Application** is part of the **Brussels Traffic Monitoring** project, designed to analyze traffic in Brussels for improved mobility and sustainable development. This application offers the following features:
