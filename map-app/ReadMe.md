@@ -189,6 +189,14 @@ To remove all deployments, use:
 ./clean.sh
 ```
 
+---
+
+## Map (frontend)
+
+Users can view the map at [http://localhost/map-app](http://localhost/map-app).
+
+---
+
 ## Deployment Script Overview
 
 The `deploy.sh` script automates the deployment process and consists of the following steps:
@@ -697,8 +705,50 @@ To update the application while keeping the service available, you can deploy ch
 - **Zero Downtime**: The service remains available as Kubernetes ensures there are always pods serving requests during the update.
 - **Version Control**: By tagging images (`<version name>`, `v1.0.1`, etc.), you can track versions and roll back to a previous image if needed.
 
-## Map (frontend)
+## Cache Implementation in the Shortest Path API
 
-Users can view the map at [http://localhost/map-app](http://localhost/map-app).
+The **Shortest Path API** uses an in-memory cache to improve performance by avoiding redundant calculations for frequently requested paths.
+
+- **Cache Structure**:  
+  A simple object stores results, where the key is the query (`startId-endId`) and the value is the shortest path.
+
+- **How It Works**:
+  1. Generate a cache key:
+     ```typescript
+     const cacheKey = `${startId}-${endId}`;
+     ```
+  2. Check if the result exists in the cache:
+     ```typescript
+     if (cache[cacheKey]) {
+       console.log("Cache hit for path:", cacheKey);
+       return NextResponse.json(cache[cacheKey]);
+     }
+     ```
+  3. Compute the result and store it in the cache:
+     ```typescript
+     cache[cacheKey] = shortestPath;
+     ```
+
+---
+
+### Example Code
+
+```typescript
+const cache: { [key: string]: any } = {};
+
+// Storing data
+cache["1-18"] = [1, 20, 19, 18];
+
+// Retrieving data
+if (cache["1-18"]) {
+  console.log("Cache hit:", cache["1-18"]);
+} else {
+  console.log("Cache miss");
+}
+```
+
+This implementation enhances efficiency for repeated queries by serving results directly from memory.
+
+---
 
 ## Conclusion

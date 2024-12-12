@@ -65,6 +65,13 @@ const styles: { [key: string]: CSSProperties } = {
     borderRadius: '4px',
     cursor: 'pointer',
   },
+  select: {
+    padding: '0.5rem',
+    fontSize: '1rem',
+    borderRadius: '4px',
+    border: '1px solid #ddd',
+    marginLeft: '1rem',
+  },
 };
 
 export default function CamerasPage() {
@@ -88,18 +95,20 @@ export default function CamerasPage() {
   }, []);
 
   // Handle camera deletion
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (cameranumber: string) => {
     try {
       const response = await fetch(`/api/remove-camera`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id }),
+        body: JSON.stringify({ cameranumber }),
       });
 
       if (response.ok) {
-        setCameras((prev) => prev.filter((camera) => camera.id !== id));
+        setCameras((prev) =>
+          prev.filter((camera) => camera.cameranumber !== cameranumber)
+        );
         alert('Camera deleted successfully');
       } else {
         const errorData = await response.json();
@@ -108,6 +117,35 @@ export default function CamerasPage() {
     } catch (error) {
       console.error('Error deleting camera:', error);
       alert('An error occurred while deleting the camera');
+    }
+  };
+
+  // Handle updating camera availability
+  const handleUpdateAvailability = async (cameranumber: string, available: boolean) => {
+    try {
+      const response = await fetch(`/api/update-camera`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ "cameranumber": cameranumber, "available" : available, }),
+      });
+
+      if (response.ok) {
+        setCameras((prev) =>
+          prev.map((camera) =>
+            camera.cameranumber === cameranumber
+              ? { ...camera, available }
+              : camera
+          )
+        );
+      } else {
+        const errorData = await response.json();
+        alert(errorData.error || 'Failed to update availability');
+      }
+    } catch (error) {
+      console.error('Error updating availability:', error);
+      alert('An error occurred while updating availability');
     }
   };
 
@@ -121,17 +159,33 @@ export default function CamerasPage() {
       ) : (
         <ul style={styles.list}>
           {cameras.map((camera) => (
-            <li key={camera.id} style={styles.listItem}>
+            <li key={camera.cameranumber} style={styles.listItem}>
               <div>
                 <div style={styles.cameraname}>{camera.cameraname}</div>
                 <div style={styles.cameranumber}>Number: {camera.cameranumber}</div>
                 <div style={styles.position}>
                   Position: {camera.position.join(', ')}
                 </div>
+                <div>
+                  Available:
+                  <select
+                    style={styles.select}
+                    value={camera.available.toString()}
+                    onChange={(e) =>
+                      handleUpdateAvailability(
+                        camera.cameranumber,
+                        e.target.value === 'true'
+                      )
+                    }
+                  >
+                    <option value="true">True</option>
+                    <option value="false">False</option>
+                  </select>
+                </div>
               </div>
               <button
                 style={styles.button}
-                onClick={() => handleDelete(camera.id)}
+                onClick={() => handleDelete(camera.cameranumber)}
               >
                 Delete
               </button>

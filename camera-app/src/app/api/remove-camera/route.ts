@@ -3,40 +3,42 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+interface CameraData {
+  cameranumber: string; // Use cameranumber instead of ID
+}
+
 export async function DELETE(req: Request) {
   try {
-    // Parse the request body to get the camera ID
-    const { id } = await req.json();
+    console.log("Starting DELETE request handler...");
+
+    // Parse the request body to get the camera number
+    const { cameranumber }: CameraData = await req.json();
+
+    console.log("Parsed camera number:", cameranumber);
 
     // Validate the input
-    if (!id) {
+    if (!cameranumber) {
+      console.error("No camera number provided in the request.");
       return NextResponse.json(
-        { error: 'Camera ID is required.' },
+        { error: 'Camera number is required.' },
         { status: 400 }
       );
     }
 
-    // Fetch the camera to get the associated cameranumber
-    const camera = await prisma.camera.findUnique({
-      where: { id },
+    const deletedVideos = await prisma.video.deleteMany({
+      where: { cameranumber },
     });
 
-    if (!camera) {
-      return NextResponse.json(
-        { error: 'Camera not found.' },
-        { status: 404 }
-      );
-    }
-
-    // Delete all videos linked to the camera
-    await prisma.video.deleteMany({
-      where: { cameranumber: camera.cameranumber },
-    });
+    console.log("Deleted videos count:", deletedVideos.count);
 
     // Delete the camera from the database
-    const deletedCamera = await prisma.camera.delete({
-      where: { id },
+    console.log("Deleting camera with number:", cameranumber);
+
+    const deletedCamera = await prisma.camera.deleteMany({
+      where: { cameranumber },
     });
+
+    console.log("Deleted camera:", deletedCamera);
 
     // Return the deleted camera details
     return NextResponse.json(deletedCamera, { status: 200 });
@@ -45,6 +47,7 @@ export async function DELETE(req: Request) {
 
     // Handle cases where the camera is not found
     if (error instanceof Error && error.message.includes('Record to delete does not exist')) {
+      console.error("Camera not found or already deleted.");
       return NextResponse.json(
         { error: 'Camera not found.' },
         { status: 404 }
@@ -57,6 +60,7 @@ export async function DELETE(req: Request) {
       { status: 500 }
     );
   } finally {
+    console.log("Disconnecting Prisma client...");
     await prisma.$disconnect();
   }
 }

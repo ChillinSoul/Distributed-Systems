@@ -75,10 +75,10 @@ export default function CreateVideoPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          cameranumber,
-          numberplate,
-          typevehicule,
-          createat: createat || undefined, // Pass only if provided
+          "cameranumber" : cameranumber,
+          "numberplate" : numberplate,
+          "typevehicule" : typevehicule,
+          "createat": createat || undefined, // Pass only if provided
         }),
       });
 
