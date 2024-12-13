@@ -379,3 +379,155 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 FEEDBACK prof:
 script pr calculer charge du service, augmenter les replica automatisé(pr voir que charge a diminué ? )
+
+# setup and deployment of the Mini-Metrics Application
+
+This is a distributed system consisting of multiple services and a database, deployed on a Kubernetes cluster using Minikube
+
+## Step 1: Prepare the Project
+
+1. Navigate to the project directory containing the necessary files to build and deploy the application:
+
+```bash
+cd .\Distributed-Systems\mini-metrics-app\
+```
+
+2. Build the Docker image for the mini-metrics application, which will be used for deployment in Kubernetes:
+
+```bash
+docker build -t mini-metrics-image .
+```
+
+(Note: The image name mini-metrics-image should match the one specified in the deployment.yaml file for Kubernetes to use the correct image during deployment.)
+
+3. Apply database migrations defined in Prisma to structure the database before using it:
+
+```bash
+npx prisma migrate deploy
+```
+
+## Step 2: Install Helm (as administrator)
+
+1. Open a terminal in administrator mode and execute the following commands:
+
+2. Install Helm(package manage used here to install the chart for the MySQL Operator):
+
+```bash
+choco install kubernetes-helm
+```
+
+3. Add and update Helm repository containing MySQL Operator chart:
+
+```bash
+helm repo add mysql-operator https://mysql.github.io/mysql-operator/
+helm repo update
+```
+
+## Step 3: Configure Minikube and MySQL Operator
+
+In a standard terminal:
+
+1. Launche local Kubernetes cluster using Minikube:
+
+```bash
+minikube start
+```
+
+2. Install the MySQL Operator(manages MySQL databases in Kubernetes cluster):
+
+```bash
+helm install my-mysql-operator mysql-operator/mysql-operator --namespace mysql-operator --create-namespace
+```
+
+3. Verifie config & resources created by MySQL Operator:
+
+```bash
+helm get manifest mycluster
+```
+
+(Note: The output shows 3 InnoDB instances in the cluster, which are replicas created by the MySQL Operator to ensure high availability.)
+
+## Step 4: Configure MySQL Database Access
+
+1. Create a credentials.yaml file in the root directory:
+
+```bash
+credentials:
+root:
+user: //fill this with the username you choose for your DB connection
+password: //fill this with the password you choose for your DB connection
+host: "%"
+```
+
+2. Create a secret.yaml file in the root directory:
+
+```bash
+DATABASE_URL="mysql://user:password@localhost:6446/mini-metrics-schema"
+```
+
+3. In MySQL Workbench:
+
+- Create a new connection (named mini-metrics-connection).
+- Create a new schema (named mini-metrics-schema) with a user and password.
+- Configure the port as 6446 instead of the default 3306.
+
+4. Create a port-forward for MySQL(Locally forwards port 6446 to the MySQL service exposed in Kubernetes, allowing access to the database):
+
+```bash
+kubectl port-forward service/mycluster 6446
+```
+
+5. Create Kubernetes secret containing MySQL connection URL for backend application:
+
+```bash
+kubectl create secret generic mini-metrics-backend-url --from-literal=backend-url=mysql://root:password@localhost:6446/mini-metrics-schema
+```
+
+## Step 5: Deploy and Visualize the Application
+
+1. Launch Kubernetes dashboard to monitor resources & visualize created secret:
+
+```bash
+minikube dashboard
+```
+
+2. View the secret:
+   Action: In the Minikube dashboard, navigate to the Secrets section to verify the presence and contents of the mini-metrics-backend-url secret.
+
+3. Apply Kubernetes configuration files:
+
+```bash
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+kubectl apply -f ingress.yaml
+minikube image load mini-metrics-image
+minikube addons list
+```
+
+- If the Ingress addon is disabled, enable it:
+
+```bash
+minikube addons enable ingress
+```
+
+- Configure a local proxy for exposing Kubernetes Ingress services externally:
+
+```bash
+minikube tunnel
+```
+
+Explanation: Creates and configures Kubernetes resources for the deployment, service, and Ingress of the mini-metrics application.
+
+## Step 6: Update System Files
+
+1. Modify the hosts file (if necessary):
+
+- Path: C:\Windows\System32\drivers\etc\hosts.
+- Action: Open the file as an administrator and add an entry to associate a domain name (e.g., mini-metrics.example) with the Minikube IP address.
+  (The Minikube IP can be found using the command below):
+
+```bash
+minikube ip
+```
+
+(Example: If the IP is 192.168.49.2, update the hosts file accordingly.)
