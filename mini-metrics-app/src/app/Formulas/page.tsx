@@ -50,7 +50,7 @@ export default function FormulasPage() {
       });
       const timeLabels = Array.from({ length: formulaWithResults.results.length }, (_, i) => {
         const result = formulaWithResults.results[i].createdAt;
-        return result.getTime();
+        return result.getMinutes();
       });
 
       setGraphData(data);
