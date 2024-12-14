@@ -55,39 +55,11 @@ apiserver: Running
 kubeconfig: Configured
 ```
 
-### Easy Start for macOS Users
+### Easy Start with Deployment Script
 
 If you choose this method, you can ignore the manual deployment steps that follow.
 
-```bash
-chmod +x deploy.sh clean.sh
-```
-
-To start the application:
-
-```bash
-./deploy.sh
-```
-
-This will also set up monitoring tools and HPA configuration automatically through the setup-monitoring script.
-
-To access the app through localhost:
-
-```bash
-minikube tunnel
-```
-
-To cleanup when finished:
-
-```bash
-./clean.sh
-```
-
-### Easy Start for WSL Users
-
-If you choose this method, you can ignore the manual deployment steps that follow.
-
-1. Run PowerShell as Administrator and start WSL:
+1. If you are on windows, Run PowerShell as Administrator and start WSL:
 
 ```PowerShell
 wsl
@@ -97,14 +69,14 @@ wsl
 
 ```bash
 cd data-nuxt-app
-chmod +x deploy_wsl.sh clean_wsl.sh
+chmod +x deploy_wsl.sh
 ```
 
 3. Install and run dos2unix:
 
 ```bash
 sudo apt-get install dos2unix
-dos2unix ./deploy_wsl.sh ./clean_wsl.sh
+dos2unix ./deploy_wsl.sh
 ```
 
 4. Create kubectl alias:
@@ -142,11 +114,18 @@ The application is structured into several key components:
 
 MannekenData includes comprehensive monitoring capabilities through multiple tools to ensure optimal performance and scaling.
 
+To launch the monitoring tools, run the following commands:
+
+```bash
+cd k8s/monitoring
+./setup-monitoring.sh
+```
+
 ### Horizontal Pod Autoscaling (HPA)
 
 The application uses Kubernetes HPA to automatically scale based on resource utilization:
 
-- Minimum replicas: 1
+- Minimum replicas: 2
 - Maximum replicas: 5
 - Target CPU utilization: 50%
 - Scale-up stabilization window: 30 seconds
@@ -265,6 +244,10 @@ kubectl get pods -n ingress-nginx
 ```bash
 kubectl -n kube-system rollout restart deployment metrics-server
 ```
+
+## API Specifications
+
+The API specifications for the MannekenData platform are available in the `public/api-docs` directory as the openapi.yaml file.
 
 ## Contributors
 
