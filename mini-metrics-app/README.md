@@ -368,19 +368,7 @@ The application uses zod schemas to validate user inputs for authentication and 
 - Graphs: Chart.js, react-chartjs-2
 - Validation: zod
 
-## References & contributions
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-FEEDBACK prof:
-script pr calculer charge du service, augmenter les replica automatisé(pr voir que charge a diminué ? )
-
-# setup and deployment of the Mini-Metrics Application
+# Setup and deployment of the Mini-Metrics Application
 
 This is a distributed system consisting of multiple services and a database, deployed on a Kubernetes cluster using Minikube
 
@@ -531,3 +519,15 @@ minikube ip
 ```
 
 (Example: If the IP is 192.168.49.2, update the hosts file accordingly.)
+
+## References & contributions
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+FEEDBACK prof:
+script pr calculer charge du service, augmenter les replica automatisé(pr voir que charge a diminué ? )
