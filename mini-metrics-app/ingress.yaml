@@ -17,17 +17,18 @@ spec:
                 name: mini-metrics-service
                 port:
                   number: 80
-    - host: api.mini-metrics.example
-      http:
-        paths:
-          - backend:
-              service:
-                name: back-mini-metrics-service
-                port:
-                  number: 80
-            path: /api
-            pathType: Prefix
+    # - host: api.mini-metrics.example
+    #   http:
+    #     paths:
+    #       - backend:
+    #           service:
+    #             name: back-mini-metrics-service
+    #             port:
+    #               number: 80
+    #         path: /
+    #         pathType: Prefix
 status:
   loadBalancer:
     ingress:
-      - ip: 172.27.132.88
+      # - ip: 172.27.132.88
+      - ip: 172.26.143.110
