@@ -129,13 +129,6 @@ Navigate to http://localhost:3000.
 - Signup Page: Registration with validation for username, email, and password.
 - Formulas Page: Graph visualization and formula management.
 
-## Dependencies
-
-- react-hook-form: For form validation and handling.
-- zod: Schema validation for forms.
-- chart.js: For rendering dynamic graphs.
-- react-chartjs-2: React wrapper for Chart.js.
-
 # Setup and deployment of the Mini-Metrics Application
 
 This is a distributed system consisting of multiple services and a database, deployed on a Kubernetes cluster using Minikube
