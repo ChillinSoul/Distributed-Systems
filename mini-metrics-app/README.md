@@ -1,63 +1,53 @@
 # Kubernetes Light Traffic Monitoring - Metrics Service
 
-The Metrics Service is a core component of the Light Traffic Monitoring project. It handles various calculations, including:
+## Overview
+
+The Metrics Service is part of the Light Traffic Monitoring project. It handles traffic analysis, including:
 
 - Counting vehicles during specified time intervals.
-- Capturing license plates from a camera service at a given time.
-- Calculating the optimal route using data from the Intersection and Routes service.
+- Capturing license plates from a camera service.
+- Calculating optimal routes using Intersection and Routes services.
 
-## Features
+## Key Features
 
-- Traffic Data Analysis: Calculates metrics such as vehicle count and optimal route suggestions.
-- Database Integration: MySQL backend for storing and querying traffic data and formulas.
-- Dynamic Visualizations: Graphical representation of applied formulas.
-- Authentication: User-based authentication and session management.
-- Customizable Formulas: Build and use custom or predefined formulas for analysis.
+1. Traffic Data Analysis:
+   - Calculates vehicle counts.
+   - Suggests optimal routes.
+2. Database Integration:
+   - MySQL backend for storing traffic data and formulas.
+3. Dynamic Visualizations:
+   - Real-time graphs of applied formulas using Chart.js.
+4. User Authentication:
+   - Secure session management with login/signup functionality.
+5. Customizable Formulas:
+   - Users can create, modify, and apply formulas for data analysis.
 
-## Prerequisites
+## Technology Stack
 
-Before starting, ensure you have the following installed:
+- Frontend: React.js, Next.js, TypeScript
+- Backend: Node.js, Next.js API Routes
+- Database: MySQL with Prisma ORM
+- Authentication: bcrypt
+- Graphs: Chart.js, react-chartjs-2
+- Validation: zod and react-hook-form
+- Kubernetes: Minikube, Helm, MySQL Operator
 
-- Node.js (v14 or higher)
-- npm (v6 or higher)
-- Next.js (v13 or higher)
-- Python (with venv support)
-- Docker and Minikube
-- MySQL database
+## Setup and Prerequisites
 
-Additionally, install the required libraries:
+1. Install Required Tools:
 
-- react-hook-form
-- zod and @hookform/resolvers/zod
-- chart.js and react-chartjs-2
+- Node.js (v14+), npm (v6+), Python with venv.
+- Docker and Minikube.
+- MySQL database.
+- Next.js (v13+).
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
+2. Install Libraries:
 
 ```bash
-npm run dev
-
+npm install react-hook-form zod @hookform/resolvers zod chart.js react-chartjs-2
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-We created a virtual environment with: py -m venv .venv
-Link Mysql and prisma using Python: https://prisma-client-py.readthedocs.io/en/stable/
-
-### DATABASE MySQL
+## DATABASE MySQL
 
 1. Create the Database Schema by setting up a MySQL database schema named db_metrics
 
@@ -120,57 +110,24 @@ helm get manifest mycluster
 - kubectl apply -f service.yaml
 - kubectl apply -f ingress.yaml
 
-### Frontend in Typescript
-
-## Setup and Installation
+## Frontend Setup
 
 1. Clone the repository:
 
 ```bash
-   git clone https://github.com/your-repo/mini-metrics-frontend.git
-   cd mini-metrics-frontend
+git clone https://github.com/your-repo/mini-metrics-frontend.git
+cd mini-metrics-frontend
+npm install
+npm run dev
 ```
 
-2. Install dependencies:
+Navigate to http://localhost:3000.
 
-```bash
-   npm install
-```
+2. Key Components:
 
-3. Run the development server:
-
-```bash
-   npm run dev
-```
-
-4. Visit the application: Open your browser and navigate to http://localhost:3000.
-
-## Key Components
-
-1. Login Page (src/app/Login/page.tsx)
-   Handles user authentication using form validation with react-hook-form and zod.
-   Redirects authenticated users to the Formulas dashboard.
-2. Signup Page (src/app/Signup/page.tsx)
-   Enables new user registration with validation for username, email, and password.
-   Redirects successfully registered users to the Login page.
-3. Formulas Page (src/app/Formulas/page.tsx)
-   Allows users to build and apply formulas.
-   Displays real-time graphs using chart.js based on the applied formulas.
-   Provides options to add or clear formulas.
-
-## Usage
-
-1. Authentication:
-   Navigate to the Login page.
-   Use your credentials to log in or sign up for a new account.
-
-2. Manage Formulas:
-   Once authenticated, access the Formulas page.
-   Create a new formula or use a predefined one.
-   Apply formulas to visualize data on the graph.
-
-3. Customization:
-   Modify the formulas array in the Formulas page to add new default formulas.
+- Login Page: User authentication with form validation.
+- Signup Page: Registration with validation for username, email, and password.
+- Formulas Page: Graph visualization and formula management.
 
 ## Dependencies
 
@@ -520,14 +477,17 @@ minikube ip
 
 (Example: If the IP is 192.168.49.2, update the hosts file accordingly.)
 
-## References & contributions
+## References
 
 To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Contributors
+
+Ghita B.
+Yann D. M.
 
 FEEDBACK prof:
 script pr calculer charge du service, augmenter les replica automatisé(pr voir que charge a diminué ? )
