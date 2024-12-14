@@ -1,21 +1,32 @@
-# Use node 22.9.0 slim image
-FROM node:22.9.0-slim
+# Step 1: Base image - Use the official Node.js image
+FROM node:23-alpine AS base
 
-# Set the working directory inside the container
-WORKDIR /src
+# Add specific repository for OpenSSL 1.1 if necessary
+RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/v3.15/main libssl1.1
 
-# Copy package files and install dependencies (npm install in this case)
+# Step 2: Set the working directory inside the container
+WORKDIR /app
+
+# Step 3: Copy package.json and package-lock.json to the container
 COPY package*.json ./
+
+# Step 4: Install dependencies
 RUN npm install
 
-# Copy the rest of the application code
+# Step 5: Copy the rest of the application code to the container
 COPY . .
 
-# Run the build step
+# Step 6: Generate Prisma Client
+RUN npx prisma generate
+
+# Step 7: Build the Next.js application for production
 RUN npm run build
 
-# Expose the port the app will run on
+# Step 8: Expose the port on which the application will run
 EXPOSE 3000
 
-# Command to run the application
-CMD ["npm", "run", "start"]
+# Step 9: Set environment variables (e.g., NODE_ENV for production mode)
+ENV NODE_ENV=production
+
+# Step 10: Start the Next.js application
+CMD ["npm", "start"]
