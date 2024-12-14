@@ -115,7 +115,7 @@ helm get manifest mycluster
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-repo/mini-metrics-frontend.git
+git clone https://github.com/ChillinSoul/Distributed-Systems.git/mini-metrics-app
 cd mini-metrics-frontend
 npm install
 npm run dev
@@ -135,195 +135,6 @@ Navigate to http://localhost:3000.
 - zod: Schema validation for forms.
 - chart.js: For rendering dynamic graphs.
 - react-chartjs-2: React wrapper for Chart.js.
-
-## API Endpoints
-
-### Authentication
-
-The application provides APIs for user authentication, including sign-up, login, and logout.
-
-#### Sign Up
-
-Endpoint: POST /api/signup
-Description: Registers a new user with a hashed password.
-
-- Request Body:
-
-```bash
-  {
-  "username": "string",
-  "email": "string",
-  "password": "string"
-  }
-```
-
-- Response:
-
-```bash
-  Success (200):
-  {
-  "id": "number",
-  "name": "string",
-  "email": "string"
-  }
-```
-
-Error (400): Returns validation errors if input is invalid.
-
-#### Login
-
-Endpoint: POST /api/login
-Description: Logs in a user by verifying their email and password.
-
-- Request Body:
-
-```bash
-  {
-  "email": "string",
-  "password": "string"
-  }
-```
-
-- Response:
-  Success (200): Returns user details and starts a session.
-  Error (403): Returns "Wrong credentials" if login fails.
-  Error (400): Returns "No user found with this email" if the email does not exist.
-
-#### Logout
-
-Endpoint: DELETE /api/login
-Description: Ends the user's session.
-Response:
-Success (200): Returns "Log out done."
-Error (403): Returns "You're not logged in
-
-## Formulas
-
-The application allows users to create, view, update, and delete mathematical formulas.
-
-## Create Formula
-
-Endpoint: POST /api/formula
-Description: Adds a new formula to the database for the authenticated user.
-
-- Request Body:
-
-```bash
-  {
-  "formula": "string"
-  }
-```
-
-- Response:
-
-```bash
-  Success (200):
-  {
-  "message": "Formula successfully created!",
-  "formula": {
-  "id": "number",
-  "formula": "string",
-  "authorId": "number"
-  }
-  }
-```
-
-Error (403): Returns "You must log in to your account to add formulas."
-
-## Get Formula by ID
-
-Endpoint: GET /api/formula/{id}
-Description: Retrieves a formula by its ID.
-
-- Response:
-
-```bash
-  Success (200):
-  {
-  "message": "Formula found!",
-  "formula": {
-  "id": "number",
-  "formula": "string",
-  "authorId": "number"
-  }
-  }
-```
-
-Error: Returns a 404 error if the formula does not exist.
-
-## Update Formula
-
-Endpoint: PUT /api/formula/{id}
-Description: Updates an existing formula by its ID.
-
-- Request Body:
-
-```bash
-  {
-  "formula": "string"
-  }
-```
-
-- Response:
-
-```bash
-  Success (200):
-  {
-  "message": "Formula successfully modified!",
-  "formula": {
-  "id": "number",
-  "formula": "string",
-  "authorId": "number"
-  }
-  }
-```
-
-Error: Returns a 404 error if the formula does not exist.
-
-## Delete Formula
-
-Endpoint: DELETE /api/formula/{id}
-Description: Deletes a formula by its ID.
-
-- Response:
-
-```bash
-  Success (200):
-  {
-  "message": "Formula erased!",
-  "formula": {
-  "id": "number",
-  "formula": "string",
-  "authorId": "number"
-  }
-  }
-```
-
-Error: Returns a 404 error if the formula does not exist.
-
-## Validation Rules
-
-The application uses zod schemas to validate user inputs for authentication and formula creation. Below are the rules for validation:
-
-### Sign Up
-
-- username: Required, non-empty string.
-- email: Required, must be a valid email format.
-- password: Required, minimum length 8 characters.
-
-### Login
-
-- email: Required, must be a valid email format.
-- password: Required, non-empty string.
-
-## Technologies Used
-
-- Backend: Node.js, Next.js API Routes
-- Database: MySQL with Prisma ORM
-- Authentication: bcrypt, session management
-- Frontend: React.js, TypeScript
-- Graphs: Chart.js, react-chartjs-2
-- Validation: zod
 
 # Setup and deployment of the Mini-Metrics Application
 
@@ -479,15 +290,15 @@ minikube ip
 
 ## References
 
-To learn more about Next.js, take a look at the following resources:
+To learn more about Next.js and MySQL operator:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- https://dev.mysql.com/doc/mysql-operator/en/mysql-operator-innodbcluster.html
 
 ## Contributors
 
-Ghita B.
-Yann D. M.
+- Ghita B.
+- Yann D. M.
 
 FEEDBACK prof:
 script pr calculer charge du service, augmenter les replica automatisé(pr voir que charge a diminué ? )
