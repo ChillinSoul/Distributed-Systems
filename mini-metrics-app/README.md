@@ -47,68 +47,70 @@ The Metrics Service is part of the Light Traffic Monitoring project. It handles 
 npm install react-hook-form zod @hookform/resolvers zod chart.js react-chartjs-2
 ```
 
-## DATABASE MySQL
+## DATABASE setup
 
-1. Create the Database Schema by setting up a MySQL database schema named db_metrics
+1. Database Schema
 
-2. Create the Tables within the schema, name them user, hour, and formula.
+- Schema Name: db_metrics
+- Tables: user, formula, result
 
-3. Configure Environment Variables by updating the .env file with the following values:
+2. Environment Variables
+   Configure .env:
 
-- Database name
-- Username
-- Password
-- Connection name
-- Port
-- Schema name
+- Database name, username, password
+- Connection name, port, and schema
 
-4. Test API Routes:
-   Use Postman to test the API routes by sending a POST request to localhost:3000/api/formula to populate the database with dummy data, including a formula value and its creation date and time.
-
-5. Set Up MySQL Credentials in Kubernetes by creating a mysql_credentials.yaml file. Apply it to the cluster during installation using the following command:
+3. Install MySQL Operator using Helm:
 
 ```bash
-   helm install mycluster mysql-operator/mysql-innodbcluster --set tls.useSelfSigned=true --values mysql_credentials.yaml
+helm repo add mysql-operator https://mysql.github.io/mysql-operator/
+helm repo update
+helm install mycluster mysql-operator/mysql-innodbcluster --set tls.useSelfSigned=true --values mysql_credentials.yaml
 ```
 
-6. Verify Credentials by running the following command:
+4. Verify resources:
 
 ```bash
 helm get manifest mycluster
 ```
 
-7. Create a new user named Api in the MySQL cluster mycluster, and grant this user the necessary privileges to access and manipulate the database.
+5. Create a new user named Api in the MySQL cluster mycluster, and grant this user the necessary privileges to access and manipulate the database.
 
-8. Deploy a Secret URL in Kubernetes by creating a secret URL and deploying it to your Kubernetes cluster.
+6. Deploy a Secret URL in Kubernetes by creating a secret URL and deploying it to your Kubernetes cluster.
 
-9. Deployment Overview:
+```bash
+kubectl create secret generic db-credentials --from-literal=url=mysql://root:password@localhost:6446/db_metrics
+```
+
+7. Deployment Overview:
    At this point, you should have the following components deployed:
 
 - MySQL Operator
 - MySQL cluster
 - The database schema and tables
 
-10. Build an image of your app
+8. Perform Prisma migration
+
+- Add a db schema on kubernetes cluster with the same name that is used on local tests
+- Modify your environment variable to point your kubernetes mysql cluster
+
+```bash
+`npx prisma migrate deploy`
+```
+
+9. Build an image of your app
 
 ```bash
     `& minikube -p minikube docker-env --shell powershell | Invoke-Expression`
     `docker build -t mini-metrics-image .`
 ```
 
-11. Perform Prisma migration
-
-- Add a db schema on kubernetes cluster with the same name that is used on local tests
-- Modify your environment variable to point your kubernetes mysql cluster
-
-```bash
-`prisma migrate deploy`
-```
-
-12. Run the image of your app
+10. Deploy Kubernetes Resources
 
 - kubectl apply -f deployment.yaml
 - kubectl apply -f service.yaml
 - kubectl apply -f ingress.yaml
+- minikube image load mini-metrics-image
 
 ## Frontend Setup
 
@@ -129,11 +131,26 @@ Navigate to http://localhost:3000.
 - Signup Page: Registration with validation for username, email, and password.
 - Formulas Page: Graph visualization and formula management.
 
+## Authentication and API Endpoints
+
+1. Authentication:
+
+- Sign Up (POST /api/signup): Registers users with hashed passwords.
+- Login (POST /api/login): Verifies credentials and starts a session.
+- Logout (DELETE /api/login): Ends the user session.
+
+2. Formula Management:
+
+- Create Formula (POST /api/formula): Adds new formulas.
+- Get Formula (GET /api/formula/{id}): Fetch formulas by ID.
+- Update Formula (PUT /api/formula/{id}): Modify formulas.
+- Delete Formula (DELETE /api/formula/{id}): Removes formulas.
+
 # Setup and deployment of the Mini-Metrics Application
 
 This is a distributed system consisting of multiple services and a database, deployed on a Kubernetes cluster using Minikube
 
-## Step 1: Prepare the Project
+### Step 1: Prepare the Project
 
 1. Navigate to the project directory containing the necessary files to build and deploy the application:
 
@@ -155,7 +172,7 @@ docker build -t mini-metrics-image .
 npx prisma migrate deploy
 ```
 
-## Step 2: Install Helm (as administrator)
+### Step 2: Install Helm (as administrator)
 
 1. Open a terminal in administrator mode and execute the following commands:
 
@@ -172,7 +189,7 @@ helm repo add mysql-operator https://mysql.github.io/mysql-operator/
 helm repo update
 ```
 
-## Step 3: Configure Minikube and MySQL Operator
+### Step 3: Configure Minikube and MySQL Operator
 
 In a standard terminal:
 
@@ -196,7 +213,7 @@ helm get manifest mycluster
 
 (Note: The output shows 3 InnoDB instances in the cluster, which are replicas created by the MySQL Operator to ensure high availability.)
 
-## Step 4: Configure MySQL Database Access
+### Step 4: Configure MySQL Database Access
 
 1. Create a credentials.yaml file in the root directory:
 
@@ -232,7 +249,7 @@ kubectl port-forward service/mycluster 6446
 kubectl create secret generic mini-metrics-backend-url --from-literal=backend-url=mysql://root:password@localhost:6446/mini-metrics-schema
 ```
 
-## Step 5: Deploy and Visualize the Application
+### Step 5: Deploy and Visualize the Application
 
 1. Launch Kubernetes dashboard to monitor resources & visualize created secret:
 
@@ -267,7 +284,7 @@ minikube tunnel
 
 Explanation: Creates and configures Kubernetes resources for the deployment, service, and Ingress of the mini-metrics application.
 
-## Step 6: Update System Files
+### Step 6: Update System Files
 
 1. Modify the hosts file (if necessary):
 
