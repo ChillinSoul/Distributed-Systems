@@ -35,3 +35,5 @@ spec:
               secretKeyRef:
                 name: mini-metrics-backend-url
                 key: backend-url
+          - name: CAMERA_URL
+            value: http://camera-app-service
