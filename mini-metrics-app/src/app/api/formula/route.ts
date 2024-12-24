@@ -16,6 +16,8 @@ export async function POST(
   const createdFormula = await prisma.formula.create({
     data: {
       formula: formula.formula,
+      beginAt: formula.beginAt,
+      endAt: formula.endAt,
       author: {
         connect: {
           id: userId,

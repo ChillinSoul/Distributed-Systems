@@ -3,11 +3,11 @@ import prisma from "@/lib/db/client";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: number } },
+  { params }: { params: { id: string } },
 ) {
   const formula = await prisma.formula.findUnique({
     where: {
-      id: params.id
+      id: +params.id
     }
   });
 
@@ -21,12 +21,12 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: number } },
+  { params }: { params: { id: string } },
 ) {
   const formula = await request.json() as RequestFormula;
   const modifiedFormula = await prisma.formula.update({
     where: {
-      id: params.id,
+      id: +params.id,
     },
     data: {
       formula: formula.formula
@@ -43,11 +43,11 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: number } },
+  { params }: { params: { id: string } },
 ) {
   const deletedFormula = await prisma.formula.delete({
     where: {
-      id: params.id,
+      id: +params.id,
     },
   });
 

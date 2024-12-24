@@ -4,12 +4,12 @@ import { ResultType } from "@prisma/client";
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: number } },
+  { params }: { params: { id: string } },
 ) {
   const result = await request.json() as RequestResult;
   const modifiedFormula = await prisma.formula.update({
     where: {
-      id: params.id,
+      id: +params.id,
     },
     data: {
       results: {

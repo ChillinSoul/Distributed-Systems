@@ -4,11 +4,11 @@ import { ResultType } from "@prisma/client";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: number } },
+  { params }: { params: { id: string } },
 ) {
   const formula = await prisma.formula.findUnique({
     where: {
-      id: params.id,
+      id: +params.id,
     },
     include: {
       results: true,
@@ -25,12 +25,12 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: number } },
+  { params }: { params: { id: string } },
 ) {
   const result = await request.json() as RequestResult;
   const modifiedFormula = await prisma.formula.update({
     where: {
-      id: params.id,
+      id: +params.id,
     },
     data: {
       results: {
@@ -52,17 +52,22 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: number } },
+  { params }: { params: { id: string } },
 ) {
-  const deletedFormula = await prisma.formula.delete({
+  const updatedFormula = await prisma.formula.update({
     where: {
-      id: params.id,
+      id: +params.id,
+    },
+    data: {
+      results: {
+        deleteMany: {},
+      },
     },
   });
 
   return Response.json({
-    message: "Formula erased !",
-    formula: deletedFormula,
+    message: "Results erased !",
+    formula: updatedFormula,
   }, {
     status: 200,
   });
