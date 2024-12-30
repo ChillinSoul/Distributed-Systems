@@ -65,21 +65,31 @@ npm install react-hook-form zod @hookform/resolvers zod chart.js react-chartjs-2
 ```bash
 helm repo add mysql-operator https://mysql.github.io/mysql-operator/
 helm repo update
-helm install mycluster mysql-operator/mysql-innodbcluster --set tls.useSelfSigned=true --values mysql_credentials.yaml
+helm install my-mysql-operator mysql-operator/mysql-operator --namespace mysql-operator --create-namespace
+helm install mysqlcluster mysql-operator/mysql-innodbcluster --set tls.useSelfSigned=true --values mysql_credentials.yaml
+```
+We name it "mysqlcluster" to differentiate it against "kubernetes clusters".
+The "mysql_credentials.yaml" file isn't here for security reasons, but the template follows this:
+```yaml
+credentials:
+  root:
+    user: root
+    password: your-password
+    host: "%"
 ```
 
 4. Verify resources:
 
 ```bash
-helm get manifest mycluster
+helm get manifest mysqlcluster
 ```
 
-5. Create a new user named Api in the MySQL cluster mycluster, and grant this user the necessary privileges to access and manipulate the database.
+5. Create a new user named Api in the MySQL cluster mysqlcluster, and grant this user the necessary privileges to access and manipulate the database.
 
 6. Deploy a Secret URL in Kubernetes by creating a secret URL and deploying it to your Kubernetes cluster.
 
 ```bash
-kubectl create secret generic db-credentials --from-literal=url=mysql://root:password@localhost:6446/db_metrics
+kubectl create secret generic db-credentials --from-literal=url=mysql://root:your-password@localhost:6446/db_metrics
 ```
 
 7. Deployment Overview:
@@ -107,10 +117,10 @@ kubectl create secret generic db-credentials --from-literal=url=mysql://root:pas
 
 10. Deploy Kubernetes Resources
 
+- minikube image load mini-metrics-image
 - kubectl apply -f deployment.yaml
 - kubectl apply -f service.yaml
 - kubectl apply -f ingress.yaml
-- minikube image load mini-metrics-image
 
 ## Frontend Setup
 
@@ -166,12 +176,6 @@ docker build -t mini-metrics-image .
 
 (Note: The image name mini-metrics-image should match the one specified in the deployment.yaml file for Kubernetes to use the correct image during deployment.)
 
-3. Apply database migrations defined in Prisma to structure the database before using it:
-
-```bash
-npx prisma migrate deploy
-```
-
 ### Step 2: Install Helm (as administrator)
 
 1. Open a terminal in administrator mode and execute the following commands:
@@ -181,6 +185,8 @@ npx prisma migrate deploy
 ```bash
 choco install kubernetes-helm
 ```
+Here we use chocolatey to install helm, but there are other package managers that can install helm for you
+Please refer to the [helm documentation](https://helm.sh/docs/intro/quickstart/) for more information
 
 3. Add and update Helm repository containing MySQL Operator chart:
 
@@ -193,7 +199,7 @@ helm repo update
 
 In a standard terminal:
 
-1. Launche local Kubernetes cluster using Minikube:
+1. Launche local Kubernetes cluster using Minikube (if it isn't the case yet):
 
 ```bash
 minikube start
@@ -205,78 +211,121 @@ minikube start
 helm install my-mysql-operator mysql-operator/mysql-operator --namespace mysql-operator --create-namespace
 ```
 
-3. Verifie config & resources created by MySQL Operator:
+3. Create a credentials.yaml file in the root directory:
+
+```yaml
+credentials:
+   root:
+      user: root
+      password: //fill this with the password you choose for your DB connection
+      host: "%"
+```
+
+The credentials.yaml file isn't included in the github repository for security reasons.
+
+4. Use it to create a innodbcluster:
 
 ```bash
-helm get manifest mycluster
+helm install mysqlcluster mysql-operator/mysql-innodbcluster --set tls.useSelfSigned=true --values credentials.yaml
+```
+
+You can verify config & resources created by reading the manifest:
+
+```bash
+helm get manifest mysqlcluster
 ```
 
 (Note: The output shows 3 InnoDB instances in the cluster, which are replicas created by the MySQL Operator to ensure high availability.)
 
-### Step 4: Configure MySQL Database Access
+### Step 4: Configure MySQL Database Schema
 
-1. Create a credentials.yaml file in the root directory:
+There are multiple ways to initialize the database on the mysql cluster. Therre is one way to do so:
 
+1. Run a mysql shell and connect to the innodbcluster with your credentials
 ```bash
-credentials:
-root:
-user: //fill this with the username you choose for your DB connection
-password: //fill this with the password you choose for your DB connection
-host: "%"
+kubectl run --rm -it myshell --image=container-registry.oracle.com/mysql/community-operator -- mysqlsh
+
+ MySQL  SQL > \connect root@mycluster
 ```
 
-2. Create a secret.yaml file in the root directory:
-
+2. Create a new schema named "db_metrics"
 ```bash
-DATABASE_URL="mysql://user:password@localhost:6446/mini-metrics-schema"
+ MySQL  mysqlcluster:3306 ssl  SQL > CREATE SCHEMA db_metrics;
 ```
 
-3. In MySQL Workbench:
+3. Use prisma to deploy the database on the cluster
+To do so, you must execute the command into the "prisma" folder of the mini-metrics project
+And you have to modify the "DATABASE_URL" environement variable in the .env file (it's not included in the repository, so you must create one in the "mini-metrics-app" folder if it isn't the case yet)
 
-- Create a new connection (named mini-metrics-connection).
-- Create a new schema (named mini-metrics-schema) with a user and password.
-- Configure the port as 6446 instead of the default 3306.
+```bash
+DATABASE_URL="mysql://root:your-password@localhost:6446/db_metrics"
+```
 
-4. Create a port-forward for MySQL(Locally forwards port 6446 to the MySQL service exposed in Kubernetes, allowing access to the database):
+You can also access the cluster with Workbench, there is the way to do it:
+
+1. Create a port-forward for MySQL(Locally forwards port 6446 to the MySQL service exposed in Kubernetes, allowing access to the database):
 
 ```bash
 kubectl port-forward service/mycluster 6446
 ```
+We choose to redirect the secundary mysql port to the mysql-operator, to keep access to local mysql instance with the default port (3306). This way we can test our service outside kubernetes as well.
 
-5. Create Kubernetes secret containing MySQL connection URL for backend application:
+2. In MySQL Workbench:
 
-```bash
-kubectl create secret generic mini-metrics-backend-url --from-literal=backend-url=mysql://root:password@localhost:6446/mini-metrics-schema
-```
+- Create a new connection (named mini-metrics-connection, or as you like).
+- Create a new schema (named mini-metrics-schema) with a user and password.
+
+Optional: you can add a new user with lower privileges, or restrained to the new db schema only, if you don't want a root access for the web service
+
 
 ### Step 5: Deploy and Visualize the Application
 
-1. Launch Kubernetes dashboard to monitor resources & visualize created secret:
+For the mini-metrics to work well, you need to install the "camera-app" service first, so please do so before deploying mini-metrics service.
 
+1. Apply database migrations defined in Prisma to structure the database before using it
+
+You have to use a [mysql "port forwarding"](https://dev.mysql.com/doc/mysql-operator/en/mysql-operator-connecting-port-forwarding.html) to do so.
+
+- Create the redirection to the mysql operator
 ```bash
-minikube dashboard
+kubectl port-forward service/mysqlcluster mysql-alternate
+```
+mysql-alternate port = 6446
+
+- In a second tab, apply migration files
+```bash
+npx prisma migrate deploy
 ```
 
-2. View the secret:
-   Action: In the Minikube dashboard, navigate to the Secrets section to verify the presence and contents of the mini-metrics-backend-url secret.
+2. Create Kubernetes secret containing the MySQL connection URL for our web application:
 
-3. Apply Kubernetes configuration files:
+```bash
+kubectl create secret generic mini-metrics-backend-url --from-literal=backend-url=mysql://root:your-password@mysqlcluster:6446/db_metrics
+```
+
+You can view the secret with the Minikube dashboard: navigate to the Secrets section to verify the presence and contents of the mini-metrics-backend-url secret. You can also view other secrets generated by mysql-operator.
+
+3. Load in kubernetes the mini-metrics-image build earlier locally
+
+```bash
+minikube image load mini-metrics-image
+```
+
+4. Apply Kubernetes configuration files:
 
 ```bash
 kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
 kubectl apply -f ingress.yaml
-minikube image load mini-metrics-image
-minikube addons list
 ```
 
-- If the Ingress addon is disabled, enable it:
+- If the Ingress addon is disabled, enable it before applying the ingress config file:
 
 ```bash
 minikube addons enable ingress
 ```
 
-- Configure a local proxy for exposing Kubernetes Ingress services externally:
+5. Configure a local proxy for exposing Kubernetes Ingress services externally (if you use hyperv, you don't need to place a tunnel):
 
 ```bash
 minikube tunnel
@@ -284,26 +333,37 @@ minikube tunnel
 
 Explanation: Creates and configures Kubernetes resources for the deployment, service, and Ingress of the mini-metrics application.
 
+- You can launch Kubernetes dashboard to monitor resources & visualize created secret:
+
+```bash
+minikube dashboard
+```
+
 ### Step 6: Update System Files
+
+If you want to access the service from your machine, you have to modify the "hosts" file from your host machine.
 
 1. Modify the hosts file (if necessary):
 
-- Path: C:\Windows\System32\drivers\etc\hosts.
-- Action: Open the file as an administrator and add an entry to associate a domain name (e.g., mini-metrics.example) with the Minikube IP address.
-  (The Minikube IP can be found using the command below):
+- Path in windows OS: C:\Windows\System32\drivers\etc\hosts.
+- Action: Open the file as an administrator (to be able to save modifications) and add an entry to associate the domain names (here, mini-metrics.example and camera-host) with the ingress IP addresses deployed with the "ingress.yaml" files.
 
-```bash
-minikube ip
+Example: If the IP is 192.168.49.2 for mini-metrics, add a line at the end of the hosts file with the name of the ingress host associated:
+
+```txt
+192.168.49.2 mini-metrics.example
 ```
 
-(Example: If the IP is 192.168.49.2, update the hosts file accordingly.)
+This way you can access our service without writing the ip address every time, it works with the web navigator, postman (or bruno)...
+Extra note: The ip address is suceptible to change if the minikube cluster is stoped or rebuilt after a "minikube delete", so you have to change your host file with the new ingress ip address accordingly
 
 ## References
 
-To learn more about Next.js and MySQL operator:
+To learn more about Next.js, Prisma and MySQL operator:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- https://dev.mysql.com/doc/mysql-operator/en/mysql-operator-innodbcluster.html
+- [Prisma Documentation](https://www.prisma.io/docs) - How to use Prisma ORM.
+- [MySQL Operator Docs](https://dev.mysql.com/doc/mysql-operator/en/mysql-operator-innodbcluster.html)
 
 ## Contributors
 
