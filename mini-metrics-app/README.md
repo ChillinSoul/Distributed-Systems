@@ -245,7 +245,7 @@ There are multiple ways to initialize the database on the mysql cluster. Therre 
 ```bash
 kubectl run --rm -it myshell --image=container-registry.oracle.com/mysql/community-operator -- mysqlsh
 
- MySQL  SQL > \connect root@mycluster
+ MySQL  SQL > \connect root@mysqlcluster
 ```
 
 2. Create a new schema named "db_metrics"
@@ -266,7 +266,7 @@ You can also access the cluster with Workbench, there is the way to do it:
 1. Create a port-forward for MySQL(Locally forwards port 6446 to the MySQL service exposed in Kubernetes, allowing access to the database):
 
 ```bash
-kubectl port-forward service/mycluster 6446
+kubectl port-forward service/mysqlcluster 6446
 ```
 We choose to redirect the secundary mysql port to the mysql-operator, to keep access to local mysql instance with the default port (3306). This way we can test our service outside kubernetes as well.
 
